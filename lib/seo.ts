@@ -55,7 +55,7 @@ export type SeoPage = {
   imageAlt?: string;
 };
 
-const p = (path: string) => `${site.basePath}${path}`;
+const p = (path: string) => `${site.basePath}${path.endsWith("/") ? path : `${path}/`}`;
 export const canonicalUrl = (path: string) => `${site.url}${path === "/" || path.includes(".") ? path : `${path}/`}`;
 export const assetUrl = (path: string) => `${site.url}${path}`;
 
@@ -102,8 +102,10 @@ export const seoPages: SeoPage[] = [
       { question: "¿Puede conectarse con un e-commerce?", answer: "Puede evaluarse una integración cuando el catálogo, las variantes y el flujo comercial lo requieren." },
     ],
     links: [
-      { label: "Ver proyecto ATLAS", href: p("/proyectos/h2o") },
+      { label: "Demo ATLAS de configurador 3D", href: p("/proyectos/h2o") },
+      { label: "Demo Exterior House", href: p("/proyectos/exterior-house") },
       { label: "Soluciones para muebles y equipamiento", href: p("/sectores/muebles-equipamiento") },
+      { label: "Soluciones para piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
       { label: "Soluciones para industria", href: p("/sectores/industria") },
     ],
   },
@@ -137,9 +139,10 @@ export const seoPages: SeoPage[] = [
       { question: "¿Funciona sin instalar una app?", answer: "La experiencia puede funcionar desde navegador, evitando instalaciones cuando el alcance técnico lo permite." },
     ],
     links: [
-      { label: "Ver Exterior House", href: p("/proyectos/exterior-house") },
-      { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
-      { label: "Piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
+      { label: "Demo Exterior House", href: p("/proyectos/exterior-house") },
+      { label: "Visualización para arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
+      { label: "Visualización para real estate", href: p("/sectores/real-estate") },
+      { label: "Soluciones para piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
     ],
   },
   {
@@ -339,8 +342,9 @@ export const seoPages: SeoPage[] = [
       { question: "¿Sirve para constructoras?", answer: "Sí. Puede apoyar venta, presentación y comunicación con clientes." },
     ],
     links: [
-      { label: "Ver Exterior House", href: p("/proyectos/exterior-house") },
-      { label: "Visualización 3D", href: p("/servicios/visualizacion-3d") },
+      { label: "Configuradores 3D para productos", href: p("/servicios/configuradores-3d") },
+      { label: "Demo Exterior House", href: p("/proyectos/exterior-house") },
+      { label: "Visualización 3D interactiva", href: p("/servicios/visualizacion-3d") },
       { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
     ],
   },
@@ -506,7 +510,8 @@ export const seoPages: SeoPage[] = [
       { question: "¿Puede usarse para preventa?", answer: "Sí. Ayuda a mostrar un proyecto antes de construirlo." },
     ],
     links: [
-      { label: "Visualización 3D", href: p("/servicios/visualizacion-3d") },
+      { label: "Configuradores 3D para productos", href: p("/servicios/configuradores-3d") },
+      { label: "Visualización 3D interactiva", href: p("/servicios/visualizacion-3d") },
       { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
       { label: "Piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
     ],

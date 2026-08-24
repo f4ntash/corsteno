@@ -31,6 +31,8 @@ function eventNameForButton(button: HTMLButtonElement) {
 
 export default function Analytics() {
   useEffect(() => {
+    if (!gaId) return;
+
     const onClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       const anchor = target?.closest("a");

@@ -62,6 +62,10 @@ const services = [
     examples: "Muebles · Arquitectura · Piscinas · Aberturas · Equipamiento",
     href: "#showroom-3d",
     cta: "Ver proyectos →",
+    detailLinks: [
+      { label: "Conocer configuradores 3D →", href: withBasePath("/servicios/configuradores-3d/") },
+      { label: "Visualización 3D interactiva →", href: withBasePath("/servicios/visualizacion-3d/") },
+    ],
   },
   {
     number: "02",
@@ -71,6 +75,9 @@ const services = [
     examples: "Hotelería · Turismo · Empresas · Productos digitales",
     href: "#showroom-web",
     cta: "Ver proyectos →",
+    detailLinks: [
+      { label: "Conocer desarrollo web →", href: withBasePath("/servicios/desarrollo-web/") },
+    ],
   },
   {
     number: "03",
@@ -80,6 +87,10 @@ const services = [
     examples: "Arquitectura · Real Estate · Producto · Showrooms",
     href: "#showroom-inmersivo",
     cta: "Próximamente",
+    detailLinks: [
+      { label: "Realidad aumentada →", href: withBasePath("/servicios/realidad-aumentada/") },
+      { label: "Realidad virtual →", href: withBasePath("/servicios/realidad-virtual/") },
+    ],
   },
 ];
 
@@ -87,26 +98,32 @@ const industries = [
   {
     title: "Muebles y equipamiento",
     description: "Configuración de materiales, colores y componentes.",
+    href: withBasePath("/sectores/muebles-equipamiento/"),
   },
   {
     title: "Arquitectura y construcción",
     description: "Visualización de proyectos y terminaciones.",
+    href: withBasePath("/sectores/arquitectura-construccion/"),
   },
   {
     title: "Piscinas y exteriores",
     description: "Configuración y preventa de proyectos.",
+    href: withBasePath("/sectores/piscinas-exteriores/"),
   },
   {
     title: "Real estate",
     description: "Presentación de desarrollos antes de su finalización.",
+    href: withBasePath("/sectores/real-estate/"),
   },
   {
     title: "Hotelería y turismo",
     description: "Experiencias digitales orientadas a comunicar mejor el lugar.",
+    href: withBasePath("/sectores/hoteleria-turismo/"),
   },
   {
     title: "Industria",
     description: "Visualización de productos técnicos y configurables.",
+    href: withBasePath("/sectores/industria/"),
   },
 ];
 
@@ -235,7 +252,7 @@ export default function CommercialIntro() {
         </div>
       </section>
 
-      <section className="commercial-section services-section">
+      <section className="commercial-section services-section" id="servicios">
         <header className="commercial-section-head">
           <span className="label">Servicios</span>
           <h2>Nuestros servicios</h2>
@@ -249,6 +266,13 @@ export default function CommercialIntro() {
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
                 <span className="service-examples">{service.examples}</span>
+                <div className="service-detail-links">
+                  {service.detailLinks.map((link) => (
+                    <a className="service-detail-link" key={link.href} href={link.href}>
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
               </div>
               <a href="#showroom-3d" onClick={() => openShowroomScene(index === 0 ? 0 : index === 1 ? 1 : 3)}>
                 {service.cta}
@@ -258,7 +282,7 @@ export default function CommercialIntro() {
         </ol>
       </section>
 
-      <section className="commercial-section industries-section">
+      <section className="commercial-section industries-section" id="sectores">
         <header className="commercial-section-head">
           <span className="label">Aplicaciones</span>
           <h2>¿Dónde podemos aplicarlo?</h2>
@@ -268,7 +292,11 @@ export default function CommercialIntro() {
           {industries.map((industry, index) => (
             <li key={industry.title}>
               <span className="cap-number">{String(index + 1).padStart(2, "0")}</span>
-              <h3>{industry.title}</h3>
+              <h3>
+                <a href={industry.href}>
+                  {industry.title} <span aria-hidden="true">→</span>
+                </a>
+              </h3>
               <p>{industry.description}</p>
             </li>
           ))}

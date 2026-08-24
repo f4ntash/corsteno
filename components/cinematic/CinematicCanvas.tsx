@@ -37,7 +37,7 @@ const smoothstep = (value: number) => value * value * (3 - 2 * value);
 function getCameraFrame(keyframes: CameraKeyframe[], progress: number) {
   const last = keyframes.length - 1;
   const index = Math.min(
-    keyframes.findIndex((frame, frameIndex) => frameIndex < last && progress <= keyframes[frameIndex + 1].progress),
+    keyframes.findIndex((_, frameIndex) => frameIndex < last && progress <= keyframes[frameIndex + 1].progress),
     last - 1,
   );
   const safeIndex = Math.max(index, 0);

@@ -33,7 +33,7 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
   const [engaged, setEngaged] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [expandedHotspot, setExpandedHotspot] = useState(false);
-  const [variant, setVariant] = useState<Variant>("natural");
+  const [variant] = useState<Variant>("natural");
   const [exteriorVariants, setExteriorVariants] = useState({ ...DEFAULT_EXTERIOR_HOUSE_VARIANTS });
   const [exteriorSelection, setExteriorSelection] = useState<{ groupId: ExteriorHouseGroupId; variantId: string }>({
     groupId: "poolLining",
@@ -61,11 +61,18 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
 
     renderStateRef.current = "loading";
     setRenderState("loading");
-    window.setTimeout(() => {
+    let completed = false;
+    const readyTimeout = window.setTimeout(() => {
+      completed = true;
       renderStateRef.current = "ready";
       setRenderState("ready");
       slot.dispatchEvent(new CustomEvent("forma3d:mount-ready"));
     }, 520);
+
+    return () => {
+      window.clearTimeout(readyTimeout);
+      if (!completed) renderStateRef.current = "idle";
+    };
   }, [active]);
 
   const beginDrag = (event: React.PointerEvent<HTMLDivElement>) => {

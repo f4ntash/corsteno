@@ -21,11 +21,18 @@ const categoryLabels: Record<SeoPage["category"], string> = {
   proyecto: "Proyectos",
 };
 
+const categoryAnchors: Record<SeoPage["category"], string> = {
+  home: "#que-hacemos",
+  servicio: "#servicios",
+  sector: "#sectores",
+  proyecto: "#proyectos",
+};
+
 export default function SeoLandingPage({ page }: SeoLandingPageProps) {
   const breadcrumbItems = [
-    { label: "Inicio", href: site.basePath },
-    { label: categoryLabels[page.category], href: `${site.basePath}/${page.path.split("/")[1]}` },
-    { label: page.h1, href: `${site.basePath}${page.path}` },
+    { label: "Inicio", href: `${site.basePath}/` },
+    { label: categoryLabels[page.category], href: `${site.basePath}/${categoryAnchors[page.category]}` },
+    { label: page.h1, href: `${site.basePath}${page.path}/` },
   ];
 
   return (

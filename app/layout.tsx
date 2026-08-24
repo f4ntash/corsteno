@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: homeSeo.title,
   description: homeSeo.description,
   icons: {
-    icon: [{ url: favicon.src, type: "image/webp", sizes: "1024x1024" }],
+    icon: [{ url: favicon.src, type: "image/webp", sizes: "2000x2000" }],
   },
   alternates: { canonical: canonicalUrl("/") },
   openGraph: {

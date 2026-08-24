@@ -1,4 +1,6 @@
 import { contactChannels } from "@/lib/contact";
+import { site } from "@/lib/seo";
+import ContactForm from "@/components/contact/ContactForm";
 
 export default function Contact() {
   const hasContactChannel = Boolean(contactChannels.whatsappUrl || contactChannels.email);
@@ -24,6 +26,7 @@ export default function Contact() {
           Mandanos una foto o catálogo de tu producto y te mostramos qué se puede hacer.
         </p>
         <span className="contact-support-copy">No necesitás tener un modelo 3D preparado.</span>
+        <ContactForm />
         {hasContactChannel ? (
           <div className="contact-channels" aria-label="Canales de contacto">
             {contactChannels.whatsappUrl ? (
@@ -41,6 +44,13 @@ export default function Contact() {
       </div>
       <footer className="contact-footer">
         <span className="meta">Corsteno · Argentina</span>
+        <nav className="contact-footer-links" aria-label="Servicios y proyectos">
+          <a href={`${site.basePath}/servicios/configuradores-3d/`}>Configuradores 3D</a>
+          <a href={`${site.basePath}/servicios/visualizacion-3d/`}>Visualización 3D</a>
+          <a href={`${site.basePath}/servicios/desarrollo-web/`}>Desarrollo web</a>
+          <a href={`${site.basePath}/#proyectos`}>Proyectos</a>
+          <a href={`${site.basePath}/#contacto`}>Contacto</a>
+        </nav>
         <span className="meta">Ver · Probar · Configurar · Decidir</span>
       </footer>
     </section>

@@ -44,8 +44,6 @@ const audiences = [
   },
 ];
 
-const technologies = ["React", "Next.js", "Three.js", "React Three Fiber", "WebGL", "GLB / glTF"];
-
 export default function Capabilities() {
   return (
     <section className="capabilities" id="capacidades" data-od-id="capacidades">
