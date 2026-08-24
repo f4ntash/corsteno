@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { contactChannels } from "@/lib/contact";
+import { BASE_PATH } from "@/lib/assetPath";
 
 export const site = {
   name: "Corsteno",
-  basePath: "/corsteno",
+  basePath: BASE_PATH,
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://f4ntash.github.io/corsteno").replace(/\/$/, ""),
   locale: "es_AR",
   defaultImage: "/projects/terrambu-hotel-web.webp",
-  contactEmail: "hola@forma3d.com",
 };
 
 const businessId = `${site.url}/#business`;
@@ -623,6 +624,16 @@ export function pageMetadata(page: Pick<SeoPage, "title" | "description" | "path
 }
 
 export function organizationJsonLd() {
+  const contactPoint = contactChannels.email || contactChannels.whatsappUrl
+    ? {
+        "@type": "ContactPoint",
+        ...(contactChannels.whatsappUrl ? { url: contactChannels.whatsappUrl } : {}),
+        ...(contactChannels.email ? { email: contactChannels.email } : {}),
+        contactType: "sales",
+        availableLanguage: ["Spanish"],
+      }
+    : undefined;
+
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -632,12 +643,7 @@ export function organizationJsonLd() {
         name: site.name,
         url: site.url,
         areaServed: ["Argentina", "Córdoba", "Remoto"],
-        contactPoint: {
-          "@type": "ContactPoint",
-          email: site.contactEmail,
-          contactType: "sales",
-          availableLanguage: ["Spanish"],
-        },
+        ...(contactPoint ? { contactPoint } : {}),
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: "Servicios Corsteno",

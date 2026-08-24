@@ -1,7 +1,7 @@
-const GITHUB_PAGES_BASE = "/corsteno";
+export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export function withBasePath(path: string) {
   const normalized = path.startsWith("/") ? path : `/${path}`;
 
-  return `${GITHUB_PAGES_BASE}${normalized}`;
+  return `${BASE_PATH}${normalized}`;
 }

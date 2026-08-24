@@ -3,9 +3,9 @@
 ## Navigation
 - Source: `components/Navigation.tsx`
 - Category: layout
-- Description: Fixed FORMA 3D navigation for the existing light/dark workspace.
+- Description: Fixed Corsteno navigation for the existing light/dark workspace.
 - Extractable props: activeItem, dark, compact
-- Hardcoded: FORMA 3D wordmark, Trabajo/Capacidades/Contacto labels, CSS classes.
+- Hardcoded: Corsteno wordmark, Trabajo/Capacidades/Contacto labels, CSS classes.
 
 ## Contact
 - Source: `components/Contact.tsx`

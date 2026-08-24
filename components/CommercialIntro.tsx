@@ -12,6 +12,7 @@ const featuredProjects = [
     id: "terrambu",
     title: "Terrambú",
     category: "Experiencia web",
+    trustLabel: "PROYECTO REAL · HOTELERÍA",
     image: TERRAMBU_IMAGE_URL,
     alt: "Sitio web para hotel boutique Terrambú desarrollado por Corsteno",
   },
@@ -19,6 +20,7 @@ const featuredProjects = [
     id: "mapa-punilla",
     title: "Mapa Punilla",
     category: "Plataforma interactiva",
+    trustLabel: "PROYECTO REAL · TURISMO",
     image: MAPA_PUNILLA_IMAGE_URL,
     alt: "Plataforma web Mapa Punilla desarrollada por Corsteno",
   },
@@ -26,6 +28,7 @@ const featuredProjects = [
     id: "atlas",
     title: "ATLAS",
     category: "Showroom digital",
+    trustLabel: "DEMO CORSTENO · CONFIGURADOR 3D",
     image: SHOWROOM_3D_IMAGE_URL,
     alt: "Configurador 3D interactivo ATLAS desarrollado por Corsteno",
   },
@@ -107,6 +110,24 @@ const industries = [
   },
 ];
 
+const processSteps = [
+  {
+    number: "01",
+    title: "Nos mostrás tu producto",
+    description: "Foto, catálogo, plano o referencia.",
+  },
+  {
+    number: "02",
+    title: "Preparamos la experiencia",
+    description: "Adaptamos la solución al producto, materiales y variantes.",
+  },
+  {
+    number: "03",
+    title: "Tus clientes pueden explorarlo",
+    description: "Lo integramos a una experiencia web preparada para compartir y vender.",
+  },
+];
+
 export default function CommercialIntro() {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const featuredProject = featuredProjects[featuredIndex];
@@ -154,12 +175,18 @@ export default function CommercialIntro() {
         <div className="commercial-hero-visual" aria-label="Proyectos de Corsteno">
           <figure className="hero-project hero-project-primary">
             <img src={featuredProject.image} alt={featuredProject.alt} />
-            <figcaption>{featuredProject.category} · {featuredProject.title}</figcaption>
+            <figcaption>
+              <span>{featuredProject.category} · {featuredProject.title}</span>
+              <span className="project-trust-label">{featuredProject.trustLabel}</span>
+            </figcaption>
           </figure>
           {secondaryProjects.map((project) => (
             <figure className="hero-project hero-project-secondary" key={project.id}>
               <img src={project.image} alt={project.alt} />
-              <figcaption>{project.category} · {project.title}</figcaption>
+              <figcaption>
+                <span>{project.category} · {project.title}</span>
+                <span className="project-trust-label">{project.trustLabel}</span>
+              </figcaption>
             </figure>
           ))}
         </div>
@@ -187,6 +214,25 @@ export default function CommercialIntro() {
             </li>
           ))}
         </ol>
+        <p className="commercial-trust-statement">
+          No empezamos de cero en cada proyecto. Adaptamos una base interactiva ya desarrollada a cada producto, sus
+          materiales y variantes.
+        </p>
+        <div className="commercial-process" aria-labelledby="como-funciona-title">
+          <header>
+            <span className="label">Cómo funciona</span>
+            <h3 id="como-funciona-title">Del producto a una experiencia lista para compartir.</h3>
+          </header>
+          <ol className="editorial-list process-list">
+            {processSteps.map((step) => (
+              <li key={step.number}>
+                <span className="cap-number">{step.number}</span>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
       <section className="commercial-section services-section">

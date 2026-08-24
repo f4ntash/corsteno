@@ -22,7 +22,7 @@ export default function Capabilities() {
         <span className="label">Capacidades</span>
         <span className="meta">Herramientas / 01—03</span>
       </header>
-      <div className="cap-menu" role="tablist" aria-label="Capacidades de FORMA 3D">
+      <div className="cap-menu" role="tablist" aria-label="Capacidades de Corsteno">
         {capabilities.map((capability) => (
           <button key={capability.id} className="cap-button" type="button" role="tab"
             aria-selected={active.id === capability.id} aria-controls="cap-output"
@@ -46,11 +46,10 @@ export default function Contact() {
     <section className="contact dark" id="contacto" data-od-id="contacto">
       <h2 data-od-id="contacto-titulo">¿Qué querés construir?</h2>
       <div className="contact-action">
-        <a href="mailto:hola@forma3d.com" data-cursor="Abrir">Iniciar proyecto →</a>
-        <span className="meta">hola@forma3d.com</span>
+        <span>Canal comercial pendiente de verificación.</span>
       </div>
       <footer className="contact-footer">
-        <span className="meta">FORMA 3D · Argentina</span>
+        <span className="meta">Corsteno · Argentina</span>
         <span className="meta">3D · Web · Sistemas</span>
       </footer>
     </section>

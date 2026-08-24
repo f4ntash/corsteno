@@ -66,7 +66,7 @@ export default function Navigation() {
       aria-label="Navegación principal"
       data-od-id="navegacion-principal"
     >
-      <a className="brand" href="#que-hacemos" data-od-id="marca-forma-3d" onClick={closeMenu}>
+      <a className="brand" href="#que-hacemos" data-od-id="marca-corsteno" onClick={closeMenu}>
         Corsteno
       </a>
       <button

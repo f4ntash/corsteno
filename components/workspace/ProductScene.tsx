@@ -185,6 +185,7 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
               <aside className="exterior-config-detail" aria-live="polite" aria-label="Detalle del material exterior">
                 <div className="demo-panel-intro">
                   <span className="scene-number">03 / 04</span>
+                  <span className="project-trust-label">DEMO CORSTENO · PREVENTA INTERACTIVA</span>
                   <span className="kind">Preventa interactiva</span>
                   <h2 data-od-id="producto-titulo">Exterior House</h2>
                   <span className="kind">Preventa interactiva</span>

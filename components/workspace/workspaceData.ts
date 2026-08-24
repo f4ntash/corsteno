@@ -8,6 +8,7 @@ export const digitalProjects = [
     title: "Terrambú",
     subtitle: "Hotel Boutique",
     location: "Córdoba, Argentina",
+    trustLabel: "PROYECTO REAL · HOTELERÍA",
     commercialContext:
       "Diseño y desarrollo de una experiencia digital orientada a transmitir el lugar antes de que el huésped llegue.",
     url: "https://terrambu.com.ar/es",
@@ -20,6 +21,7 @@ export const digitalProjects = [
     title: "Mapa Punilla",
     subtitle: "Turismo · Territorio · Exploración",
     location: "Valle de Punilla · Córdoba, Argentina",
+    trustLabel: "PROYECTO REAL · TURISMO",
     commercialContext: "Una experiencia digital que transforma información territorial en un producto útil y navegable.",
     url: "https://mapapunilla.com.ar/",
     externalUrl: "https://mapapunilla.com.ar/",
@@ -29,6 +31,7 @@ export const digitalProjects = [
     number: "03",
     type: "cta",
     title: "Tu proyecto puede ser el próximo.",
+    trustLabel: "",
   },
 ] as const;
 

@@ -3,6 +3,9 @@
 import H2OViewer, { type H2OViewerHandle } from "@/components/three/H2OViewer";
 import { DEFAULT_H2O_VARIANTS, H2O_VARIANT_GROUPS, type H2OVariantGroupId } from "@/components/three/h2oVariants";
 import { useEffect, useRef, useState } from "react";
+import { withBasePath } from "@/lib/assetPath";
+
+const H2O_PREVIEW_URL = withBasePath("/projects/corsteno-showroom-3d.webp");
 
 type H2OSceneProps = {
   sceneStyle: React.CSSProperties;
@@ -88,6 +91,7 @@ export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OScenePr
         <aside className="h2o-material-detail" aria-live="polite" aria-label="Detalle del material seleccionado">
           <div className="demo-panel-intro">
             <span className="scene-number">01 / 04</span>
+            <span className="project-trust-label">DEMO CORSTENO · CONFIGURADOR 3D</span>
             <span className="kind">Showroom digital</span>
             <h2 data-od-id="h2o-titulo">ATLAS</h2>
             <span className="kind">Configurador de producto</span>
@@ -127,6 +131,7 @@ export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OScenePr
               data-cursor="ROTATE"
               data-dragging={dragging ? "true" : "false"}
             >
+              <img className="slot-loading-preview" src={H2O_PREVIEW_URL} alt="" aria-hidden="true" />
               <div className="slot-loading">Cargando 3D</div>
               {(active || renderState !== "idle") && (
                 <H2OViewer

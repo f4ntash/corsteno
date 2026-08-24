@@ -8,8 +8,8 @@ import type { Metadata, Viewport } from "next";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "FORMA 3D — Workspace interactivo",
-  description: "FORMA 3D — 3D interactivo, web y sistemas digitales.",
+  title: "Corsteno — Workspace interactivo",
+  description: "Corsteno — 3D interactivo, web y sistemas digitales.",
 };
 
 export const viewport: Viewport = { themeColor: "#f6f6f3" };
@@ -66,7 +66,7 @@ export default function Navigation() {
   const closeMenu = () => setMenuOpen(false);
   return (
     <nav className={`workspace-nav${compact ? " compact" : ""}${dark ? " dark" : ""}`} aria-label="Navegación principal">
-      <a className="brand" href="#trabajo" onClick={closeMenu}>FORMA 3D</a>
+      <a className="brand" href="#trabajo" onClick={closeMenu}>Corsteno</a>
       <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="nav-links"
         onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? "Cerrar" : "Menú"}</button>
       <div className={`nav-links${menuOpen ? " open" : ""}`} id="nav-links">

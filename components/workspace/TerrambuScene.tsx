@@ -42,6 +42,7 @@ export default function TerrambuScene({ sceneStyle, active, onSceneLink }: Terra
           <>
             <header className="scene-heading project-scene-heading project-context-heading motion-heading terrambu-motion-heading">
               <span className="scene-number">02 / Experiencia web</span>
+              <span className="project-trust-label">{activeProject.trustLabel}</span>
               <h2 className="motion-title">{activeProject.title}</h2>
               <span className="kind">{activeProject.subtitle}</span>
               <span className="project-location">{activeProject.location}</span>
