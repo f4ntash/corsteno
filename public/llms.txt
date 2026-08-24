@@ -4,29 +4,29 @@ Corsteno desarrolla experiencias web, configuradores 3D, visualización 3D inter
 
 ## Servicios principales
 
-- Configuradores 3D de productos: https://f4ntash.github.io/corsteno/servicios/configuradores-3d
-- Visualización 3D interactiva: https://f4ntash.github.io/corsteno/servicios/visualizacion-3d
-- Desarrollo web interactivo: https://f4ntash.github.io/corsteno/servicios/desarrollo-web
-- Realidad aumentada: https://f4ntash.github.io/corsteno/servicios/realidad-aumentada
-- Realidad virtual: https://f4ntash.github.io/corsteno/servicios/realidad-virtual
+- Configuradores 3D de productos: https://corsteno.com/servicios/configuradores-3d
+- Visualización 3D interactiva: https://corsteno.com/servicios/visualizacion-3d
+- Desarrollo web interactivo: https://corsteno.com/servicios/desarrollo-web
+- Realidad aumentada: https://corsteno.com/servicios/realidad-aumentada
+- Realidad virtual: https://corsteno.com/servicios/realidad-virtual
 
 ## Sectores
 
-- Arquitectura y construcción: https://f4ntash.github.io/corsteno/sectores/arquitectura-construccion
-- Muebles y equipamiento: https://f4ntash.github.io/corsteno/sectores/muebles-equipamiento
-- Piscinas y exteriores: https://f4ntash.github.io/corsteno/sectores/piscinas-exteriores
-- Industria: https://f4ntash.github.io/corsteno/sectores/industria
-- Real estate: https://f4ntash.github.io/corsteno/sectores/real-estate
-- Hotelería y turismo: https://f4ntash.github.io/corsteno/sectores/hoteleria-turismo
+- Arquitectura y construcción: https://corsteno.com/sectores/arquitectura-construccion
+- Muebles y equipamiento: https://corsteno.com/sectores/muebles-equipamiento
+- Piscinas y exteriores: https://corsteno.com/sectores/piscinas-exteriores
+- Industria: https://corsteno.com/sectores/industria
+- Real estate: https://corsteno.com/sectores/real-estate
+- Hotelería y turismo: https://corsteno.com/sectores/hoteleria-turismo
 
 ## Proyectos
 
-- ATLAS: https://f4ntash.github.io/corsteno/proyectos/h2o
-- Exterior House: https://f4ntash.github.io/corsteno/proyectos/exterior-house
-- Terrambú: https://f4ntash.github.io/corsteno/proyectos/terrambu
-- Mapa Punilla: https://f4ntash.github.io/corsteno/proyectos/mapa-punilla
+- ATLAS: https://corsteno.com/proyectos/h2o
+- Exterior House: https://corsteno.com/proyectos/exterior-house
+- Terrambú: https://corsteno.com/proyectos/terrambu
+- Mapa Punilla: https://corsteno.com/proyectos/mapa-punilla
 
 ## Contacto
 
-- Web: https://f4ntash.github.io/corsteno/
+- Web: https://corsteno.com/
 - Los canales comerciales de producción todavía no están publicados.

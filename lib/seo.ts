@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { contactChannels } from "@/lib/contact";
 import { BASE_PATH } from "@/lib/assetPath";
 
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://corsteno.com").replace(/\/$/, "");
+
 export const site = {
   name: "Corsteno",
   basePath: BASE_PATH,
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://f4ntash.github.io/corsteno").replace(/\/$/, ""),
+  url: SITE_URL,
   locale: "es_AR",
   defaultImage: "/projects/terrambu-hotel-web.webp",
 };
