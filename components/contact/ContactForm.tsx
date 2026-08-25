@@ -151,6 +151,10 @@ export default function ContactForm() {
       <button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Enviando..." : "Enviar consulta"}
       </button>
+      <p className="contact-form-reassurance">
+        Contanos qué querés hacer. Evaluamos la idea y te respondemos con los próximos pasos.
+        <span>Respuesta habitual: 24–48 h.</span>
+      </p>
     </form>
   );
 }

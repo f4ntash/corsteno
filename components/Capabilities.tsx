@@ -46,7 +46,7 @@ const audiences = [
 
 export default function Capabilities() {
   return (
-    <section className="capabilities" id="capacidades" data-od-id="capacidades">
+    <section className="capabilities" id="capacidades" data-od-id="capacidades" data-navbar-theme="light">
       <header className="cap-head">
         <span className="label">Capacidades</span>
         <p>
@@ -65,13 +65,21 @@ export default function Capabilities() {
       </ol>
       <div className="cap-engine">
         <span className="label">Corsteno Engine</span>
-        <h2>Un sistema reutilizable para construir configuradores 3D a partir de productos y proyectos reales.</h2>
+        <h2>No empezamos cada configurador desde cero.</h2>
         <p>
-          Modelo 3D + partes configurables + variantes + interfaz + web → experiencia lista para integrar.
+          Corsteno Engine reúne una base reutilizable para materiales, variantes, cámaras, controles de interacción y
+          lógica de configuración.
         </p>
         <p>
-          No empezamos cada configurador desde cero. Adaptamos una arquitectura ya probada al producto de cada cliente.
+          Así podemos adaptar cada experiencia al producto y su forma de uso sin reconstruir la base técnica cada vez.
         </p>
+        <ul className="engine-foundation" aria-label="Base reutilizable de Corsteno Engine">
+          <li>Materiales</li>
+          <li>Variantes</li>
+          <li>Cámaras</li>
+          <li>Controles</li>
+          <li>Lógica de producto</li>
+        </ul>
       </div>
       <div className="cap-audience">
         <span className="label">Para quién</span>

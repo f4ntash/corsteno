@@ -1,4 +1,4 @@
-import { contactChannels } from "@/lib/contact";
+import { contactChannels, socialLinks } from "@/lib/contact";
 import { site } from "@/lib/seo";
 import ContactForm from "@/components/contact/ContactForm";
 
@@ -6,7 +6,7 @@ export default function Contact() {
   const hasContactChannel = Boolean(contactChannels.whatsappUrl || contactChannels.email);
 
   return (
-    <section className="contact dark" id="contacto" data-od-id="contacto">
+    <section className="contact dark" id="contacto" data-od-id="contacto" data-navbar-theme="dark">
       <div className="contact-copy">
         <span className="label">Contacto</span>
         <h2 data-od-id="contacto-titulo">
@@ -31,7 +31,7 @@ export default function Contact() {
           <div className="contact-channels" aria-label="Canales de contacto">
             {contactChannels.whatsappUrl ? (
               <a href={contactChannels.whatsappUrl} data-cursor="Abrir" data-od-id="contacto-iniciar">
-                Contanos sobre tu producto
+                Escribinos por WhatsApp
               </a>
             ) : null}
             {contactChannels.email ? (
@@ -50,6 +50,12 @@ export default function Contact() {
           <a href={`${site.basePath}/servicios/desarrollo-web/`}>Desarrollo web</a>
           <a href={`${site.basePath}/#proyectos`}>Proyectos</a>
           <a href={`${site.basePath}/#contacto`}>Contacto</a>
+          {socialLinks.instagramUrl ? (
+            <a href={socialLinks.instagramUrl} target="_blank" rel="noreferrer">Instagram</a>
+          ) : null}
+          {socialLinks.linkedinUrl ? (
+            <a href={socialLinks.linkedinUrl} target="_blank" rel="noreferrer">LinkedIn</a>
+          ) : null}
         </nav>
         <span className="meta">Ver · Probar · Configurar · Decidir</span>
       </footer>

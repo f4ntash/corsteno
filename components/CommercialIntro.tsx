@@ -176,7 +176,7 @@ export default function CommercialIntro() {
 
   return (
     <>
-      <section className="commercial-hero" id="que-hacemos" data-od-id="que-hacemos">
+      <section className="commercial-hero" id="que-hacemos" data-od-id="que-hacemos" data-navbar-theme="light">
         <div className="commercial-hero-copy">
           <span className="label">Visualización digital interactiva</span>
           <h1>
@@ -240,7 +240,7 @@ export default function CommercialIntro() {
         </div>
       </section>
 
-      <section className="commercial-section problem-section">
+      <section className="commercial-section problem-section" data-navbar-theme="light">
         <header className="commercial-section-head">
           <span className="label">Qué resolvemos</span>
           <h2>
@@ -283,7 +283,7 @@ export default function CommercialIntro() {
         </div>
       </section>
 
-      <section className="commercial-section services-section" id="servicios">
+      <section className="commercial-section services-section" id="servicios" data-navbar-theme="light">
         <header className="commercial-section-head">
           <span className="label">Servicios</span>
           <h2>Nuestros servicios</h2>
@@ -313,7 +313,7 @@ export default function CommercialIntro() {
         </ol>
       </section>
 
-      <section className="commercial-section industries-section" id="sectores">
+      <section className="commercial-section industries-section" id="sectores" data-navbar-theme="light">
         <header className="commercial-section-head">
           <span className="label">Aplicaciones</span>
           <h2>¿Dónde podemos aplicarlo?</h2>

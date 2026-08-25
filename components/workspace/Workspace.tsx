@@ -39,6 +39,11 @@ export default function Workspace() {
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
   const dark = currentScene === 1 || currentScene === 3;
+  const showroomGroupLabel = showroomCategory === "web"
+    ? "Casos reales"
+    : showroomCategory === "3d"
+      ? "Experiencias / Demos Corsteno"
+      : "Experiencias Corsteno";
 
   const sceneMetrics = useMemo<SceneMetrics[]>(
     () =>
@@ -191,20 +196,25 @@ export default function Workspace() {
   return (
     <>
       <ContextCursor />
-      <section className="showroom-intro" id="proyectos">
+      <section className="showroom-intro" id="proyectos" data-navbar-theme="light">
         <span className="label">Proyectos</span>
         <h2>
           Trabajo real.
           <br />
           Experiencias interactivas.
         </h2>
-        <p>Una selección de proyectos donde combinamos desarrollo web, visualización 3D e interacción.</p>
+        <p>Casos entregados a clientes y demos propias donde mostramos desarrollo web, visualización 3D e interacción.</p>
+        <div className="showroom-trust-groups" aria-label="Tipos de proyectos">
+          <span><strong>Casos reales</strong> Terrambú · Mapa Punilla</span>
+          <span><strong>Demos Corsteno</strong> ATLAS · Exterior House</span>
+        </div>
       </section>
       <section
         ref={workspaceRef}
         className={`workspace ${workspaceStyles.workspaceComponent}`}
         id="showroom-3d"
         data-od-id="workspace-trabajo"
+        data-navbar-theme={dark ? "dark" : "light"}
       >
         <div className="workspace-stage" data-scene={currentScene + 1} data-od-id="escena-principal">
           <nav className={`showroom-nav${dark ? " dark" : ""}`} aria-label="Showroom">
@@ -219,34 +229,37 @@ export default function Workspace() {
                 Inmersivo
               </button>
             </div>
-            <div className="showroom-project-tabs" aria-label="Proyectos">
-              {showroomCategory === "3d" && (
-                <>
-                  <button type="button" aria-current={currentScene === 0 ? "true" : undefined} onClick={() => goToScene(0)}>
-                    01 ATLAS
-                  </button>
-                  <button type="button" aria-current={currentScene === 2 ? "true" : undefined} onClick={() => goToScene(2)}>
-                    02 Exterior House
-                  </button>
-                </>
-              )}
-              {showroomCategory === "web" && (
-                <>
-                  {digitalProjects
-                    .filter((project) => project.type === "website")
-                    .map((project) => (
-                      <button
-                        key={project.id}
-                        type="button"
-                        aria-current={activeWebProjectId === project.id ? "true" : undefined}
-                        onClick={() => selectWebProject(project.id)}
-                      >
-                        {project.number} {project.title}
-                      </button>
-                    ))}
-                </>
-              )}
-              {showroomCategory === "immersive" && <span>Próximamente</span>}
+            <div className="showroom-project-menu">
+              <span className="showroom-project-group-label">{showroomGroupLabel}</span>
+              <div className="showroom-project-tabs" aria-label={`${showroomGroupLabel}: proyectos`}>
+                {showroomCategory === "3d" && (
+                  <>
+                    <button type="button" aria-current={currentScene === 0 ? "true" : undefined} onClick={() => goToScene(0)}>
+                      01 ATLAS
+                    </button>
+                    <button type="button" aria-current={currentScene === 2 ? "true" : undefined} onClick={() => goToScene(2)}>
+                      02 Exterior House
+                    </button>
+                  </>
+                )}
+                {showroomCategory === "web" && (
+                  <>
+                    {digitalProjects
+                      .filter((project) => project.type === "website")
+                      .map((project) => (
+                        <button
+                          key={project.id}
+                          type="button"
+                          aria-current={activeWebProjectId === project.id ? "true" : undefined}
+                          onClick={() => selectWebProject(project.id)}
+                        >
+                          {project.number} {project.title}
+                        </button>
+                      ))}
+                  </>
+                )}
+                {showroomCategory === "immersive" && <span>Próximamente</span>}
+              </div>
             </div>
           </nav>
           <span className="axis axis-x" />

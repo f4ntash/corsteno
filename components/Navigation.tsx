@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logoCorsteno from "./logoSombreado.png";
 
 const navItems = [
@@ -10,12 +10,15 @@ const navItems = [
   { href: "#contacto", key: "contacto", label: "Contacto" },
 ];
 
+const navKeys = new Set(navItems.map((item) => item.key));
+
 type ChromeState = {
   dark?: boolean;
   compact?: boolean;
 };
 
 export default function Navigation() {
+  const activeThemeSectionRef = useRef("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("trabajo");
   const [dark, setDark] = useState(false);
@@ -29,7 +32,9 @@ export default function Navigation() {
   useEffect(() => {
     const onChrome = (event: Event) => {
       const detail = (event as CustomEvent<ChromeState>).detail;
-      if (typeof detail.dark === "boolean") setDark(detail.dark);
+      if (typeof detail.dark === "boolean" && activeThemeSectionRef.current === "showroom-3d") {
+        setDark(detail.dark);
+      }
       if (typeof detail.compact === "boolean") setCompact(detail.compact);
     };
 
@@ -38,25 +43,44 @@ export default function Navigation() {
   }, []);
 
   useEffect(() => {
-    const sections = ["que-hacemos", "proyectos", "capacidades", "contacto"]
-      .map((id) => document.getElementById(id))
-      .filter((section): section is HTMLElement => Boolean(section));
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-navbar-theme]"));
+    const syncTheme = () => {
+      const section = document
+        .elementFromPoint(window.innerWidth / 2, window.innerHeight * 0.35)
+        ?.closest<HTMLElement>("[data-navbar-theme]");
+
+      if (!section) return;
+      activeThemeSectionRef.current = section.id;
+      setDark(section.dataset.navbarTheme === "dark");
+    };
+    const requestThemeSync = () => window.requestAnimationFrame(syncTheme);
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          const id = entry.target.id;
-          setActiveNav(id);
-          if (id === "capacidades") setDark(false);
-          if (id === "contacto") setDark(true);
+          const section = entry.target as HTMLElement;
+          if (navKeys.has(section.id)) setActiveNav(section.id);
         });
       },
       { rootMargin: "-35% 0px -60% 0px" },
     );
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    const themeObserver = new MutationObserver(syncTheme);
+
+    sections.forEach((section) => {
+      observer.observe(section);
+      themeObserver.observe(section, { attributes: true, attributeFilter: ["data-navbar-theme"] });
+    });
+    window.addEventListener("scroll", requestThemeSync, { passive: true });
+    window.addEventListener("resize", requestThemeSync);
+    syncTheme();
+    return () => {
+      observer.disconnect();
+      themeObserver.disconnect();
+      window.removeEventListener("scroll", requestThemeSync);
+      window.removeEventListener("resize", requestThemeSync);
+    };
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
