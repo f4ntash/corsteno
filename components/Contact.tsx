@@ -20,6 +20,21 @@ export default function Contact() {
           Podés enviarnos una referencia, fotografía, catálogo, plano o modelo 3D y analizamos qué tipo de experiencia
           puede adaptarse mejor.
         </p>
+        <div className="contact-quote-info" aria-labelledby="contact-quote-title">
+          <h3 id="contact-quote-title">¿Cómo cotizamos?</h3>
+          <p>
+            Cada proyecto es distinto. El alcance depende de lo que quieras construir y del producto que necesitemos
+            representar.
+          </p>
+          <ul>
+            <li>Complejidad del producto</li>
+            <li>Cantidad de variantes</li>
+            <li>Modelado 3D necesario</li>
+            <li>Interacciones y funcionalidades</li>
+            <li>Integraciones con otros sistemas</li>
+          </ul>
+          <p>Contanos qué necesitás y evaluamos el proyecto sin costo.</p>
+        </div>
       </div>
       <div className="contact-action">
         <p className="contact-commercial-copy">

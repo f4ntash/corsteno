@@ -17,12 +17,13 @@ export default function DigitalSystemScene({ sceneStyle, active }: DigitalSystem
         <span className="spatial-kicker">RA · RV · Spatial</span>
         <h2 data-od-id="sistema-titulo">Experiencias inmersivas para productos y espacios.</h2>
         <p>
-          Llevamos productos y proyectos interactivos a experiencias de Realidad Aumentada y Realidad Virtual.
+          Estamos preparando experiencias de Realidad Aumentada y Realidad Virtual para productos, espacios y
+          proyectos interactivos.
         </p>
         <strong>Próximamente</strong>
         <span className="spatial-meta">Aplicaciones para arquitectura, real estate y producto.</span>
         <a className="contextual-cta dark" href="#contacto" data-service="immersive" data-cursor="Abrir">
-          Hablemos ↗
+          Contanos sobre tu producto ↗
         </a>
       </div>
       <a className="scene-action" href="#capacidades" data-od-id="sistema-continuar">

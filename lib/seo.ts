@@ -17,8 +17,8 @@ const serviceCatalog = [
   "Configuradores 3D interactivos",
   "Visualización 3D",
   "Desarrollo web interactivo",
-  "Realidad aumentada",
-  "Realidad virtual",
+  "Realidad aumentada (próximamente)",
+  "Realidad virtual (próximamente)",
 ];
 
 export type SeoLink = {
@@ -189,11 +189,11 @@ export const seoPages: SeoPage[] = [
     category: "servicio",
     intent: "evaluar realidad aumentada para visualizar productos y espacios",
     title: "Realidad Aumentada para Productos y Espacios | Corsteno",
-    description: "Experiencias de realidad aumentada para visualizar productos, espacios y proyectos en contexto real desde dispositivos compatibles.",
+    description: "Próximamente en Corsteno: realidad aumentada para visualizar productos, espacios y proyectos en contexto real.",
     h1: "Realidad aumentada para productos y espacios",
-    eyebrow: "Servicio",
-    intro: "La realidad aumentada permite evaluar cómo podría verse un producto, espacio o proyecto dentro de un contexto real.",
-    cta: "Consultar experiencia AR",
+    eyebrow: "Próximamente",
+    intro: "Estamos preparando experiencias de realidad aumentada para evaluar productos, espacios y proyectos dentro de un contexto real.",
+    cta: "Contanos sobre tu producto",
     takeaways: [
       "Ayuda a visualizar escala, presencia y contexto.",
       "Puede complementar configuradores 3D y visualización web.",
@@ -222,11 +222,11 @@ export const seoPages: SeoPage[] = [
     category: "servicio",
     intent: "evaluar realidad virtual para presentar proyectos y espacios",
     title: "Realidad Virtual para Proyectos y Showrooms | Corsteno",
-    description: "Experiencias de realidad virtual para presentar espacios, productos y proyectos en entornos inmersivos orientados a negocio.",
+    description: "Próximamente en Corsteno: realidad virtual para presentar espacios, productos y proyectos en entornos inmersivos.",
     h1: "Realidad virtual para proyectos y showrooms",
-    eyebrow: "Servicio",
-    intro: "La realidad virtual puede transformar una presentación en una experiencia inmersiva para recorrer espacios, productos o proyectos.",
-    cta: "Consultar experiencia VR",
+    eyebrow: "Próximamente",
+    intro: "Estamos preparando experiencias de realidad virtual para recorrer espacios, productos y proyectos en entornos inmersivos.",
+    cta: "Contanos sobre tu producto",
     takeaways: [
       "Permite recorrer espacios o proyectos de forma inmersiva.",
       "Puede ser útil para showrooms, real estate y arquitectura.",
@@ -243,7 +243,7 @@ export const seoPages: SeoPage[] = [
       { question: "¿Puede partir de un proyecto 3D existente?", answer: "Sí, si el material técnico y visual tiene calidad suficiente o puede adaptarse." },
     ],
     links: [
-      { label: "Realidad aumentada", href: p("/servicios/realidad-aumentada") },
+      { label: "Realidad aumentada · Próximamente", href: p("/servicios/realidad-aumentada") },
       { label: "Real estate", href: p("/sectores/real-estate") },
       { label: "Visualización 3D", href: p("/servicios/visualizacion-3d") },
     ],
@@ -264,7 +264,7 @@ export const seoPages: SeoPage[] = [
       "Permite mostrar proyectos antes de construirlos.",
       "Ayuda a comparar terminaciones y materiales.",
       "Puede apoyar preventa, presentación y aprobación interna.",
-      "Se conecta naturalmente con visualización 3D y AR/VR.",
+      "Se conecta naturalmente con visualización 3D y, a futuro, con AR/VR.",
     ],
     sections: [
       { title: "Aplicaciones", body: "La visualización interactiva puede aplicarse a viviendas, espacios exteriores, piscinas, terminaciones y desarrollos en etapa comercial." },
@@ -277,7 +277,7 @@ export const seoPages: SeoPage[] = [
     ],
     links: [
       { label: "Visualización 3D", href: p("/servicios/visualizacion-3d") },
-      { label: "Realidad aumentada", href: p("/servicios/realidad-aumentada") },
+      { label: "Realidad aumentada · Próximamente", href: p("/servicios/realidad-aumentada") },
       { label: "Ver Exterior House", href: p("/proyectos/exterior-house") },
     ],
   },
@@ -401,7 +401,7 @@ export const seoPages: SeoPage[] = [
     ],
     sections: [
       { title: "Qué puede incluir", body: "Visualización de unidades, terminaciones, espacios comunes, ubicación, recorridos y material comercial interactivo." },
-      { title: "Servicios relacionados", body: "La visualización 3D, realidad aumentada y realidad virtual pueden combinarse según el objetivo del desarrollo." },
+      { title: "Servicios relacionados", body: "La visualización 3D puede combinarse, a futuro, con realidad aumentada y realidad virtual según el objetivo del desarrollo." },
     ],
     faqs: [
       { question: "¿Sirve para preventa inmobiliaria?", answer: "Sí. Permite explicar y mostrar desarrollos antes de que estén terminados." },
@@ -410,7 +410,7 @@ export const seoPages: SeoPage[] = [
     ],
     links: [
       { label: "Visualización 3D", href: p("/servicios/visualizacion-3d") },
-      { label: "Realidad virtual", href: p("/servicios/realidad-virtual") },
+      { label: "Realidad virtual · Próximamente", href: p("/servicios/realidad-virtual") },
       { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
     ],
   },

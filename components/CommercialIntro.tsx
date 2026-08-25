@@ -95,13 +95,13 @@ const services = [
     number: "03",
     title: "Realidad aumentada y virtual",
     description:
-      "Experiencias inmersivas para visualizar productos y espacios dentro de contextos reales o virtuales.",
+      "Próximamente: experiencias inmersivas para visualizar productos y espacios dentro de contextos reales o virtuales.",
     examples: "Arquitectura · Real Estate · Producto · Showrooms",
     href: "#showroom-inmersivo",
     cta: "Próximamente",
     detailLinks: [
-      { label: "Realidad aumentada →", href: withBasePath("/servicios/realidad-aumentada/") },
-      { label: "Realidad virtual →", href: withBasePath("/servicios/realidad-virtual/") },
+      { label: "Realidad aumentada · Próximamente →", href: withBasePath("/servicios/realidad-aumentada/") },
+      { label: "Realidad virtual · Próximamente →", href: withBasePath("/servicios/realidad-virtual/") },
     ],
   },
 ];
@@ -187,22 +187,25 @@ export default function CommercialIntro() {
             entender antes de comprarlos.
           </h1>
           <p>
-            Creamos configuradores 3D, experiencias web y soluciones inmersivas para empresas que necesitan mostrar
-            mejor lo que venden.
+            Creamos configuradores 3D y experiencias web para empresas que necesitan mostrar mejor lo que venden.
+            También estamos preparando soluciones inmersivas.
           </p>
           <ul className="commercial-hero-services" aria-label="Servicios principales">
             <li>Configuradores 3D</li>
             <li>Experiencias web</li>
-            <li>Realidad aumentada y virtual</li>
+            <li>
+              Realidad aumentada y virtual
+              <span>Próximamente</span>
+            </li>
           </ul>
           <div className="commercial-actions">
-            <a href="#proyectos">Ver proyectos</a>
-            <a href="#contacto">Contanos sobre tu producto</a>
+            <a className="commercial-action-primary" href="#contacto">Contanos sobre tu producto</a>
+            <a className="commercial-action-secondary" href="#proyectos">Ver proyectos</a>
           </div>
           <div className="commercial-proof" aria-label="Áreas de trabajo">
             <span>3D</span>
             <span>Web</span>
-            <span>RA / RV</span>
+            <span>RA / RV · Próximamente</span>
           </div>
         </div>
         <div className="commercial-hero-visual" aria-label="Proyectos de Corsteno">

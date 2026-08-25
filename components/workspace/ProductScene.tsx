@@ -210,7 +210,7 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
                 </dl>
                 <p className="panel-commercial-copy">Mostrá materiales y terminaciones antes de construir.</p>
                 <a className="contextual-cta" href="#contacto" data-service="preventa" data-cursor="Abrir">
-                  Quiero una demo con mi proyecto ↗
+                  Quiero algo así ↗
                 </a>
               </aside>
               <div className="exterior-render-column">

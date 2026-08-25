@@ -48,7 +48,7 @@ export default function TerrambuScene({ sceneStyle, active, onSceneLink }: Terra
               <span className="project-location">{activeProject.location}</span>
               <p className="project-context-copy">{activeProject.commercialContext}</p>
               <a className="contextual-cta dark" href="#contacto" data-service="web" data-cursor="Abrir">
-                Quiero una experiencia así ↗
+                Quiero algo así ↗
               </a>
             </header>
             <LiveWebsiteFrame
@@ -67,7 +67,7 @@ export default function TerrambuScene({ sceneStyle, active, onSceneLink }: Terra
               <br />
               Nosotros te ayudamos a darle forma.
             </p>
-            <a href="#contacto">Hablemos del proyecto ↗</a>
+            <a href="#contacto">Contanos sobre tu producto ↗</a>
             <span className="digital-project-cta-meta">Web · 3D · Producto interactivo</span>
           </div>
         )}

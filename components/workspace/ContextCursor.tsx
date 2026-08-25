@@ -14,7 +14,7 @@ export default function ContextCursor() {
   const positionRef = useRef({ x: 0, y: 0 });
   const positionedRef = useRef(false);
   const [cursor, setCursor] = useState<CursorState>({
-    label: "VIEW",
+    label: "VER",
     visible: false,
     dark: false,
   });
@@ -38,7 +38,7 @@ export default function ContextCursor() {
       if (!element) return;
       setCursor((current) => ({
         ...current,
-        label: element.dataset.cursor || "VIEW",
+        label: element.dataset.cursor || "VER",
         visible: true,
         dark: Boolean(element.closest(".dark")),
       }));

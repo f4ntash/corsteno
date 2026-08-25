@@ -38,7 +38,7 @@ export default function MobileCTA() {
       data-analytics="cta"
       data-visible={visible ? "true" : "false"}
     >
-      Hablemos de tu proyecto
+      Contanos sobre tu producto
     </a>
   );
 }

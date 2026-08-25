@@ -16,8 +16,8 @@ const capabilities = [
     description: "Configuradores embebibles en sitios existentes, catálogos, ecommerce o herramientas comerciales.",
   },
   {
-    title: "RA / RV",
-    description: "Extensión de experiencias 3D al espacio físico y entornos inmersivos.",
+    title: "Realidad aumentada y virtual",
+    description: "Próximamente: extensión de experiencias 3D al espacio físico y entornos inmersivos.",
   },
 ];
 
@@ -65,13 +65,26 @@ export default function Capabilities() {
       </ol>
       <div className="cap-engine">
         <span className="label">Corsteno Engine</span>
-        <h2>No empezamos cada configurador desde cero.</h2>
+        <h2>No arrancamos de cero.</h2>
         <p>
-          Corsteno Engine reúne una base reutilizable para materiales, variantes, cámaras, controles de interacción y
-          lógica de configuración.
+          Corsteno Engine es nuestra base reutilizable para construir experiencias interactivas adaptadas a cada
+          producto.
         </p>
+        <div className="engine-formula" aria-label="Modelo 3D más partes configurables más variantes más interfaz más web: experiencia lista para integrar">
+          <span>Modelo 3D</span>
+          <b aria-hidden="true">+</b>
+          <span>Partes configurables</span>
+          <b aria-hidden="true">+</b>
+          <span>Variantes</span>
+          <b aria-hidden="true">+</b>
+          <span>Interfaz</span>
+          <b aria-hidden="true">+</b>
+          <span>Web</span>
+          <b aria-hidden="true">→</b>
+          <strong>Experiencia lista para integrar</strong>
+        </div>
         <p>
-          Así podemos adaptar cada experiencia al producto y su forma de uso sin reconstruir la base técnica cada vez.
+          Compartimos la misma base técnica y adaptamos materiales, variantes, controles e integraciones a cada caso.
         </p>
         <ul className="engine-foundation" aria-label="Base reutilizable de Corsteno Engine">
           <li>Materiales</li>

@@ -109,7 +109,7 @@ export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OScenePr
           </dl>
           <p className="panel-commercial-copy">Tus clientes pueden explorar materiales y terminaciones en tiempo real.</p>
           <a className="contextual-cta" href="#contacto" data-service="showroom" data-cursor="Abrir">
-            Quiero esto para mi producto ↗
+            Quiero algo así ↗
           </a>
         </aside>
         <div className="h2o-render-column">

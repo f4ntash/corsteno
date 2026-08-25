@@ -1,14 +1,14 @@
 # Corsteno
 
-Corsteno desarrolla experiencias web, configuradores 3D, visualización 3D interactiva y soluciones inmersivas para empresas.
+Corsteno desarrolla experiencias web, configuradores 3D y visualización 3D interactiva, y prepara soluciones inmersivas para empresas.
 
 ## Servicios principales
 
 - Configuradores 3D de productos: https://corsteno.com/servicios/configuradores-3d/
 - Visualización 3D interactiva: https://corsteno.com/servicios/visualizacion-3d/
 - Desarrollo web interactivo: https://corsteno.com/servicios/desarrollo-web/
-- Realidad aumentada: https://corsteno.com/servicios/realidad-aumentada/
-- Realidad virtual: https://corsteno.com/servicios/realidad-virtual/
+- Realidad aumentada (próximamente): https://corsteno.com/servicios/realidad-aumentada/
+- Realidad virtual (próximamente): https://corsteno.com/servicios/realidad-virtual/
 
 ## Sectores
 
