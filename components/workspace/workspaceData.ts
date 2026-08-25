@@ -1,5 +1,12 @@
 export const sceneCount = 4;
 
+export type ShowroomCategory = "3d" | "web" | "immersive";
+
+export type ShowroomProjectTarget = {
+  category: ShowroomCategory;
+  project: string;
+};
+
 export const digitalProjects = [
   {
     id: "terrambu",

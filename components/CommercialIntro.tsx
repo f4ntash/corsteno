@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { withBasePath } from "@/lib/assetPath";
+import type { ShowroomProjectTarget } from "./workspace/workspaceData";
 
 const TERRAMBU_IMAGE_URL = withBasePath("/projects/terrambu-hotel-web.webp");
 const MAPA_PUNILLA_IMAGE_URL = withBasePath("/projects/mapa-punilla-web.webp");
@@ -15,6 +16,7 @@ const featuredProjects = [
     trustLabel: "PROYECTO REAL · HOTELERÍA",
     image: TERRAMBU_IMAGE_URL,
     alt: "Sitio web para hotel boutique Terrambú desarrollado por Corsteno",
+    target: { category: "web", project: "terrambu" },
   },
   {
     id: "mapa-punilla",
@@ -23,6 +25,7 @@ const featuredProjects = [
     trustLabel: "PROYECTO REAL · TURISMO",
     image: MAPA_PUNILLA_IMAGE_URL,
     alt: "Plataforma web Mapa Punilla desarrollada por Corsteno",
+    target: { category: "web", project: "mapa-punilla" },
   },
   {
     id: "atlas",
@@ -31,8 +34,17 @@ const featuredProjects = [
     trustLabel: "DEMO CORSTENO · CONFIGURADOR 3D",
     image: SHOWROOM_3D_IMAGE_URL,
     alt: "Configurador 3D interactivo ATLAS desarrollado por Corsteno",
+    target: { category: "3d", project: "atlas" },
   },
-];
+] satisfies Array<{
+  id: string;
+  title: string;
+  category: string;
+  trustLabel: string;
+  image: string;
+  alt: string;
+  target: ShowroomProjectTarget;
+}>;
 
 const uses = [
   {
@@ -158,6 +170,10 @@ export default function CommercialIntro() {
     window.dispatchEvent(new CustomEvent("forma3d:showroom-scene", { detail: { scene } }));
   };
 
+  const openProject = ({ category, project }: ShowroomProjectTarget) => {
+    window.dispatchEvent(new CustomEvent("forma3d:showroom-scene", { detail: { category, project } }));
+  };
+
   return (
     <>
       <section className="commercial-hero" id="que-hacemos" data-od-id="que-hacemos">
@@ -190,21 +206,36 @@ export default function CommercialIntro() {
           </div>
         </div>
         <div className="commercial-hero-visual" aria-label="Proyectos de Corsteno">
-          <figure className="hero-project hero-project-primary">
-            <img src={featuredProject.image} alt={featuredProject.alt} />
-            <figcaption>
-              <span>{featuredProject.category} · {featuredProject.title}</span>
-              <span className="project-trust-label">{featuredProject.trustLabel}</span>
-            </figcaption>
-          </figure>
+          <button
+            type="button"
+            className="hero-project-link hero-project-primary"
+            aria-label={`Ver ${featuredProject.title} en proyectos`}
+            onClick={() => openProject(featuredProject.target)}
+          >
+            <span className="hero-project">
+              <img src={featuredProject.image} alt={featuredProject.alt} />
+              <span className="hero-project-caption">
+                <span>{featuredProject.category} · {featuredProject.title}</span>
+                <span className="project-trust-label">{featuredProject.trustLabel}</span>
+              </span>
+            </span>
+          </button>
           {secondaryProjects.map((project) => (
-            <figure className="hero-project hero-project-secondary" key={project.id}>
-              <img src={project.image} alt={project.alt} />
-              <figcaption>
-                <span>{project.category} · {project.title}</span>
-                <span className="project-trust-label">{project.trustLabel}</span>
-              </figcaption>
-            </figure>
+            <button
+              type="button"
+              className="hero-project-link hero-project-secondary"
+              key={project.id}
+              aria-label={`Ver ${project.title} en proyectos`}
+              onClick={() => openProject(project.target)}
+            >
+              <span className="hero-project">
+                <img src={project.image} alt={project.alt} />
+                <span className="hero-project-caption">
+                  <span>{project.category} · {project.title}</span>
+                  <span className="project-trust-label">{project.trustLabel}</span>
+                </span>
+              </span>
+            </button>
           ))}
         </div>
       </section>

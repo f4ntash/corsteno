@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import logoCorsteno from "./logoSombreado.png";
 
 const navItems = [
   { href: "#que-hacemos", key: "que-hacemos", label: "Qué hacemos" },
@@ -67,7 +68,19 @@ export default function Navigation() {
       data-od-id="navegacion-principal"
     >
       <a className="brand" href="#que-hacemos" data-od-id="marca-corsteno" onClick={closeMenu}>
-        Corsteno
+        {/* CORSTENO_LOGO_HERE — Logo oficial de Corsteno */}
+        <img
+          className="brand-logo"
+          src={logoCorsteno.src}
+          width={logoCorsteno.width}
+          height={logoCorsteno.height}
+          alt=""
+          aria-hidden="true"
+        />
+        <span className="brand-copy">
+          <span className="brand-name">Corsteno</span>
+          <span className="brand-tagline">Interactive Technologies</span>
+        </span>
       </a>
       <button
         className="menu-toggle"

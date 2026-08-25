@@ -9,6 +9,7 @@ import ProductScene from "./ProductScene";
 import StepTransition from "./StepTransition";
 import TerrambuScene from "./TerrambuScene";
 import { digitalProjects, sceneCount } from "./workspaceData";
+import type { ShowroomCategory, ShowroomProjectTarget } from "./workspaceData";
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const mobileQuery = "(max-width:900px)";
@@ -28,7 +29,7 @@ export default function Workspace() {
   const tickingRef = useRef(false);
   const currentSceneRef = useRef(0);
   const [currentScene, setCurrentScene] = useState(0);
-  const [showroomCategory, setShowroomCategory] = useState<"3d" | "web" | "immersive">("3d");
+  const [showroomCategory, setShowroomCategory] = useState<ShowroomCategory>("3d");
   const [activeWebProjectId, setActiveWebProjectId] = useState<(typeof digitalProjects)[number]["id"]>(
     digitalProjects[0].id,
   );
@@ -114,6 +115,22 @@ export default function Workspace() {
     if (workspace) window.scrollTo({ top: workspace.offsetTop, behavior: "smooth" });
   }, [setScene]);
 
+  const openProject = useCallback(({ category, project }: ShowroomProjectTarget) => {
+    if (category === "3d") {
+      const scene = project === "atlas" ? 0 : project === "exterior-house" ? 2 : null;
+      if (scene !== null) goToScene(scene);
+      return;
+    }
+
+    if (category === "web") {
+      const webProject = digitalProjects.find((item) => item.type === "website" && item.id === project);
+      if (webProject) selectWebProject(webProject.id);
+      return;
+    }
+
+    goToScene(3);
+  }, [goToScene, selectWebProject]);
+
   useEffect(() => {
     dispatchChrome({ dark, compact });
   }, [dark, compact]);
@@ -157,13 +174,19 @@ export default function Workspace() {
 
   useEffect(() => {
     const onShowroomScene = (event: Event) => {
-      const scene = (event as CustomEvent<{ scene?: number }>).detail.scene;
+      const detail = (event as CustomEvent<{ scene?: number } & Partial<ShowroomProjectTarget>>).detail;
+      if (detail.category && detail.project) {
+        openProject({ category: detail.category, project: detail.project });
+        return;
+      }
+
+      const { scene } = detail;
       if (typeof scene === "number") goToScene(scene);
     };
 
     window.addEventListener("forma3d:showroom-scene", onShowroomScene);
     return () => window.removeEventListener("forma3d:showroom-scene", onShowroomScene);
-  }, [goToScene]);
+  }, [goToScene, openProject]);
 
   return (
     <>
