@@ -26,7 +26,7 @@ export default function DigitalSystemScene({ sceneStyle, active }: DigitalSystem
           Contanos sobre tu producto ↗
         </a>
       </div>
-      <a className="scene-action" href="#capacidades" data-od-id="sistema-continuar">
+      <a className="scene-action" href="#soluciones" data-od-id="sistema-continuar">
         Capacidades ↓
       </a>
     </article>

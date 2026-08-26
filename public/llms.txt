@@ -1,12 +1,14 @@
 # Corsteno
 
-Corsteno desarrolla experiencias web, configuradores 3D y visualización 3D interactiva, y prepara soluciones inmersivas para empresas.
+Corsteno es un estudio tecnológico argentino que crea experiencias digitales para productos, marcas y negocios.
+
+Su oferta actual combina configuradores 3D de producto, experiencias digitales interactivas y desarrollo web.
 
 ## Servicios principales
 
-- Configuradores 3D de productos: https://corsteno.com/servicios/configuradores-3d/
-- Visualización 3D interactiva: https://corsteno.com/servicios/visualizacion-3d/
-- Desarrollo web interactivo: https://corsteno.com/servicios/desarrollo-web/
+- Configuradores 3D de productos: experiencias para explorar materiales, terminaciones, componentes y variantes desde el navegador. https://corsteno.com/servicios/configuradores-3d/
+- Experiencias digitales: showrooms, catálogos y visualización interactiva alrededor de un producto. https://corsteno.com/servicios/visualizacion-3d/
+- Desarrollo web: sitios y plataformas web orientados a comunicar productos, servicios y experiencias. https://corsteno.com/servicios/desarrollo-web/
 - Realidad aumentada (próximamente): https://corsteno.com/servicios/realidad-aumentada/
 - Realidad virtual (próximamente): https://corsteno.com/servicios/realidad-virtual/
 
@@ -19,14 +21,22 @@ Corsteno desarrolla experiencias web, configuradores 3D y visualización 3D inte
 - Real estate: https://corsteno.com/sectores/real-estate/
 - Hotelería y turismo: https://corsteno.com/sectores/hoteleria-turismo/
 
-## Proyectos
+## Capacidad de evolución e integración
 
-- ATLAS: https://corsteno.com/proyectos/h2o/
-- Exterior House: https://corsteno.com/proyectos/exterior-house/
-- Terrambú: https://corsteno.com/proyectos/terrambu/
-- Mapa Punilla: https://corsteno.com/proyectos/mapa-punilla/
+Las experiencias creadas por Corsteno pueden evolucionar e integrarse, según cada proyecto, con ecommerce, flujos de cotización, pricing, CRM, ERP, APIs, analytics y otros sistemas de negocio. Corsteno no presenta esta capacidad como un SaaS o una plataforma enterprise propia ya terminada. https://corsteno.com/#soluciones
+
+## Client work
+
+- Terrambú: experiencia web responsive para presentar la identidad, habitaciones, gastronomía y entorno de un hotel boutique. https://corsteno.com/proyectos/terrambu/
+- Mapa Punilla: plataforma web interactiva basada en mapas para turismo y exploración territorial. https://corsteno.com/proyectos/mapa-punilla/
+
+## Corsteno Lab / conceptos internos
+
+- ATLAS: demo interna de configurador 3D de producto con materiales, variantes, lógica de producto, WebGL y Three.js. No se presenta como trabajo de cliente. https://corsteno.com/proyectos/h2o/
+- Exterior House: demo interna de visualización arquitectónica 3D con comparación de materiales y terminaciones. No se presenta como trabajo de cliente. https://corsteno.com/proyectos/exterior-house/
 
 ## Contacto
 
 - Web: https://corsteno.com/
 - Formulario de contacto: https://corsteno.com/#contacto
+- Política de privacidad: https://corsteno.com/privacidad/

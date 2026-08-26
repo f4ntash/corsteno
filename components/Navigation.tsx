@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { withBasePath } from "@/lib/assetPath";
 import logoCorsteno from "./logoSombreado.png";
 
 const navItems = [
-  { href: "#que-hacemos", key: "que-hacemos", label: "Qué hacemos" },
+  { href: "#inicio", key: "inicio", label: "Inicio" },
+  { href: "#soluciones", key: "soluciones", label: "Soluciones" },
+  { href: "#demo", key: "demo", label: "Demo" },
   { href: "#proyectos", key: "proyectos", label: "Proyectos" },
-  { href: "#capacidades", key: "capacidades", label: "Capacidades" },
   { href: "#contacto", key: "contacto", label: "Contacto" },
 ];
 
@@ -17,16 +19,32 @@ type ChromeState = {
   compact?: boolean;
 };
 
-export default function Navigation() {
+type NavigationProps = {
+  home?: boolean;
+};
+
+export default function Navigation({ home = false }: NavigationProps) {
   const activeThemeSectionRef = useRef("");
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("trabajo");
+  const [activeNav, setActiveNav] = useState("inicio");
   const [dark, setDark] = useState(false);
   const [compact, setCompact] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle("menu-open", menuOpen);
     return () => document.body.classList.remove("menu-open");
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
   }, [menuOpen]);
 
   useEffect(() => {
@@ -84,6 +102,7 @@ export default function Navigation() {
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
+  const navigationHref = (anchor: string) => home ? anchor : withBasePath(`/${anchor}`);
 
   return (
     <nav
@@ -91,7 +110,7 @@ export default function Navigation() {
       aria-label="Navegación principal"
       data-od-id="navegacion-principal"
     >
-      <a className="brand" href="#que-hacemos" data-od-id="marca-corsteno" onClick={closeMenu}>
+      <a className="brand" href={navigationHref("#inicio")} data-od-id="marca-corsteno" onClick={closeMenu}>
         {/* CORSTENO_LOGO_HERE — Logo oficial de Corsteno */}
         <img
           className="brand-logo"
@@ -107,6 +126,7 @@ export default function Navigation() {
         </span>
       </a>
       <button
+        ref={menuButtonRef}
         className="menu-toggle"
         type="button"
         aria-expanded={menuOpen}
@@ -120,10 +140,10 @@ export default function Navigation() {
         {navItems.map((item) => (
           <a
             key={item.key}
-            href={item.href}
+            href={navigationHref(item.href)}
             data-nav={item.key}
             data-od-id={`nav-${item.key}`}
-            aria-current={activeNav === item.key ? "true" : undefined}
+            aria-current={activeNav === item.key ? "location" : undefined}
             onClick={closeMenu}
           >
             {item.label}

@@ -55,6 +55,7 @@ export default function TerrambuScene({ sceneStyle, active, onSceneLink }: Terra
               title={activeProject.title}
               url={activeProject.url}
               externalUrl={activeProject.externalUrl}
+              projectSlug={activeProject.id}
               className="terrambu-project-frame"
             />
           </>

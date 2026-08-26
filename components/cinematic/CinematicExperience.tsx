@@ -55,7 +55,7 @@ export default function CinematicExperience() {
   }, [requestUpdate]);
 
   return (
-    <main ref={experienceRef} className={styles.experience} data-scene={activeScene}>
+    <main ref={experienceRef} className={styles.experience} id="main-content" data-scene={activeScene}>
       <div className={styles.canvasLayer} aria-hidden="true">
         <CinematicCanvas progressRef={progressRef} reducedMotion={reducedMotion} />
       </div>

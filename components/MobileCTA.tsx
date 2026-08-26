@@ -8,25 +8,29 @@ export default function MobileCTA() {
 
   useEffect(() => {
     const heroActions = document.querySelector(".commercial-actions");
-    const workspace = document.querySelector(".workspace");
+    const demo = document.getElementById("demo");
+    const projects = document.getElementById("proyectos");
     const contact = document.getElementById("contacto");
-    if (!heroActions || !workspace || !contact) return;
+    if (!heroActions || !demo || !projects || !contact) return;
 
     let heroActionsVisible = true;
-    let workspaceVisible = false;
+    let demoVisible = false;
+    let projectsVisible = false;
     let contactVisible = false;
-    const updateVisibility = () => setVisible(!heroActionsVisible && !workspaceVisible && !contactVisible);
+    const updateVisibility = () => setVisible(!heroActionsVisible && !demoVisible && !projectsVisible && !contactVisible);
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target === heroActions) heroActionsVisible = entry.isIntersecting;
-        if (entry.target === workspace) workspaceVisible = entry.isIntersecting;
+        if (entry.target === demo) demoVisible = entry.isIntersecting;
+        if (entry.target === projects) projectsVisible = entry.isIntersecting;
         if (entry.target === contact) contactVisible = entry.isIntersecting;
       });
       updateVisibility();
     });
 
     observer.observe(heroActions);
-    observer.observe(workspace);
+    observer.observe(demo);
+    observer.observe(projects);
     observer.observe(contact);
     return () => observer.disconnect();
   }, []);

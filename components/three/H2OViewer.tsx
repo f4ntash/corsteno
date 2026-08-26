@@ -102,10 +102,12 @@ const getModelMetrics = (object?: THREE.Object3D) => {
 
 export type H2OViewerHandle = {
   reset: () => void;
+  nudge: (azimuthDelta: number, polarDelta: number) => void;
 };
 
 type H2OViewerProps = {
   active: boolean;
+  presentation?: "default" | "project";
   variants: H2OVariantState;
   onEngaged: () => void;
   onInteractionStart: () => void;
@@ -140,6 +142,7 @@ function ResizeOnFullscreen() {
 
 type H2OCameraRigProps = {
   controlsRef: React.RefObject<OrbitControlsImpl | null>;
+  presentation: "default" | "project";
   variants: H2OVariantState;
   onReady: () => void;
   setResetHandler: (handler: () => void) => void;
@@ -147,14 +150,19 @@ type H2OCameraRigProps = {
 
 function H2OCameraRig({
   controlsRef,
+  presentation,
   variants,
   onReady,
   setResetHandler,
 }: H2OCameraRigProps) {
   const camera = useThree((state) => state.camera);
   const invalidate = useThree((state) => state.invalidate);
+  const size = useThree((state) => state.size);
   const modelRef = useRef<THREE.Object3D | null>(null);
-  const zoomRef = useRef(H2O_CAMERA_CONFIG.initialZoom);
+  const initialZoom = presentation === "project" && size.width >= size.height
+    ? 116
+    : H2O_CAMERA_CONFIG.initialZoom;
+  const zoomRef = useRef(initialZoom);
   const viewOffsetRef = useRef(
     clampViewOffset(H2O_CAMERA_CONFIG.initialViewOffset),
   );
@@ -174,7 +182,7 @@ function H2OCameraRig({
       const target = new THREE.Vector3(...H2O_CAMERA_CONFIG.target);
       const basePosition = new THREE.Vector3(...H2O_CAMERA_CONFIG.position);
       const baseDistance = basePosition.distanceTo(target);
-      const distance = baseDistance * (100 / H2O_CAMERA_CONFIG.initialZoom);
+      const distance = baseDistance * (100 / initialZoom);
       const position = target.clone().add(basePosition.sub(target).normalize().multiplyScalar(distance));
 
       camera.position.copy(position);
@@ -215,7 +223,7 @@ function H2OCameraRig({
 
       invalidate();
     },
-    [camera, controlsRef, invalidate],
+    [camera, controlsRef, initialZoom, invalidate],
   );
 
   const handleModelReady = useCallback(
@@ -225,7 +233,7 @@ function H2OCameraRig({
       viewOffsetRef.current =
         clampViewOffset(H2O_CAMERA_CONFIG.initialViewOffset);
 
-      zoomRef.current = H2O_CAMERA_CONFIG.initialZoom;
+      zoomRef.current = initialZoom;
 
       applyInitialView(object);
 
@@ -233,12 +241,12 @@ function H2OCameraRig({
         viewOffsetRef.current =
           clampViewOffset(H2O_CAMERA_CONFIG.initialViewOffset);
 
-        zoomRef.current = H2O_CAMERA_CONFIG.initialZoom;
+        zoomRef.current = initialZoom;
 
         applyInitialView(modelRef.current);
       });
     },
-    [applyInitialView, setResetHandler],
+    [applyInitialView, initialZoom, setResetHandler],
   );
 
   return (
@@ -256,6 +264,7 @@ const H2OViewer = forwardRef<
 >(function H2OViewer(
   {
     active,
+    presentation = "default",
     variants,
     onEngaged,
     onInteractionStart,
@@ -275,6 +284,23 @@ const H2OViewer = forwardRef<
     fitModelRef.current();
   }, []);
 
+  const nudge = useCallback((azimuthDelta: number, polarDelta: number) => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const camera = controls.object;
+    const offset = camera.position.clone().sub(controls.target);
+    const spherical = new THREE.Spherical().setFromVector3(offset);
+    spherical.theta += azimuthDelta;
+    spherical.phi = THREE.MathUtils.clamp(
+      spherical.phi + polarDelta,
+      H2O_CAMERA_CONFIG.minPolarAngle,
+      H2O_CAMERA_CONFIG.maxPolarAngle,
+    );
+    camera.position.copy(controls.target.clone().add(offset.setFromSpherical(spherical)));
+    camera.lookAt(controls.target);
+    controls.update();
+  }, []);
+
   const registerResetHandler = useCallback(
     (handler: () => void) => {
       fitModelRef.current = handler;
@@ -289,8 +315,8 @@ const H2OViewer = forwardRef<
 
   useImperativeHandle(
     ref,
-    () => ({ reset }),
-    [reset],
+    () => ({ reset, nudge }),
+    [nudge, reset],
   );
 
   return (
@@ -330,6 +356,7 @@ const H2OViewer = forwardRef<
         <Suspense fallback={null}>
           <H2OCameraRig
             controlsRef={controlsRef}
+            presentation={presentation}
             variants={variants}
             onReady={onReady}
             setResetHandler={registerResetHandler}

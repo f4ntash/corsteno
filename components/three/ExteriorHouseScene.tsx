@@ -2,8 +2,9 @@
 
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useLayoutEffect, useMemo } from "react";
+import { forwardRef, Suspense, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import {
   EXTERIOR_HOUSE_VARIANT_GROUPS,
   type ExteriorHouseGroupId,
@@ -37,6 +38,11 @@ const INITIAL_AZIMUTH = Math.atan2(
 
 type ExteriorHouseModelProps = {
   variants: ExteriorHouseVariantState;
+  presentation?: "default" | "project";
+};
+
+export type ExteriorHouseSceneHandle = {
+  nudge: (azimuthDelta: number, polarDelta: number) => void;
 };
 
 const cloneMaterialWithOverrides = (
@@ -51,7 +57,11 @@ const cloneMaterialWithOverrides = (
   return clone;
 };
 
-function ExteriorHouseModel({ variants }: ExteriorHouseModelProps) {
+function ExteriorHouseModel({
+  variants,
+  presentation = "default",
+  controlsRef,
+}: ExteriorHouseModelProps & { controlsRef: React.RefObject<OrbitControlsImpl | null> }) {
   const gltf = useGLTF(EXTERIOR_HOUSE_MODEL_URL);
   const invalidate = useThree((state) => state.invalidate);
   const { scene, center, radius, meshes, targetMeshes, variantMaterials } = useMemo(() => {
@@ -132,19 +142,28 @@ function ExteriorHouseModel({ variants }: ExteriorHouseModelProps) {
 
   return (
     <>
-      <CameraAndControls radius={radius} />
+      <CameraAndControls radius={radius} presentation={presentation} controlsRef={controlsRef} />
       <primitive object={scene} position={[-center.x, -center.y, -center.z]} />
     </>
   );
 }
 
-function CameraAndControls({ radius }: { radius: number }) {
+function CameraAndControls({
+  radius,
+  presentation,
+  controlsRef,
+}: {
+  radius: number;
+  presentation: "default" | "project";
+  controlsRef: React.RefObject<OrbitControlsImpl | null>;
+}) {
   const { camera, size } = useThree();
   const config = EXTERIOR_HOUSE_CAMERA_CONFIG;
   const aspect = Math.max(size.width / Math.max(size.height, 1), 0.01);
   const verticalFov = THREE.MathUtils.degToRad(config.fov);
   const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * aspect);
-  const fitDistance = (radius / Math.sin(Math.min(verticalFov, horizontalFov) / 2)) * config.fitPadding;
+  const fitPadding = presentation === "project" && aspect >= 1 ? 0.64 : config.fitPadding;
+  const fitDistance = (radius / Math.sin(Math.min(verticalFov, horizontalFov) / 2)) * fitPadding;
 
   useLayoutEffect(() => {
     const perspectiveCamera = camera as THREE.PerspectiveCamera;
@@ -160,6 +179,7 @@ function CameraAndControls({ radius }: { radius: number }) {
 
   return (
     <OrbitControls
+      ref={controlsRef}
       makeDefault
       target={config.target}
       enableDamping
@@ -177,7 +197,34 @@ function CameraAndControls({ radius }: { radius: number }) {
   );
 }
 
-export default function ExteriorHouseScene({ variants }: ExteriorHouseModelProps) {
+const ExteriorHouseScene = forwardRef<ExteriorHouseSceneHandle, ExteriorHouseModelProps>(function ExteriorHouseScene(
+  { variants, presentation = "default" },
+  ref,
+) {
+  const controlsRef = useRef<OrbitControlsImpl>(null);
+  const nudge = useCallback((azimuthDelta: number, polarDelta: number) => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const camera = controls.object;
+    const offset = camera.position.clone().sub(controls.target);
+    const spherical = new THREE.Spherical().setFromVector3(offset);
+    spherical.theta = THREE.MathUtils.clamp(
+      spherical.theta + azimuthDelta,
+      INITIAL_AZIMUTH - EXTERIOR_HOUSE_CAMERA_CONFIG.azimuthRange,
+      INITIAL_AZIMUTH + EXTERIOR_HOUSE_CAMERA_CONFIG.azimuthRange,
+    );
+    spherical.phi = THREE.MathUtils.clamp(
+      spherical.phi + polarDelta,
+      EXTERIOR_HOUSE_CAMERA_CONFIG.minPolarAngle,
+      EXTERIOR_HOUSE_CAMERA_CONFIG.maxPolarAngle,
+    );
+    camera.position.copy(controls.target.clone().add(offset.setFromSpherical(spherical)));
+    camera.lookAt(controls.target);
+    controls.update();
+  }, []);
+
+  useImperativeHandle(ref, () => ({ nudge }), [nudge]);
+
   return (
     <div className="exterior-house-viewer" aria-hidden="true">
       <Canvas
@@ -192,11 +239,13 @@ export default function ExteriorHouseScene({ variants }: ExteriorHouseModelProps
         <directionalLight position={[5, 8, 6]} intensity={2.1} />
         <directionalLight position={[-4, 3, -5]} intensity={0.65} />
         <Suspense fallback={null}>
-          <ExteriorHouseModel variants={variants} />
+          <ExteriorHouseModel variants={variants} presentation={presentation} controlsRef={controlsRef} />
         </Suspense>
       </Canvas>
     </div>
   );
-}
+});
+
+export default ExteriorHouseScene;
 
 useGLTF.preload(EXTERIOR_HOUSE_MODEL_URL);

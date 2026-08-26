@@ -11,9 +11,10 @@ type H2OSceneProps = {
   sceneStyle: React.CSSProperties;
   active: boolean;
   onSceneLink: (index: number) => void;
+  presentation?: "default" | "project";
 };
 
-export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OSceneProps) {
+export default function H2OScene({ sceneStyle, active, onSceneLink, presentation = "default" }: H2OSceneProps) {
   const slotRef = useRef<HTMLElement>(null);
   const viewerRef = useRef<H2OViewerHandle>(null);
   const [renderState, setRenderState] = useState("idle");
@@ -79,6 +80,20 @@ export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OScenePr
     viewerRef.current?.reset();
   };
 
+  const onViewerKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const movement: Record<string, [number, number]> = {
+      ArrowLeft: [-0.1, 0],
+      ArrowRight: [0.1, 0],
+      ArrowUp: [0, -0.08],
+      ArrowDown: [0, 0.08],
+    };
+    const delta = movement[event.key];
+    if (!delta) return;
+    event.preventDefault();
+    setEngaged(true);
+    viewerRef.current?.nudge(...delta);
+  };
+
   return (
     <article
       className={`scene scene-h2o${active ? " is-active" : ""}`}
@@ -91,7 +106,7 @@ export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OScenePr
         <aside className="h2o-material-detail" aria-live="polite" aria-label="Detalle del material seleccionado">
           <div className="demo-panel-intro">
             <span className="scene-number">01 / 04</span>
-            <span className="project-trust-label">DEMO CORSTENO · CONFIGURADOR 3D</span>
+            <span className="project-trust-label">CORSTENO LAB · 3D PRODUCT CONFIGURATOR</span>
             <span className="kind">Showroom digital</span>
             <h2 data-od-id="h2o-titulo">ATLAS</h2>
             <span className="kind">Configurador de producto</span>
@@ -121,22 +136,29 @@ export default function H2OScene({ sceneStyle, active, onSceneLink }: H2OScenePr
             data-render-state={renderState}
             data-engaged={engaged ? "true" : undefined}
             aria-label="Espacio preparado para el configurador 3D ATLAS"
+            aria-describedby="h2o-accessible-description"
             data-od-id="h2o-three-slot"
           >
             <div
               className="canvas-mount"
               tabIndex={0}
-              aria-label="Arrastrá para explorar ATLAS"
+              aria-label="Explorá ATLAS arrastrando o usando las flechas del teclado"
               data-canvas-mount="h2o-configurator"
               data-cursor="ROTATE"
               data-dragging={dragging ? "true" : "false"}
+              onKeyDown={onViewerKeyDown}
             >
+              <p id="h2o-accessible-description" className="visually-hidden">
+                Experiencia 3D interactiva del proyecto ATLAS. Usá las flechas para mover la cámara y los controles
+                disponibles para cambiar materiales y variantes.
+              </p>
               <img className="slot-loading-preview" src={H2O_PREVIEW_URL} alt="" aria-hidden="true" />
               <div className="slot-loading">Cargando 3D</div>
               {(active || renderState !== "idle") && (
                 <H2OViewer
                   ref={viewerRef}
                   active={active}
+                  presentation={presentation}
                   variants={variants}
                   onEngaged={markEngaged}
                   onInteractionStart={startInteraction}

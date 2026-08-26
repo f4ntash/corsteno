@@ -4,7 +4,7 @@ import { canonicalUrl, homeSeo, indexablePages } from "@/lib/seo";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date("2026-08-20");
+  const lastModified = new Date("2026-08-26");
 
   return [
     {
@@ -12,6 +12,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly",
       priority: 1,
+    },
+    {
+      url: canonicalUrl("/privacidad"),
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
     ...indexablePages.map((page) => ({
       url: canonicalUrl(page.path),

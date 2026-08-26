@@ -46,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="es-AR">
       <body>
+        <a className="skip-link" href="#main-content">Saltar al contenido</a>
         {children}
         <Analytics />
       </body>

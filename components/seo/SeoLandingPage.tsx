@@ -22,9 +22,9 @@ const categoryLabels: Record<SeoPage["category"], string> = {
 };
 
 const categoryAnchors: Record<SeoPage["category"], string> = {
-  home: "#que-hacemos",
-  servicio: "#servicios",
-  sector: "#sectores",
+  home: "#inicio",
+  servicio: "#soluciones",
+  sector: "#soluciones",
   proyecto: "#proyectos",
 };
 
@@ -41,7 +41,7 @@ export default function SeoLandingPage({ page }: SeoLandingPageProps) {
       <JsonLd data={serviceJsonLd(page)} />
       <JsonLd data={faqJsonLd(page.faqs)} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
-      <main className="seo-page">
+      <main className="seo-page" id="main-content">
         <nav className="seo-breadcrumbs" aria-label="Breadcrumb">
           {breadcrumbItems.map((item, index) => (
             <span key={item.href}>

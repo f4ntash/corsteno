@@ -10,11 +10,12 @@ export type ContactPayload = {
   name: string;
   email: string;
   company: string;
+  interest: string;
   message: string;
   _gotcha: string;
 };
 
-export type ContactField = "name" | "email" | "company" | "message";
+export type ContactField = "name" | "email" | "company" | "interest" | "message";
 export type ContactErrors = Partial<Record<ContactField, string>>;
 
 type ValidationResult =
@@ -34,6 +35,7 @@ export function validateContactPayload(value: unknown): ValidationResult {
     name: readString(input, "name"),
     email: readString(input, "email").toLowerCase(),
     company: readString(input, "company"),
+    interest: readString(input, "interest"),
     message: readString(input, "message"),
     _gotcha: readString(input, "_gotcha"),
   };
@@ -50,6 +52,8 @@ export function validateContactPayload(value: unknown): ValidationResult {
   if (data.company.length > CONTACT_LIMITS.company) {
     errors.company = `Usá hasta ${CONTACT_LIMITS.company} caracteres.`;
   }
+
+  if (!data.interest) errors.interest = "Seleccioná el tipo de proyecto.";
 
   if (!data.message) errors.message = "Contanos brevemente sobre tu consulta.";
   else if (data.message.length > CONTACT_LIMITS.message) {

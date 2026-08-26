@@ -65,6 +65,7 @@ export default function Contact() {
           <a href={`${site.basePath}/servicios/desarrollo-web/`}>Desarrollo web</a>
           <a href={`${site.basePath}/#proyectos`}>Proyectos</a>
           <a href={`${site.basePath}/#contacto`}>Contacto</a>
+          <a href={`${site.basePath}/privacidad/`}>Privacidad</a>
           {socialLinks.instagramUrl ? (
             <a href={socialLinks.instagramUrl} target="_blank" rel="noreferrer">Instagram</a>
           ) : null}

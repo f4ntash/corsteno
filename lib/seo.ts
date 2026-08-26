@@ -15,10 +15,8 @@ export const site = {
 const businessId = `${site.url}/#business`;
 const serviceCatalog = [
   "Configuradores 3D interactivos",
-  "Visualización 3D",
-  "Desarrollo web interactivo",
-  "Realidad aumentada (próximamente)",
-  "Realidad virtual (próximamente)",
+  "Experiencias digitales interactivas",
+  "Desarrollo web",
 ];
 
 export type SeoLink = {
@@ -53,6 +51,8 @@ export type SeoPage = {
   links: SeoLink[];
   image?: string;
   imageAlt?: string;
+  keywords?: string[];
+  projectKind?: "client-work" | "corsteno-lab";
 };
 
 const p = (path: string) => `${site.basePath}${path.endsWith("/") ? path : `${path}/`}`;
@@ -454,12 +454,12 @@ export const seoPages: SeoPage[] = [
     path: "/proyectos/h2o",
     cluster: "3D",
     category: "proyecto",
-    intent: "ver ejemplo real de configurador 3D de producto",
-    title: "ATLAS Configurador 3D | Proyecto Corsteno",
-    description: "Proyecto ATLAS: configurador 3D interactivo para explorar materiales y terminaciones de producto desde el navegador.",
-    h1: "ATLAS: configurador 3D interactivo",
-    eyebrow: "Proyecto",
-    intro: "ATLAS muestra cómo un producto puede convertirse en una experiencia configurable, pensada para explorar materiales y terminaciones desde la web.",
+    intent: "ver una demo de configurador 3D de producto",
+    title: "ATLAS — Configurador 3D de Producto | Corsteno Lab",
+    description: "ATLAS es una demo de Corsteno Lab para explorar personalización de producto, materiales, variantes y lógica 3D con WebGL y Three.js.",
+    h1: "ATLAS: un catálogo que reacciona al cliente",
+    eyebrow: "Corsteno Lab",
+    intro: "Un concepto desarrollado por Corsteno para explorar cómo un producto físico puede convertirse en una experiencia personalizable directamente desde el navegador.",
     cta: "Quiero una experiencia como ATLAS",
     takeaways: [
       "Configuración de materiales desde navegador.",
@@ -481,6 +481,10 @@ export const seoPages: SeoPage[] = [
       { label: "Muebles y equipamiento", href: p("/sectores/muebles-equipamiento") },
       { label: "Industria", href: p("/sectores/industria") },
     ],
+    image: "/projects/corsteno-showroom-3d.webp",
+    imageAlt: "Configurador 3D interactivo ATLAS desarrollado por Corsteno",
+    keywords: ["configurador 3D", "visualización de producto", "materiales", "personalización", "WebGL", "Three.js"],
+    projectKind: "corsteno-lab",
   },
   {
     slug: "exterior-house",
@@ -488,11 +492,11 @@ export const seoPages: SeoPage[] = [
     cluster: "3D",
     category: "proyecto",
     intent: "ver ejemplo de visualización 3D arquitectónica interactiva",
-    title: "Exterior House Visualización 3D | Proyecto Corsteno",
-    description: "Exterior House: visualización 3D interactiva para presentar materiales y terminaciones de un proyecto exterior.",
-    h1: "Exterior House: visualización 3D de exteriores",
-    eyebrow: "Proyecto",
-    intro: "Exterior House muestra cómo un proyecto exterior puede presentarse con materiales y terminaciones configurables antes de construirse.",
+    title: "Exterior House — Visualización Arquitectónica 3D | Corsteno Lab",
+    description: "Exterior House es una demo arquitectónica de Corsteno Lab para comparar materiales y terminaciones con 3D interactivo y Three.js.",
+    h1: "Decidir materiales antes de construir",
+    eyebrow: "Corsteno Lab",
+    intro: "Una experiencia conceptual para explorar cómo arquitectura, terminaciones y materiales pueden visualizarse y compararse directamente desde el navegador.",
     cta: "Quiero una demo con mi proyecto",
     takeaways: [
       "Visualización 3D para preventa y presentación.",
@@ -515,6 +519,10 @@ export const seoPages: SeoPage[] = [
       { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
       { label: "Piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
     ],
+    image: "/projects/exterior-house-3d.png",
+    imageAlt: "Experiencia arquitectónica 3D Exterior House desarrollada por Corsteno",
+    keywords: ["visualización arquitectónica", "materiales", "3D interactivo", "arquitectura web", "Three.js"],
+    projectKind: "corsteno-lab",
   },
   {
     slug: "terrambu",
@@ -522,10 +530,10 @@ export const seoPages: SeoPage[] = [
     cluster: "WEB",
     category: "proyecto",
     intent: "ver ejemplo real de experiencia web para hotelería",
-    title: "Terrambú Experiencia Web | Proyecto Corsteno",
-    description: "Terrambú: experiencia web para comunicar un hotel boutique, su entorno y propuesta antes de la visita.",
-    h1: "Terrambú: experiencia web para hotelería",
-    eyebrow: "Proyecto",
+    title: "Terrambú — Desarrollo Web para Hotelería | Corsteno",
+    description: "Experiencia web responsive desarrollada para presentar la identidad, habitaciones, gastronomía y entorno del hotel boutique Terrambú.",
+    h1: "Una experiencia digital para llevar la identidad de Terrambú al navegador",
+    eyebrow: "Client project",
     intro: "Terrambú muestra cómo una experiencia web puede transmitir un lugar, su entorno y su propuesta antes de que el huésped llegue.",
     cta: "Quiero una experiencia como Terrambú",
     takeaways: [
@@ -550,6 +558,8 @@ export const seoPages: SeoPage[] = [
     ],
     image: "/projects/terrambu-hotel-web.webp",
     imageAlt: "Página web de Terrambú, hotel boutique, desarrollada por Corsteno",
+    keywords: ["desarrollo web", "hotelería", "diseño responsive", "performance", "experiencia digital"],
+    projectKind: "client-work",
   },
   {
     slug: "mapa-punilla",
@@ -557,10 +567,10 @@ export const seoPages: SeoPage[] = [
     cluster: "WEB",
     category: "proyecto",
     intent: "ver ejemplo de plataforma web territorial y turística",
-    title: "Mapa Punilla Plataforma Web | Proyecto Corsteno",
-    description: "Mapa Punilla: plataforma web que organiza información territorial y turística en una experiencia navegable.",
-    h1: "Mapa Punilla: plataforma web territorial",
-    eyebrow: "Proyecto",
+    title: "Mapa Punilla — Plataforma Interactiva de Turismo | Corsteno",
+    description: "Plataforma web basada en mapas para organizar y explorar lugares, puntos de interés e información turística del Valle de Punilla.",
+    h1: "Explorar un territorio como producto digital",
+    eyebrow: "Client project",
     intro: "Mapa Punilla muestra cómo una experiencia web puede transformar información territorial en una plataforma útil y navegable.",
     cta: "Quiero una plataforma interactiva",
     takeaways: [
@@ -585,6 +595,8 @@ export const seoPages: SeoPage[] = [
     ],
     image: "/projects/mapa-punilla-web.webp",
     imageAlt: "Plataforma web Mapa Punilla desarrollada por Corsteno",
+    keywords: ["plataforma interactiva", "mapas", "turismo", "desarrollo web", "experiencia de exploración"],
+    projectKind: "client-work",
   },
 ];
 
@@ -595,9 +607,9 @@ export const indexablePages = seoPages;
 
 export const homeSeo = {
   path: "/",
-  intent: "empresa que desarrolla experiencias digitales, web y 3D para empresas",
-  title: "Corsteno | Experiencias Web y 3D para Empresas",
-  description: "Corsteno desarrolla configuradores 3D, visualización interactiva y experiencias web para empresas que necesitan mostrar mejor sus productos.",
+  intent: "estudio de experiencias digitales, configuradores 3D y desarrollo web",
+  title: "Corsteno | Configuradores 3D y Experiencias Digitales",
+  description: "Corsteno crea configuradores 3D, experiencias digitales interactivas y productos web que pueden evolucionar e integrarse con sistemas de negocio.",
   h1: "Hacemos que tus productos se puedan ver, probar y entender antes de comprarlos.",
 };
 
@@ -605,12 +617,13 @@ export function findSeoPage(category: SeoPage["category"], slug: string) {
   return seoPages.find((page) => page.category === category && page.slug === slug);
 }
 
-export function pageMetadata(page: Pick<SeoPage, "title" | "description" | "path" | "image" | "imageAlt">): Metadata {
+export function pageMetadata(page: Pick<SeoPage, "title" | "description" | "path" | "image" | "imageAlt" | "keywords">): Metadata {
   const url = canonicalUrl(page.path);
   const image = assetUrl(page.image ?? site.defaultImage);
   return {
     title: page.title,
     description: page.description,
+    keywords: page.keywords,
     alternates: { canonical: url },
     openGraph: {
       title: page.title,
@@ -680,6 +693,20 @@ export function serviceJsonLd(page: SeoPage) {
     },
     areaServed: ["Argentina", "Córdoba", "Remoto"],
     url: canonicalUrl(page.path),
+  };
+}
+
+export function projectJsonLd(page: SeoPage) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: page.h1,
+    description: page.description,
+    url: canonicalUrl(page.path),
+    creator: { "@id": businessId },
+    ...(page.keywords ? { keywords: page.keywords.join(", ") } : {}),
+    ...(page.projectKind ? { genre: page.projectKind === "client-work" ? "Client project" : "Corsteno Lab concept" } : {}),
+    ...(page.image ? { image: assetUrl(page.image) } : {}),
   };
 }
 

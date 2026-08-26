@@ -46,7 +46,7 @@ const audiences = [
 
 export default function Capabilities() {
   return (
-    <section className="capabilities" id="capacidades" data-od-id="capacidades" data-navbar-theme="light">
+    <section className="capabilities" id="soluciones" data-od-id="capacidades" data-navbar-theme="light">
       <header className="cap-head">
         <span className="label">Capacidades</span>
         <p>

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SolicitudEnviadaPage() {
   return (
-    <main className="not-found-page">
+    <main className="not-found-page" id="main-content">
       <span className="label">Contacto</span>
       <h1>Solicitud enviada</h1>
       <p>Recibimos tu consulta. Te responderemos a la brevedad.</p>

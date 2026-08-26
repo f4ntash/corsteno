@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import ExteriorHouseScene from "@/components/three/ExteriorHouseScene";
+import ExteriorHouseScene, { type ExteriorHouseSceneHandle } from "@/components/three/ExteriorHouseScene";
 import {
   DEFAULT_EXTERIOR_HOUSE_VARIANTS,
   EXTERIOR_HOUSE_VARIANT_GROUPS,
@@ -14,6 +14,7 @@ type ProductSceneProps = {
   sceneStyle: React.CSSProperties;
   active: boolean;
   onSceneLink: (index: number) => void;
+  presentation?: "default" | "project";
 };
 
 type Variant = "natural" | "light" | "dark";
@@ -24,8 +25,9 @@ const variantBackground: Record<Variant, string> = {
   dark: "var(--accent)",
 };
 
-export default function ProductScene({ sceneStyle, active, onSceneLink }: ProductSceneProps) {
+export default function ProductScene({ sceneStyle, active, onSceneLink, presentation = "default" }: ProductSceneProps) {
   const slotRef = useRef<HTMLElement>(null);
+  const exteriorViewerRef = useRef<ExteriorHouseSceneHandle>(null);
   const dragRef = useRef({ dragging: false, x: 0, y: 0 });
   const renderStateRef = useRef("idle");
   const [rotation, setRotation] = useState({ x: -16, y: 28 });
@@ -102,7 +104,6 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (variant === "natural") return;
     const keys: Record<string, [number, number]> = {
       ArrowLeft: [0, -6],
       ArrowRight: [0, 6],
@@ -112,6 +113,11 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
     const change = keys[event.key];
     if (!change) return;
     event.preventDefault();
+    setEngaged(true);
+    if (variant === "natural") {
+      exteriorViewerRef.current?.nudge(change[1] * 0.016, change[0] * 0.016);
+      return;
+    }
     setRotation((current) => ({ x: current.x + change[0], y: current.y + change[1] }));
   };
 
@@ -171,12 +177,13 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
         data-render-state={renderState}
         data-engaged={engaged ? "true" : undefined}
         aria-label="Espacio preparado para el configurador 3D de producto"
+        aria-describedby="exterior-house-accessible-description"
         data-od-id="producto-three-slot"
       >
         <div
           className="canvas-mount"
           tabIndex={0}
-          aria-label="Arrastrá para rotar el producto"
+          aria-label="Explorá el producto arrastrando o usando las flechas del teclado"
           data-canvas-mount="product-configurator"
           data-cursor="Rotar"
           data-dragging={dragging ? "true" : "false"}
@@ -186,13 +193,17 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
           onPointerCancel={stopDrag}
           onKeyDown={onKeyDown}
         >
+          <p id="exterior-house-accessible-description" className="visually-hidden">
+            Experiencia 3D interactiva de Exterior House. Usá las flechas para mover la cámara y los controles
+            disponibles para comparar materiales y terminaciones.
+          </p>
           <div className="slot-loading">Preparando objeto</div>
           {variant === "natural" ? (
             <div className="exterior-config-layout">
               <aside className="exterior-config-detail" aria-live="polite" aria-label="Detalle del material exterior">
                 <div className="demo-panel-intro">
                   <span className="scene-number">03 / 04</span>
-                  <span className="project-trust-label">DEMO CORSTENO · PREVENTA INTERACTIVA</span>
+                  <span className="project-trust-label">CORSTENO LAB · ARCHITECTURAL 3D</span>
                   <span className="kind">Preventa interactiva</span>
                   <h2 data-od-id="producto-titulo">Exterior House</h2>
                   <span className="kind">Preventa interactiva</span>
@@ -215,7 +226,9 @@ export default function ProductScene({ sceneStyle, active, onSceneLink }: Produc
               </aside>
               <div className="exterior-render-column">
                 <div className="exterior-render-stage">
-                  {active ? <ExteriorHouseScene variants={exteriorVariants} /> : null}
+                  {active ? (
+                    <ExteriorHouseScene ref={exteriorViewerRef} variants={exteriorVariants} presentation={presentation} />
+                  ) : null}
                 </div>
                 <span className="drag-hint">Arrastrar · Rotar</span>
               </div>

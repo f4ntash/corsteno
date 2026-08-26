@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="not-found-page">
+    <main className="not-found-page" id="main-content">
       <span className="label">404</span>
       <h1>Página no encontrada</h1>
       <p>El enlace no está disponible o cambió de ubicación.</p>
