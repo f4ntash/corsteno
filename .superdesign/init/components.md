@@ -58,4 +58,4 @@ export default function Contact() {
 ```
 
 ## Workspace composition
-The current home uses `Workspace`, `H2OScene`, `TerrambuScene`, `ProductScene`, `DigitalSystemScene`, `ProjectIndex`, and `ContextCursor`. The workspace is a 520vh scroll area with a sticky viewport and four absolutely layered scenes. This system remains untouched by the cinematic experiment.
+The showroom workspace uses `InteriorFinishesScene`, `TerrambuScene`, `DigitalSystemScene`, `StepTransition`, and `ContextCursor` across three layered scenes.

@@ -32,8 +32,8 @@ Las experiencias creadas por Corsteno pueden evolucionar e integrarse, según ca
 
 ## Corsteno Lab / conceptos internos
 
-- ATLAS: demo interna de configurador 3D de producto con materiales, variantes, lógica de producto, WebGL y Three.js. No se presenta como trabajo de cliente. https://corsteno.com/proyectos/h2o/
-- Exterior House: demo interna de visualización arquitectónica 3D con comparación de materiales y terminaciones. No se presenta como trabajo de cliente. https://corsteno.com/proyectos/exterior-house/
+- Exterior House: demo interna para configurar agua, cascada, borde, interior y piso exterior de una pileta en 3D. https://corsteno.com/proyectos/exterior-house/
+- Revestimientos Interactivos: demo interna para comparar pisos, paredes, revestimientos de barra y aberturas dentro de un ambiente 3D. El mobiliario funciona únicamente como ambientación y no se presenta como configurable. https://corsteno.com/proyectos/revestimientos-interactivos/
 
 ## Contacto
 

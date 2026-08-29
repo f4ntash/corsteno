@@ -122,13 +122,9 @@
   transform: none !important;
 }
 
-.threeExperience :global(.h2o-layout),
+.threeExperience :global(.interior-finishes-layout),
 .threeExperience :global(.exterior-config-layout) {
   top: 44px;
-}
-
-.threeExperience[data-project-viewer="h2o"] :global(.h2o-viewer) {
-  bottom: 0;
 }
 
 .threeExperience :global(.scene-action) {
@@ -213,7 +209,7 @@
 }
 
 @media (min-width: 1181px) {
-  .threeExperience :global(.h2o-layout),
+  .threeExperience :global(.interior-finishes-layout),
   .threeExperience :global(.exterior-config-layout) {
     left: clamp(28px, 2.6vw, 48px);
     right: clamp(28px, 2.6vw, 48px);
@@ -221,10 +217,7 @@
     gap: clamp(26px, 2.6vw, 48px);
   }
 
-  .threeExperience :global(.scene-h2o .three-slot) {
-    height: clamp(560px, 66svh, 720px);
-  }
-
+  .threeExperience :global(.interior-finishes-render-stage),
   .threeExperience :global(.exterior-render-stage) {
     height: clamp(560px, 66svh, 720px);
   }
@@ -237,7 +230,7 @@
     min-height: 0;
   }
 
-  .threeExperience :global(.h2o-layout),
+  .threeExperience :global(.interior-finishes-layout),
   .threeExperience :global(.exterior-config-layout) {
     position: relative;
     inset: auto;
@@ -250,11 +243,13 @@
     gap: 40px 48px;
   }
 
-  .threeExperience :global(.scene-h2o .three-slot),
+  .threeExperience :global(.interior-finishes-render-stage),
   .threeExperience :global(.exterior-render-stage) {
     height: clamp(520px, 62svh, 660px);
   }
 
+  .threeExperience[data-project-viewer="interior-finishes"] :global(.three-slot),
+  .threeExperience[data-project-viewer="interior-finishes"] :global(.canvas-mount),
   .threeExperience[data-project-viewer="exterior-house"] :global(.three-slot),
   .threeExperience[data-project-viewer="exterior-house"] :global(.canvas-mount) {
     position: relative;
@@ -316,11 +311,8 @@
     transform: none;
   }
 
-  .threeExperience :global(.h2o-layout) {
-    top: auto;
-    margin-top: 0;
-  }
-
+  .threeExperience[data-project-viewer="interior-finishes"] :global(.three-slot),
+  .threeExperience[data-project-viewer="interior-finishes"] :global(.canvas-mount),
   .threeExperience[data-project-viewer="exterior-house"] :global(.three-slot),
   .threeExperience[data-project-viewer="exterior-house"] :global(.canvas-mount) {
     position: relative;
@@ -329,6 +321,7 @@
     overflow: visible;
   }
 
+  .threeExperience :global(.interior-finishes-layout),
   .threeExperience :global(.exterior-config-layout) {
     position: relative;
     inset: auto;

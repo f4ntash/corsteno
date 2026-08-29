@@ -5,9 +5,13 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import type { Group } from "three";
 import { withBasePath } from "@/lib/assetPath";
+import {
+  DEFAULT_INTERIOR_FINISHES,
+  getInteriorFinishVisibility,
+} from "@/components/three/interiorFinishVariants";
 import styles from "./industrial.module.css";
 
-const INDUSTRIAL_HERO_MODEL_URL = withBasePath("/models/exterior_house.glb");
+const INDUSTRIAL_HERO_MODEL_URL = withBasePath("/models/previa_house_interior.glb");
 
 function LoadingStatus() {
   const { active, progress } = useProgress();
@@ -18,7 +22,15 @@ function LoadingStatus() {
 function HeroAsset({ active }: { active: boolean }) {
   const groupRef = useRef<Group>(null);
   const gltf = useGLTF(INDUSTRIAL_HERO_MODEL_URL);
-  const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
+  const scene = useMemo(() => {
+    const clonedScene = gltf.scene.clone(true);
+    const visibility = getInteriorFinishVisibility(DEFAULT_INTERIOR_FINISHES);
+    clonedScene.traverse((object) => {
+      const visible = visibility.get(object.name);
+      if (visible !== undefined) object.visible = visible;
+    });
+    return clonedScene;
+  }, [gltf.scene]);
 
   useFrame((state, delta) => {
     if (!active || !groupRef.current) return;
@@ -73,7 +85,6 @@ export default function IndustrialHeroModel() {
         <directionalLight position={[7, 9, 6]} intensity={2.8} />
         <directionalLight position={[-6, 3, -4]} intensity={0.9} color="#9ca69e" />
         <Suspense fallback={null}>
-          {/* Temporary 20 MB asset. Replace and optimize the definitive window GLB with Blender or gltf-transform. */}
           <HeroAsset active={active} />
         </Suspense>
         <OrbitControls

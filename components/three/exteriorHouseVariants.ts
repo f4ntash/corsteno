@@ -1,163 +1,177 @@
-export type ExteriorHouseGroupId = "poolLining" | "exteriorFloor" | "poolEdge" | "waterfallFinish";
+export type ExteriorHouseCascade = "marble" | "stone" | "whiteStone";
+export type ExteriorHouseInterior = "aqua" | "dark" | "jade";
+export type ExteriorHouseExterior = "white" | "colorado" | "wood";
 
-export type ExteriorHouseVariantState = Record<ExteriorHouseGroupId, string>;
-
-export type ExteriorHouseMaterialOverrides = {
-  color: string;
-  roughness: number;
-  metalness: number;
+export type ExteriorHouseState = {
+  water: boolean;
+  cascade: ExteriorHouseCascade;
+  interior: ExteriorHouseInterior;
+  exterior: ExteriorHouseExterior;
+  borderColor: string;
 };
 
-export type ExteriorHouseVariantGroup = {
-  id: ExteriorHouseGroupId;
+export type ExteriorHouseOptionGroupId = "cascade" | "interior" | "exterior";
+export type ExteriorHouseOptionValue =
+  | ExteriorHouseCascade
+  | ExteriorHouseInterior
+  | ExteriorHouseExterior;
+
+export type ExteriorHouseOption = {
+  id: string;
   label: string;
-  selectionMode: "mesh" | "material";
-  targetMeshName: string;
-  sourceMeshNames: string[];
-  preserveChildMeshNames?: string[];
-  variants: Array<{
-    id: string;
-    label: string;
-    sourceMeshName: string;
-    materialOverrides?: ExteriorHouseMaterialOverrides;
-    description: string;
-    details: Array<{ label: string; value: string }>;
-  }>;
+  value: ExteriorHouseOptionValue;
+  description: string;
+  details: Array<{ label: string; value: string }>;
 };
 
-export const EXTERIOR_HOUSE_VARIANT_GROUPS: ExteriorHouseVariantGroup[] = [
+export type ExteriorHouseOptionGroup = {
+  id: ExteriorHouseOptionGroupId;
+  label: string;
+  options: ExteriorHouseOption[];
+};
+
+export const EXTERIOR_HOUSE_MESHES = {
+  water: ["agua_cascada", "agua_superficie"],
+  cascade: {
+    marble: "Cascada_Marmol",
+    stone: "Cascada_Piedra",
+    whiteStone: "Cascada_PiedraBlanca",
+  },
+  border: "Pileta_Borde",
+  interior: {
+    aqua: "Pileta_Interior_Aqua",
+    dark: "Pileta_Interior_Dark",
+    jade: "Pileta_Interior_Jade",
+  },
+  exterior: {
+    white: "Pileta_Piso_Exterior_Blanco",
+    colorado: "Pileta_Piso_Exterior_Colorado",
+    wood: "Pileta_Piso_Exterior_Madera",
+  },
+} as const;
+
+export const EXTERIOR_HOUSE_REQUIRED_MESHES = [
+  ...EXTERIOR_HOUSE_MESHES.water,
+  ...Object.values(EXTERIOR_HOUSE_MESHES.cascade),
+  EXTERIOR_HOUSE_MESHES.border,
+  ...Object.values(EXTERIOR_HOUSE_MESHES.interior),
+  ...Object.values(EXTERIOR_HOUSE_MESHES.exterior),
+] as const;
+
+export const EXTERIOR_HOUSE_GROUPS: ExteriorHouseOptionGroup[] = [
   {
-    id: "poolLining",
-    label: "Vaso piscina",
-    selectionMode: "mesh",
-    targetMeshName: "Pileta_Interior_Aqua",
-    sourceMeshNames: ["Pileta_Interior_Aqua", "Pileta_Interior_Dark", "Pileta_Interior_Jade"],
-    variants: [
+    id: "cascade",
+    label: "Cascada",
+    options: [
       {
-        id: "default",
-        label: "Default",
-        sourceMeshName: "Pileta_Interior_Aqua",
-        description: "Revestimiento original del vaso con terminación azul y relieve visible.",
-        details: [{ label: "Carácter", value: "Acuático" }, { label: "Aplicación", value: "Vaso de piscina" }],
+        id: "marble",
+        label: "Mármol",
+        value: "marble",
+        description: "Terminación de mármol incluida para la pieza de cascada.",
+        details: [{ label: "Terminación", value: "Mármol" }, { label: "Aplicación", value: "Cascada" }],
       },
       {
-        id: "terracotta",
-        label: "Terracota",
-        sourceMeshName: "Pileta_Interior_Dark",
-        description: "Alternativa texturada de tono terroso para el interior de la piscina.",
-        details: [{ label: "Carácter", value: "Cálido" }, { label: "Aplicación", value: "Vaso de piscina" }],
+        id: "stone",
+        label: "Piedra",
+        value: "stone",
+        description: "Terminación de piedra incluida para la pieza de cascada.",
+        details: [{ label: "Terminación", value: "Piedra" }, { label: "Aplicación", value: "Cascada" }],
       },
       {
-        id: "greenStone",
-        label: "Piedra verde",
-        sourceMeshName: "Pileta_Interior_Jade",
-        description: "Terminación de piedra verde con una lectura natural y profunda.",
-        details: [{ label: "Carácter", value: "Natural" }, { label: "Aplicación", value: "Vaso de piscina" }],
+        id: "whiteStone",
+        label: "Piedra Blanca",
+        value: "whiteStone",
+        description: "Terminación de piedra blanca incluida para la pieza de cascada.",
+        details: [{ label: "Terminación", value: "Piedra Blanca" }, { label: "Aplicación", value: "Cascada" }],
       },
     ],
   },
   {
-    id: "exteriorFloor",
-    label: "Piso exterior",
-    selectionMode: "mesh",
-    targetMeshName: "Pielta_Piso_Exterior_Colorado",
-    sourceMeshNames: [
-      "Pielta_Piso_Exterior_Colorado",
-      "Pielta_Piso_Exterior_Madera",
-      "Pileta_Piso_Exterior_Blanco",
-    ],
-    variants: [
+    id: "interior",
+    label: "Interior",
+    options: [
       {
-        id: "default",
-        label: "Default",
-        sourceMeshName: "Pielta_Piso_Exterior_Colorado",
-        description: "Cerámica exterior original de tono cálido y textura continua.",
-        details: [{ label: "Carácter", value: "Cálido" }, { label: "Aplicación", value: "Piso exterior" }],
+        id: "aqua",
+        label: "Aqua",
+        value: "aqua",
+        description: "Revestimiento Aqua aplicado al interior de la pileta.",
+        details: [{ label: "Terminación", value: "Aqua" }, { label: "Aplicación", value: "Interior" }],
+      },
+      {
+        id: "dark",
+        label: "Dark",
+        value: "dark",
+        description: "Revestimiento oscuro aplicado al interior de la pileta.",
+        details: [{ label: "Terminación", value: "Dark" }, { label: "Aplicación", value: "Interior" }],
+      },
+      {
+        id: "jade",
+        label: "Jade",
+        value: "jade",
+        description: "Revestimiento Jade aplicado al interior de la pileta.",
+        details: [{ label: "Terminación", value: "Jade" }, { label: "Aplicación", value: "Interior" }],
+      },
+    ],
+  },
+  {
+    id: "exterior",
+    label: "Exterior",
+    options: [
+      {
+        id: "white",
+        label: "Blanco",
+        value: "white",
+        description: "Piso exterior blanco incluido en el modelo.",
+        details: [{ label: "Terminación", value: "Blanco" }, { label: "Aplicación", value: "Piso exterior" }],
+      },
+      {
+        id: "colorado",
+        label: "Colorado",
+        value: "colorado",
+        description: "Piso exterior Colorado incluido en el modelo.",
+        details: [{ label: "Terminación", value: "Colorado" }, { label: "Aplicación", value: "Piso exterior" }],
       },
       {
         id: "wood",
         label: "Madera",
-        sourceMeshName: "Pielta_Piso_Exterior_Madera",
-        description: "Entablonado de madera para una terminación exterior más natural.",
-        details: [{ label: "Superficie", value: "Madera" }, { label: "Aplicación", value: "Piso exterior" }],
-      },
-      {
-        id: "whitePlanks",
-        label: "Tabla clara",
-        sourceMeshName: "Pileta_Piso_Exterior_Blanco",
-        description: "Tablas claras que reducen el contraste alrededor de la piscina.",
-        details: [{ label: "Tono", value: "Claro" }, { label: "Aplicación", value: "Piso exterior" }],
-      },
-    ],
-  },
-  {
-    id: "poolEdge",
-    label: "Borde piscina",
-    selectionMode: "material",
-    targetMeshName: "Pielta_Borde",
-    sourceMeshNames: ["Pielta_Borde"],
-    variants: [
-      {
-        id: "default",
-        label: "Default",
-        sourceMeshName: "Pielta_Borde",
-        description: "Porcelanato de concreto satinado original del borde de piscina.",
-        details: [{ label: "Carácter", value: "Neutro" }, { label: "Aplicación", value: "Borde de piscina" }],
-      },
-      {
-        id: "sand",
-        label: "Arena",
-        sourceMeshName: "Pielta_Borde",
-        materialOverrides: { color: "#d3c2a5", roughness: 0.94, metalness: 0 },
-        description: "Tinte arena aplicado sobre los mapas originales del porcelanato.",
-        details: [{ label: "Tono", value: "Arena" }, { label: "Aplicación", value: "Borde de piscina" }],
-      },
-      {
-        id: "graphite",
-        label: "Grafito",
-        sourceMeshName: "Pielta_Borde",
-        materialOverrides: { color: "#626566", roughness: 0.9, metalness: 0 },
-        description: "Tinte grafito que conserva la textura original de la superficie.",
-        details: [{ label: "Tono", value: "Grafito" }, { label: "Aplicación", value: "Borde de piscina" }],
-      },
-    ],
-  },
-  {
-    id: "waterfallFinish",
-    label: "Acabado cascada",
-    selectionMode: "mesh",
-    targetMeshName: "Cascada_Piedra",
-    sourceMeshNames: ["Cascada_Piedra", "Cascada_PiedraBlanca", "Cascada_Marmol"],
-    preserveChildMeshNames: ["fonte_.008"],
-    variants: [
-      {
-        id: "default",
-        label: "Default",
-        sourceMeshName: "Cascada_Piedra",
-        description: "Piedra original de la cascada con una terminación exterior natural.",
-        details: [{ label: "Carácter", value: "Mineral" }, { label: "Aplicación", value: "Cascada" }],
-      },
-      {
-        id: "whiteStone",
-        label: "Piedra clara",
-        sourceMeshName: "Cascada_PiedraBlanca",
-        description: "Alternativa de piedra clara reutilizada desde el modelo original.",
-        details: [{ label: "Tono", value: "Claro" }, { label: "Aplicación", value: "Cascada" }],
-      },
-      {
-        id: "marble",
-        label: "Mármol",
-        sourceMeshName: "Cascada_Marmol",
-        description: "Acabado marmolado incluido en el modelo para la pieza de cascada.",
-        details: [{ label: "Carácter", value: "Marmolado" }, { label: "Aplicación", value: "Cascada" }],
+        value: "wood",
+        description: "Piso exterior de madera incluido en el modelo.",
+        details: [{ label: "Terminación", value: "Madera" }, { label: "Aplicación", value: "Piso exterior" }],
       },
     ],
   },
 ];
 
-export const DEFAULT_EXTERIOR_HOUSE_VARIANTS: ExteriorHouseVariantState = {
-  poolLining: "default",
-  exteriorFloor: "default",
-  poolEdge: "default",
-  waterfallFinish: "default",
+export const DEFAULT_EXTERIOR_HOUSE_STATE: ExteriorHouseState = {
+  water: true,
+  cascade: "marble",
+  interior: "aqua",
+  exterior: "white",
+  borderColor: "#ffffff",
 };
+
+export function getExteriorHouseVisibility(state: ExteriorHouseState) {
+  const visibility = new Map<string, boolean>();
+
+  EXTERIOR_HOUSE_MESHES.water.forEach((meshName) => visibility.set(meshName, state.water));
+
+  const groups = [
+    [Object.values(EXTERIOR_HOUSE_MESHES.cascade), EXTERIOR_HOUSE_MESHES.cascade[state.cascade]],
+    [Object.values(EXTERIOR_HOUSE_MESHES.interior), EXTERIOR_HOUSE_MESHES.interior[state.interior]],
+    [Object.values(EXTERIOR_HOUSE_MESHES.exterior), EXTERIOR_HOUSE_MESHES.exterior[state.exterior]],
+  ] as const;
+
+  groups.forEach(([meshNames, selectedMeshName]) => {
+    meshNames.forEach((meshName) => visibility.set(meshName, meshName === selectedMeshName));
+  });
+
+  return visibility;
+}
+
+export function updateExteriorHouseOption(
+  state: ExteriorHouseState,
+  groupId: ExteriorHouseOptionGroupId,
+  value: ExteriorHouseOptionValue,
+) {
+  return { ...state, [groupId]: value } as ExteriorHouseState;
+}

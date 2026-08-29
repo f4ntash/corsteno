@@ -45,11 +45,9 @@
         "components/Navigation.tsx",
         "components/workspace/Workspace.tsx",
         "components/workspace/ContextCursor.tsx",
-        "components/workspace/H2OScene.tsx",
         "components/workspace/TerrambuScene.tsx",
         "components/workspace/ProductScene.tsx",
         "components/workspace/DigitalSystemScene.tsx",
-        "components/three/H2OViewer.tsx",
         "styles/globals.css"
       ],
       "fingerprints": {
@@ -58,11 +56,9 @@
         "components/Navigation.tsx": "8FB2FDC185E288CDB52AAF2CCC2D81A4CE8149DA555E3900AC8CAB34EBF40F6B",
         "components/workspace/Workspace.tsx": "2579E801362FDB9D06804CF34260C00FF793DBE59B370833723A245F480BD2F9",
         "components/workspace/ContextCursor.tsx": "55B2E5BB5106D9898B9DEAD9455CB68C07FC098C1ADE10BC75D09D10A68D4816",
-        "components/workspace/H2OScene.tsx": "9BE78629B72C9905724DC9CF28DE5D9118A8F2A24CB0ABCD322B1AFEB9F28E84",
         "components/workspace/TerrambuScene.tsx": "6AF079C95858F1291B83195468EE746EC5D5F8DC061D76596C27D0C9AE97FE55",
         "components/workspace/ProductScene.tsx": "84414EE4A551B89F0E97C17ECFAF3069464780D056B0F61B20E52096FAD855B1",
         "components/workspace/DigitalSystemScene.tsx": "78D9885CF9CE9EC4B7DC2CFD14E2FA93E8FF83225A3DEB3B17F9A4D7A9CB8E57",
-        "components/three/H2OViewer.tsx": "D6F420AE3705C6DD344776B1487667C0683A89DBD1FEE99ACCB2BE2AD6492ABB",
         "styles/globals.css": "4CD7F6A342FD6AB0C19EDF7AA61C88A50E6EB8CBB170C77245FE1BDE3B6DB183"
       },
       "drafts": {

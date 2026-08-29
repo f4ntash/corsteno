@@ -28,7 +28,7 @@ function eventNameForAnchor(anchor: HTMLAnchorElement) {
 
 function eventNameForButton(button: HTMLButtonElement) {
   if (button.dataset.analytics === "project_opened") return "project_opened";
-  if (button.closest(".h2o-variant-options, .exterior-variant-options, .slot-controls")) return "configurator_interaction";
+  if (button.closest(".interior-finishes-variant-options, .exterior-variant-options, .slot-controls")) return "configurator_interaction";
   if (button.closest(".showroom-category-tabs, .showroom-project-tabs")) return "project_interaction";
   return null;
 }

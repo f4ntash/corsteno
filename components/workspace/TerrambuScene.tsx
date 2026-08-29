@@ -75,7 +75,7 @@ export default function TerrambuScene({ sceneStyle, active, onSceneLink }: Terra
       </div>
       <a
         className="scene-action"
-        href="#product"
+        href="#system"
         data-scene-link="2"
         data-od-id="terrambu-siguiente"
         onClick={(event) => {

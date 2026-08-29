@@ -13,7 +13,7 @@ import {
 } from "@/lib/seo";
 import styles from "./projectCaseStudy.module.css";
 
-const H2OProjectExperience = dynamic(() => import("./H2OProjectExperience"));
+const InteriorFinishesProjectExperience = dynamic(() => import("./InteriorFinishesProjectExperience"));
 const ExteriorHouseProjectExperience = dynamic(() => import("./ExteriorHouseProjectExperience"));
 
 type ProjectConfig = {
@@ -29,7 +29,7 @@ type ProjectConfig = {
   capabilities: string[];
   relatedHref: string;
   relatedLabel: string;
-  experience: "terrambu" | "mapa-punilla" | "h2o" | "exterior-house";
+  experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house";
 };
 
 const projectConfigs: Record<string, ProjectConfig> = {
@@ -69,38 +69,38 @@ const projectConfigs: Record<string, ProjectConfig> = {
     relatedLabel: "Ver desarrollo web",
     experience: "mapa-punilla",
   },
-  h2o: {
-    category: "CORSTENO LAB · 3D PRODUCT CONFIGURATOR",
+  "revestimientos-interactivos": {
+    category: "CORSTENO LAB · INTERIOR FINISHES 3D",
     description:
-      "Un concepto desarrollado por Corsteno para explorar cómo un producto físico puede convertirse en una experiencia personalizable directamente desde el navegador.",
-    liveTitle: "Probá el configurador",
+      "Explorá distintas combinaciones de pisos, paredes y terminaciones en tiempo real dentro de un ambiente 3D.",
+    liveTitle: "Explorá los revestimientos",
     firstLabel: "El concepto",
-    firstTitle: "Un catálogo que responde al cliente.",
+    firstTitle: "Comparar antes de elegir.",
     firstBody:
-      "ATLAS convierte la exploración de un producto en una experiencia donde materiales y variantes reaccionan en tiempo real.",
+      "La experiencia permite probar pisos, paredes, revestimientos de barra y aberturas directamente sobre un ambiente interior.",
     secondLabel: "Qué demuestra",
-    secondTitle: "Personalización directamente en la web.",
+    secondTitle: "Revestimientos en contexto.",
     secondBody:
-      "La demo combina producto 3D, controles de cámara, lógica de variantes, materiales, reinicio y pantalla completa sin afirmar un cliente asociado.",
-    capabilities: ["Real-time 3D", "Materials", "Variants", "Product Logic", "WebGL"],
-    relatedHref: `${site.basePath}/servicios/configuradores-3d/`,
-    relatedLabel: "Ver configuradores 3D",
-    experience: "h2o",
+      "La demo combina variantes incluidas en el modelo, navegación 3D, controles táctiles, reinicio y pantalla completa sin convertir el mobiliario en una opción configurable.",
+    capabilities: ["Interior Finishes", "Material Comparison", "Real-time 3D", "Three.js", "Interactive Web"],
+    relatedHref: `${site.basePath}/servicios/visualizacion-3d/`,
+    relatedLabel: "Ver visualización 3D",
+    experience: "interior-finishes",
   },
   "exterior-house": {
     category: "CORSTENO LAB · ARCHITECTURAL 3D",
     description:
-      "Una experiencia conceptual para explorar cómo arquitectura, terminaciones y materiales pueden visualizarse y compararse directamente desde el navegador.",
-    liveTitle: "Explorá el proyecto",
+      "Una experiencia conceptual para explorar materiales y terminaciones de una pileta directamente desde el navegador.",
+    liveTitle: "Probá el configurador",
     firstLabel: "El concepto",
-    firstTitle: "Decidir antes de construir.",
+    firstTitle: "Decidir materiales antes de construir.",
     firstBody:
-      "Exterior House explora cómo una propuesta arquitectónica puede comunicar terminaciones y alternativas antes de existir físicamente.",
+      "Exterior House permite comparar agua, cascada, borde, interior y piso exterior sobre una pileta interactiva.",
     secondLabel: "Qué demuestra",
-    secondTitle: "Arquitectura y materiales en tiempo real.",
+    secondTitle: "Terminaciones exteriores en contexto.",
     secondBody:
-      "La demo integra navegación 3D, configuración de materiales, controles táctiles, reinicio y pantalla completa dentro de una experiencia web.",
-    capabilities: ["Archviz", "Material Configuration", "Real-time 3D", "Three.js", "Interactive Web"],
+      "La demo combina variantes incluidas en el modelo, cambio de color del borde, navegación 3D, reinicio y pantalla completa.",
+    capabilities: ["Architectural 3D", "Material Comparison", "Real-time 3D", "Three.js", "Interactive Web"],
     relatedHref: `${site.basePath}/servicios/visualizacion-3d/`,
     relatedLabel: "Ver visualización 3D",
     experience: "exterior-house",
@@ -108,7 +108,7 @@ const projectConfigs: Record<string, ProjectConfig> = {
 };
 
 function ProjectExperience({ config }: { config: ProjectConfig }) {
-  if (config.experience === "h2o") return <H2OProjectExperience />;
+  if (config.experience === "interior-finishes") return <InteriorFinishesProjectExperience />;
   if (config.experience === "exterior-house") return <ExteriorHouseProjectExperience />;
 
   const project = digitalProjects.find((item) => item.id === config.experience);
@@ -128,7 +128,7 @@ function ProjectExperience({ config }: { config: ProjectConfig }) {
 export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
   const config = projectConfigs[page.slug];
   if (!config) return null;
-  const isThreeD = config.experience === "h2o" || config.experience === "exterior-house";
+  const isThreeD = config.experience === "interior-finishes" || config.experience === "exterior-house";
 
   const breadcrumbItems = [
     { label: "Inicio", href: `${site.basePath}/` },

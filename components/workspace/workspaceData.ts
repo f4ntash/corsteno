@@ -1,4 +1,4 @@
-export const sceneCount = 4;
+export const sceneCount = 3;
 
 export type ShowroomCategory = "3d" | "web" | "immersive";
 
@@ -42,4 +42,4 @@ export const digitalProjects = [
   },
 ] as const;
 
-export type SceneIndex = 0 | 1 | 2 | 3;
+export type SceneIndex = 0 | 1 | 2;

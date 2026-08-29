@@ -209,8 +209,8 @@
 
 .projectTerrambu { grid-column: 1 / 8; grid-row: 1; }
 .projectMap { grid-column: 8 / 13; grid-row: 1; }
-.projectExterior { grid-column: 1 / 5; grid-row: 2; }
-.projectAtlas { grid-column: 5 / 13; grid-row: 2; }
+.projectFinishes { grid-column: 1 / 6; grid-row: 2; }
+.projectExterior { grid-column: 6 / 13; grid-row: 2; }
 
 .workCta {
   display: flex;
@@ -265,8 +265,8 @@
   transition: transform 600ms var(--ease), filter 300ms var(--ease);
 }
 
-.projectExterior .projectMedia img,
-.projectAtlas .projectMedia img {
+.projectFinishes .projectMedia img,
+.projectExterior .projectMedia img {
   object-fit: contain;
   background: #eef0eb;
 }
@@ -458,8 +458,8 @@
 
   .projectTerrambu,
   .projectMap,
-  .projectExterior,
-  .projectAtlas {
+  .projectFinishes,
+  .projectExterior {
     grid-column: auto;
     grid-row: auto;
   }

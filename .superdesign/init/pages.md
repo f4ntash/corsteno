@@ -6,17 +6,14 @@ Entry: `app/page.tsx`
 Dependencies:
 - `components/Navigation.tsx`
 - `components/workspace/Workspace.tsx`
-  - `components/workspace/ProjectIndex.tsx`
   - `components/workspace/ContextCursor.tsx`
-  - `components/workspace/H2OScene.tsx`
-    - `components/three/H2OViewer.tsx`
-      - `components/three/H2OModel.tsx`
-      - `components/three/h2oVariants.ts`
+  - `components/workspace/InteriorFinishesScene.tsx`
+    - `components/three/InteriorFinishesViewer.tsx`
+    - `components/three/interiorFinishVariants.ts`
   - `components/workspace/TerrambuScene.tsx`
-  - `components/workspace/ProductScene.tsx`
   - `components/workspace/DigitalSystemScene.tsx`
   - `components/workspace/workspaceData.ts`
-- `components/Capabilities.tsx`
+- `components/home/SelectedWorkSection.tsx`
 - `components/Contact.tsx`
 - `styles/globals.css`
 - `styles/workspace.module.css`

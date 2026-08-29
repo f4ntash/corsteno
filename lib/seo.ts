@@ -91,7 +91,7 @@ export const seoPages: SeoPage[] = [
       },
       {
         title: "Proyecto relacionado",
-        body: "ATLAS muestra cómo un producto puede explorarse con materiales y terminaciones configurables desde el navegador.",
+        body: "Revestimientos Interactivos muestra cómo comparar materiales y terminaciones directamente sobre un ambiente 3D.",
       },
     ],
     faqs: [
@@ -102,8 +102,8 @@ export const seoPages: SeoPage[] = [
       { question: "¿Puede conectarse con un e-commerce?", answer: "Puede evaluarse una integración cuando el catálogo, las variantes y el flujo comercial lo requieren." },
     ],
     links: [
-      { label: "Demo ATLAS de configurador 3D", href: p("/proyectos/h2o") },
       { label: "Demo Exterior House", href: p("/proyectos/exterior-house") },
+      { label: "Demo Revestimientos Interactivos", href: p("/proyectos/revestimientos-interactivos") },
       { label: "Soluciones para muebles y equipamiento", href: p("/sectores/muebles-equipamiento") },
       { label: "Soluciones para piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
       { label: "Soluciones para industria", href: p("/sectores/industria") },
@@ -130,7 +130,7 @@ export const seoPages: SeoPage[] = [
     sections: [
       { title: "Qué problema resuelve", body: "Cuando una propuesta depende de planos, renders aislados o explicaciones largas, la visualización 3D permite que el cliente vea y comprenda mejor la idea." },
       { title: "Casos habituales", body: "Se aplica en arquitectura, construcción, productos configurables, piscinas, exteriores y productos técnicos.", items: ["Preventa", "Presentaciones comerciales", "Catálogos interactivos", "Showrooms digitales"] },
-      { title: "Proyecto relacionado", body: "Exterior House muestra cómo presentar terminaciones y materiales antes de que el proyecto esté construido." },
+      { title: "Proyecto relacionado", body: "Revestimientos Interactivos muestra cómo comparar pisos, paredes y terminaciones dentro de un ambiente 3D." },
     ],
     faqs: [
       { question: "¿La visualización 3D es lo mismo que un render?", answer: "No. Un render es una imagen fija; una visualización interactiva permite explorar, navegar o cambiar opciones desde la web." },
@@ -140,6 +140,7 @@ export const seoPages: SeoPage[] = [
     ],
     links: [
       { label: "Demo Exterior House", href: p("/proyectos/exterior-house") },
+      { label: "Demo Revestimientos Interactivos", href: p("/proyectos/revestimientos-interactivos") },
       { label: "Visualización para arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
       { label: "Visualización para real estate", href: p("/sectores/real-estate") },
       { label: "Soluciones para piscinas y exteriores", href: p("/sectores/piscinas-exteriores") },
@@ -279,6 +280,7 @@ export const seoPages: SeoPage[] = [
       { label: "Visualización 3D", href: p("/servicios/visualizacion-3d") },
       { label: "Realidad aumentada · Próximamente", href: p("/servicios/realidad-aumentada") },
       { label: "Ver Exterior House", href: p("/proyectos/exterior-house") },
+      { label: "Ver Revestimientos Interactivos", href: p("/proyectos/revestimientos-interactivos") },
     ],
   },
   {
@@ -311,7 +313,6 @@ export const seoPages: SeoPage[] = [
     links: [
       { label: "Configuradores 3D", href: p("/servicios/configuradores-3d") },
       { label: "Industria", href: p("/sectores/industria") },
-      { label: "Ver ATLAS", href: p("/proyectos/h2o") },
     ],
   },
   {
@@ -334,7 +335,7 @@ export const seoPages: SeoPage[] = [
     ],
     sections: [
       { title: "Aplicaciones", body: "Piscinas, galerías, patios, espacios exteriores, revestimientos y materiales de terminación." },
-      { title: "Proyecto relacionado", body: "Exterior House muestra un caso de configuración de materiales para un proyecto exterior." },
+      { title: "Servicio relacionado", body: "La visualización 3D permite comparar revestimientos y materiales antes de construir." },
     ],
     faqs: [
       { question: "¿Puedo mostrar una piscina antes de construirla?", answer: "Sí. La visualización 3D ayuda a presentar el proyecto antes de la obra." },
@@ -344,6 +345,7 @@ export const seoPages: SeoPage[] = [
     links: [
       { label: "Configuradores 3D para productos", href: p("/servicios/configuradores-3d") },
       { label: "Demo Exterior House", href: p("/proyectos/exterior-house") },
+      { label: "Demo Revestimientos Interactivos", href: p("/proyectos/revestimientos-interactivos") },
       { label: "Visualización 3D interactiva", href: p("/servicios/visualizacion-3d") },
       { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
     ],
@@ -450,43 +452,6 @@ export const seoPages: SeoPage[] = [
     imageAlt: "Sitio web interactivo para hotelería y turismo desarrollado por Corsteno",
   },
   {
-    slug: "h2o",
-    path: "/proyectos/h2o",
-    cluster: "3D",
-    category: "proyecto",
-    intent: "ver una demo de configurador 3D de producto",
-    title: "ATLAS — Configurador 3D de Producto | Corsteno Lab",
-    description: "ATLAS es una demo de Corsteno Lab para explorar personalización de producto, materiales, variantes y lógica 3D con WebGL y Three.js.",
-    h1: "ATLAS: un catálogo que reacciona al cliente",
-    eyebrow: "Corsteno Lab",
-    intro: "Un concepto desarrollado por Corsteno para explorar cómo un producto físico puede convertirse en una experiencia personalizable directamente desde el navegador.",
-    cta: "Quiero una experiencia como ATLAS",
-    takeaways: [
-      "Configuración de materiales desde navegador.",
-      "Interacción 3D con foco comercial.",
-      "Panel de opciones y detalle del material seleccionado.",
-      "Ejemplo aplicable a productos configurables.",
-    ],
-    sections: [
-      { title: "Qué demuestra", body: "El proyecto muestra cómo una interfaz puede ordenar variantes, explicar terminaciones y mantener el producto como protagonista." },
-      { title: "Servicio relacionado", body: "Se vincula directamente con configuradores 3D y visualización 3D interactiva." },
-    ],
-    faqs: [
-      { question: "¿ATLAS es un configurador 3D?", answer: "Sí. Es un ejemplo de experiencia interactiva para explorar materiales y terminaciones." },
-      { question: "¿Puede aplicarse a otros productos?", answer: "Sí. La lógica puede adaptarse a otros productos con variantes reales." },
-      { question: "¿Funciona desde navegador?", answer: "Sí. La experiencia está pensada para web." },
-    ],
-    links: [
-      { label: "Configuradores 3D", href: p("/servicios/configuradores-3d") },
-      { label: "Muebles y equipamiento", href: p("/sectores/muebles-equipamiento") },
-      { label: "Industria", href: p("/sectores/industria") },
-    ],
-    image: "/projects/corsteno-showroom-3d.webp",
-    imageAlt: "Configurador 3D interactivo ATLAS desarrollado por Corsteno",
-    keywords: ["configurador 3D", "visualización de producto", "materiales", "personalización", "WebGL", "Three.js"],
-    projectKind: "corsteno-lab",
-  },
-  {
     slug: "exterior-house",
     path: "/proyectos/exterior-house",
     cluster: "3D",
@@ -522,6 +487,43 @@ export const seoPages: SeoPage[] = [
     image: "/projects/exterior-house-3d.png",
     imageAlt: "Experiencia arquitectónica 3D Exterior House desarrollada por Corsteno",
     keywords: ["visualización arquitectónica", "materiales", "3D interactivo", "arquitectura web", "Three.js"],
+    projectKind: "corsteno-lab",
+  },
+  {
+    slug: "revestimientos-interactivos",
+    path: "/proyectos/revestimientos-interactivos",
+    cluster: "3D",
+    category: "proyecto",
+    intent: "ver ejemplo de visualización 3D interactiva de revestimientos interiores",
+    title: "Revestimientos Interactivos en 3D | Corsteno Lab",
+    description: "Demo 3D de Corsteno Lab para comparar pisos, paredes, revestimientos de barra y aberturas directamente sobre un ambiente interior.",
+    h1: "Revestimientos Interactivos",
+    eyebrow: "Corsteno Lab",
+    intro: "Visualizá diferentes revestimientos directamente sobre un ambiente 3D y compará pisos, paredes y terminaciones antes de tomar una decisión.",
+    cta: "Quiero visualizar mis revestimientos",
+    takeaways: [
+      "Comparación de pisos y revestimientos de pared.",
+      "Variantes de terminación para barras y aberturas.",
+      "Materiales originales del modelo visualizados en contexto.",
+      "Experiencia web interactiva para apoyar decisiones.",
+    ],
+    sections: [
+      { title: "Qué demuestra", body: "La experiencia permite comparar revestimientos dentro de un ambiente antes de definir una combinación." },
+      { title: "Servicios relacionados", body: "Conecta con visualización 3D, arquitectura y presentación interactiva de materiales." },
+    ],
+    faqs: [
+      { question: "¿Qué revestimientos se pueden comparar?", answer: "La demo permite alternar pisos, paredes, revestimientos de barra y aberturas incluidos en el modelo." },
+      { question: "¿Los materiales se ven dentro del ambiente?", answer: "Sí. Cada variante se visualiza directamente sobre el espacio 3D para poder compararla en contexto." },
+      { question: "¿Incluye configuración de muebles?", answer: "No. El mobiliario funciona únicamente como ambientación fija; esta experiencia está centrada en revestimientos." },
+    ],
+    links: [
+      { label: "Configuradores 3D para productos", href: p("/servicios/configuradores-3d") },
+      { label: "Visualización 3D interactiva", href: p("/servicios/visualizacion-3d") },
+      { label: "Arquitectura y construcción", href: p("/sectores/arquitectura-construccion") },
+    ],
+    image: "/projects/revestimientos-interactivos.png",
+    imageAlt: "Experiencia 3D de revestimientos interactivos desarrollada por Corsteno",
+    keywords: ["revestimientos 3D", "pisos", "paredes", "materiales", "interiores interactivos", "Three.js"],
     projectKind: "corsteno-lab",
   },
   {

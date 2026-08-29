@@ -4,8 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import workspaceStyles from "@/styles/workspace.module.css";
 import ContextCursor from "./ContextCursor";
 import DigitalSystemScene from "./DigitalSystemScene";
-import H2OScene from "./H2OScene";
-import ProductScene from "./ProductScene";
+import InteriorFinishesScene from "./InteriorFinishesScene";
 import StepTransition from "./StepTransition";
 import TerrambuScene from "./TerrambuScene";
 import { digitalProjects, sceneCount } from "./workspaceData";
@@ -38,7 +37,7 @@ export default function Workspace() {
   const [compact, setCompact] = useState(false);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
-  const dark = currentScene === 1 || currentScene === 3;
+  const dark = currentScene === 1 || currentScene === 2;
   const showroomGroupLabel = showroomCategory === "web"
     ? "Casos reales"
     : showroomCategory === "3d"
@@ -86,10 +85,10 @@ export default function Workspace() {
       currentSceneRef.current = index;
       window.dispatchEvent(new CustomEvent("forma3d:project-view", { detail: { scene: index } }));
     }
-    setShowroomCategory(index === 1 ? "web" : index === 3 ? "immersive" : "3d");
+    setShowroomCategory(index === 1 ? "web" : index === 2 ? "immersive" : "3d");
     setCurrentScene(index);
     setRawScene(raw);
-    dispatchChrome({ dark: index === 1 || index === 3 });
+    dispatchChrome({ dark: index === 1 || index === 2 });
   }, []);
 
   const updateWorkspace = useCallback(() => {
@@ -122,7 +121,7 @@ export default function Workspace() {
 
   const openProject = useCallback(({ category, project }: ShowroomProjectTarget) => {
     if (category === "3d") {
-      const scene = project === "atlas" ? 0 : project === "exterior-house" ? 2 : null;
+      const scene = project === "revestimientos-interactivos" ? 0 : null;
       if (scene !== null) goToScene(scene);
       return;
     }
@@ -133,7 +132,7 @@ export default function Workspace() {
       return;
     }
 
-    goToScene(3);
+    goToScene(2);
   }, [goToScene, selectWebProject]);
 
   useEffect(() => {
@@ -206,7 +205,7 @@ export default function Workspace() {
         <p>Casos entregados a clientes y demos propias donde mostramos desarrollo web, visualización 3D e interacción.</p>
         <div className="showroom-trust-groups" aria-label="Tipos de proyectos">
           <span><strong>Casos reales</strong> Terrambú · Mapa Punilla</span>
-          <span><strong>Demos Corsteno</strong> ATLAS · Exterior House</span>
+          <span><strong>Demos Corsteno</strong> Revestimientos Interactivos</span>
         </div>
       </section>
       <section
@@ -219,13 +218,13 @@ export default function Workspace() {
         <div className="workspace-stage" data-scene={currentScene + 1} data-od-id="escena-principal">
           <nav className={`showroom-nav${dark ? " dark" : ""}`} aria-label="Showroom">
             <div className="showroom-category-tabs" aria-label="Categorías">
-              <button type="button" aria-current={showroomCategory === "3d" ? "true" : undefined} onClick={() => goToScene(currentScene === 2 ? 2 : 0)}>
+              <button type="button" aria-current={showroomCategory === "3d" ? "true" : undefined} onClick={() => goToScene(0)}>
                 3D interactivo
               </button>
               <button type="button" aria-current={showroomCategory === "web" ? "true" : undefined} onClick={() => goToScene(1)}>
                 Web
               </button>
-              <button type="button" aria-current={showroomCategory === "immersive" ? "true" : undefined} onClick={() => goToScene(3)}>
+              <button type="button" aria-current={showroomCategory === "immersive" ? "true" : undefined} onClick={() => goToScene(2)}>
                 Inmersivo
               </button>
             </div>
@@ -233,14 +232,9 @@ export default function Workspace() {
               <span className="showroom-project-group-label">{showroomGroupLabel}</span>
               <div className="showroom-project-tabs" aria-label={`${showroomGroupLabel}: proyectos`}>
                 {showroomCategory === "3d" && (
-                  <>
-                    <button type="button" aria-current={currentScene === 0 ? "true" : undefined} onClick={() => goToScene(0)}>
-                      01 ATLAS
-                    </button>
-                    <button type="button" aria-current={currentScene === 2 ? "true" : undefined} onClick={() => goToScene(2)}>
-                      02 Exterior House
-                    </button>
-                  </>
+                  <button type="button" aria-current={currentScene === 0 ? "true" : undefined} onClick={() => goToScene(0)}>
+                    01 Revestimientos Interactivos
+                  </button>
                 )}
                 {showroomCategory === "web" && (
                   <>
@@ -267,10 +261,9 @@ export default function Workspace() {
           <div className="stage-status label">Showroom · Proyectos reales</div>
 
           <StepTransition step={currentScene} direction={sceneDirection}>
-            <H2OScene sceneStyle={sceneStyle(0)} active={sceneMetrics[0].opacity > 0.12} onSceneLink={goToScene} />
+            <InteriorFinishesScene sceneStyle={sceneStyle(0)} active={sceneMetrics[0].opacity > 0.12} onSceneLink={goToScene} />
             <TerrambuScene sceneStyle={sceneStyle(1)} active={sceneMetrics[1].opacity > 0.12} onSceneLink={goToScene} />
-            <ProductScene sceneStyle={sceneStyle(2)} active={sceneMetrics[2].opacity > 0.12} onSceneLink={goToScene} />
-            <DigitalSystemScene sceneStyle={sceneStyle(3)} active={sceneMetrics[3].opacity > 0.12} />
+            <DigitalSystemScene sceneStyle={sceneStyle(2)} active={sceneMetrics[2].opacity > 0.12} />
           </StepTransition>
         </div>
       </section>

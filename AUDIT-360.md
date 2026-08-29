@@ -29,15 +29,15 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 ## Alcance y evidencia
 
-- Rutas: `/`, `/proyectos/terrambu/`, `/proyectos/mapa-punilla/`, `/proyectos/h2o/`, `/proyectos/exterior-house/` y `/industrial/`.
+- Rutas: `/`, `/proyectos/terrambu/`, `/proyectos/mapa-punilla/`, `/proyectos/exterior-house/`, `/proyectos/revestimientos-interactivos/` y `/industrial/`.
 - Viewports de home: los seis solicitados. Proyectos: desktop 1920×1080 y mobile 390×844, con comprobaciones estructurales adicionales sobre el HTML exportado.
-- Build: Next.js 16.3.0, export estático de 23 páginas.
+- Build: Next.js 16.3.0, export estático de 24 páginas.
 - Estado HTTP local: 200 en todas las rutas auditadas, `robots.txt`, `sitemap.xml` y `llms.txt`.
 - Home: 1 H1, 20 links, 19 buttons, 8 imágenes, 1 formulario; ningún control o link sin nombre accesible; 0 Canvas y 0 iframes antes de hacer scroll.
 - Altura de home: 8,091 px a 1920×1080; 13,030 px a 390×844; 13,196 px a 360×800.
 - JS referenciado por ruta, suma sin comprimir: home ≈1,513.7 KB; proyectos ≈1,567.1 KB; `/industrial/` ≈1,549.4 KB.
 - Chunk Three/R3F principal: 882.2 KB sin comprimir y presente en el HTML inicial de todas las rutas auditadas.
-- GLB: `exterior_house.glb` 20,316,540 bytes; `preview_house.glb` 10,395,324 bytes.
+- GLB: `exterior_house.glb` y `previa_house_interior.glb` como modelos principales de las experiencias 3D.
 - Logo y favicon fuente: PNG de marca ≈345.6 KB, 2000×2000; favicon ≈180.1 KB, 2000×2000.
 - Lighthouse/CWV: no disponible. No se inventan LCP, CLS ni INP; las observaciones son inferencias técnicas.
 
@@ -65,7 +65,7 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 ### 6. Demos propias y trabajos de cliente no se distinguen con suficiente fuerza
 
-**Evidencia:** ATLAS/H2O y Exterior House conviven en “Trabajo seleccionado” junto a Terrambú y Mapa Punilla; el detalle aclara “Demo Corsteno”, pero la jerarquía de cards es equivalente. **Importa:** puede generar dudas sobre qué fue contratado, qué está en producción y qué es concepto. **Severidad:** P1. **Esfuerzo:** S. **Recomendación:** etiquetar de forma consistente tipo, estado y naturaleza de cada proyecto.
+**Evidencia:** Revestimientos Interactivos convive en “Trabajo seleccionado” junto a Terrambú y Mapa Punilla; el detalle aclara “Demo Corsteno”, pero la jerarquía de cards es equivalente. **Importa:** puede generar dudas sobre qué fue contratado, qué está en producción y qué es concepto. **Severidad:** P1. **Esfuerzo:** S. **Recomendación:** etiquetar de forma consistente tipo, estado y naturaleza de cada proyecto.
 
 ### 7. No hay capa pública de privacidad pese a analytics y formulario externo
 
@@ -77,7 +77,7 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 ### 9. Los modelos 3D son demasiado pesados para una experiencia comercial móvil
 
-**Evidencia:** 19.38 MiB y 9.91 MiB; se difieren correctamente, pero el costo aparece al entrar en los proyectos 3D. **Importa:** en redes móviles puede demorar el momento de valor o provocar abandono. **Severidad:** P1. **Esfuerzo:** L. **Recomendación:** establecer presupuestos por modelo y optimizar geometría, texturas, compresión y progresive loading sin degradar la prueba visual.
+**Evidencia:** los modelos 3D pesan aproximadamente 27.04 MiB y 19.38 MiB; se difieren correctamente, pero el costo aparece al entrar en los proyectos 3D. **Importa:** en redes móviles puede demorar el momento de valor o provocar abandono. **Severidad:** P1. **Esfuerzo:** L. **Recomendación:** establecer presupuestos por modelo y optimizar geometría, texturas, compresión y progressive loading sin degradar la prueba visual.
 
 ### 10. La home mobile exige entre 15 y 16.5 pantallas de scroll
 
@@ -89,12 +89,11 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 2. Diferenciar visual y verbalmente “demo propia” de “proyecto para cliente”.
 3. Instrumentar `form_start`, `form_success`, `form_error`, `demo_start` y `project_open`.
 4. Unificar etiquetas ES/EN de las cards.
-5. Alinear el nombre público ATLAS con su slug/identidad H2O o documentar la relación.
-6. Agregar `width`/`height` o `aspect-ratio` estable a imágenes HTML relevantes.
-7. Gestionar foco y anuncio de errores de validación.
-8. Añadir acceso “Saltar al contenido”.
-9. Revisar la promesa exacta de “24–48 h” contra la operación real.
-10. Dar a cada case study al menos un problema, decisión y entregable factual.
+5. Agregar `width`/`height` o `aspect-ratio` estable a imágenes HTML relevantes.
+6. Gestionar foco y anuncio de errores de validación.
+7. Añadir acceso “Saltar al contenido”.
+8. Revisar la promesa exacta de “24–48 h” contra la operación real.
+9. Dar a cada case study al menos un problema, decisión y entregable factual.
 
 ## Findings completos
 
@@ -162,11 +161,10 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 | ID | Finding concreto | Impacto | Sev. | Esf. | Recomendación |
 |---|---|---|---:|---:|---|
-| F41 | ATLAS se publica bajo `/proyectos/h2o/`. | Inconsistencia de entidad, URL compartida y anchor text. | P2 | M | Unificar identidad o establecer transición/redirect documentado. |
 | F42 | La metadata de los proyectos es correcta, pero el cuerpo comparte frases y secciones genéricas. | Reduce diferenciación semántica entre casos. | P2 | M | Agregar contenido específico factual por ruta. |
 | F43 | Imágenes HTML de hero, cards y SEO no declaran dimensiones intrínsecas. | Riesgo de CLS y menor previsibilidad del render. | P1 | S | Reservar espacio con dimensiones/aspect-ratio. |
 | F44 | `/industrial/` está correctamente `noindex,nofollow`, sin canonical y fuera del sitemap, pero sigue accesible por URL. | Bien para experimento; riesgo solo si se enlaza o difunde. | P3 | XS | Mantener aislamiento y revisar antes de cualquier publicación. |
-| F45 | Sitemap contiene 16 URLs válidas y excluye confirmación/industrial; no hay señales de rutas de proyecto rotas. | Estado saludable, pero requiere disciplina al escalar. | P3 | S | Generarlo desde una única fuente de rutas. |
+| F45 | Sitemap contiene 17 URLs válidas y excluye confirmación/industrial; no hay señales de rutas de proyecto rotas. | Estado saludable, pero requiere disciplina al escalar. | P3 | S | Generarlo desde una única fuente de rutas. |
 | F46 | `llms.txt` describe servicios y proyectos, pero replica la amplitud de AR/VR próximos. | Un LLM puede sobreestimar oferta disponible. | P2 | XS | Separar claramente disponible, demo y roadmap. |
 | F47 | JSON-LD usa ProfessionalService y CreativeWork, pero los proyectos no incluyen resultados/autores/cliente verificables. | Entidad válida pero poco rica para citación. | P2 | M | Completar solo propiedades respaldadas. |
 | F48 | El contenido define Corsteno, servicios y proyectos en texto HTML; el diferencial competitivo sigue implícito. | LLMs responden qué hace, no por qué elegirlo. | P2 | M | Formular diferenciación factual y consistente. |
@@ -250,7 +248,6 @@ Los mayores quiebres son `PRUEBA → CONFÍA` y `CONFÍA → VALORA`: la experie
 - Diferenciar demo propia vs. cliente.
 - Instrumentar funnel mínimo.
 - Gestionar errores de formulario accesiblemente.
-- Unificar etiquetas y relación ATLAS/H2O.
 - Reservar espacio de imágenes.
 
 ### SIGUIENTE ITERACIÓN

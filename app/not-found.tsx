@@ -20,7 +20,7 @@ export default function NotFound() {
       <div>
         <a href={`${site.basePath}/`}>Volver al inicio</a>
         <a href={`${site.basePath}/servicios/configuradores-3d/`}>Servicios</a>
-        <a href={`${site.basePath}/proyectos/h2o/`}>Proyectos</a>
+        <a href={`${site.basePath}/#proyectos`}>Proyectos</a>
       </div>
     </main>
   );

@@ -2,23 +2,30 @@
 
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
-import { forwardRef, Suspense, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  forwardRef,
+  Suspense,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import {
-  EXTERIOR_HOUSE_VARIANT_GROUPS,
-  type ExteriorHouseGroupId,
-  type ExteriorHouseMaterialOverrides,
-  type ExteriorHouseVariantState,
-} from "./exteriorHouseVariants";
+
 import { withBasePath } from "@/lib/assetPath";
+import {
+  DEFAULT_EXTERIOR_HOUSE_STATE,
+  EXTERIOR_HOUSE_MESHES,
+  EXTERIOR_HOUSE_REQUIRED_MESHES,
+  getExteriorHouseVisibility,
+  type ExteriorHouseState,
+} from "./exteriorHouseVariants";
 
 const EXTERIOR_HOUSE_MODEL_URL = withBasePath("/models/exterior_house.glb");
 
-// ============================================================
-// EXTERIOR HOUSE CAMERA CONFIG
-// Ajustar encuadre, zoom y limites de orbita solamente aca.
-// ============================================================
 const EXTERIOR_HOUSE_CAMERA_CONFIG = {
   direction: [4.4, 1.5, 4] as [number, number, number],
   target: [0, 0, 0] as [number, number, number],
@@ -37,7 +44,7 @@ const INITIAL_AZIMUTH = Math.atan2(
 );
 
 type ExteriorHouseModelProps = {
-  variants: ExteriorHouseVariantState;
+  configuration: ExteriorHouseState;
   presentation?: "default" | "project";
 };
 
@@ -45,67 +52,76 @@ export type ExteriorHouseSceneHandle = {
   nudge: (azimuthDelta: number, polarDelta: number) => void;
 };
 
-const cloneMaterialWithOverrides = (
-  material: THREE.Material,
-  overrides: ExteriorHouseMaterialOverrides,
-) => {
-  const clone = material.clone();
-  if ("color" in clone && clone.color instanceof THREE.Color) clone.color.set(overrides.color);
-  if ("roughness" in clone) clone.roughness = overrides.roughness;
-  if ("metalness" in clone) clone.metalness = overrides.metalness;
-  clone.needsUpdate = true;
-  return clone;
-};
+type IndexedObjects = Map<string, THREE.Object3D[]>;
+
+function applyExteriorHouseVisibility(objects: IndexedObjects, configuration: ExteriorHouseState) {
+  getExteriorHouseVisibility(configuration).forEach((visible, meshName) => {
+    objects.get(meshName)?.forEach((object) => {
+      object.visible = visible;
+    });
+  });
+}
+
+function prepareBorderMaterials(objects: IndexedObjects) {
+  const materials: THREE.Material[] = [];
+
+  objects.get(EXTERIOR_HOUSE_MESHES.border)?.forEach((object) => {
+    if (!(object instanceof THREE.Mesh)) return;
+
+    if (Array.isArray(object.material)) {
+      const clonedMaterials = object.material.map((material) => material.clone());
+      object.material = clonedMaterials;
+      materials.push(...clonedMaterials);
+      return;
+    }
+
+    const clonedMaterial = object.material.clone();
+    object.material = clonedMaterial;
+    materials.push(clonedMaterial);
+  });
+
+  return materials;
+}
+
+function applyBorderColor(materials: THREE.Material[], color: string) {
+  materials.forEach((material) => {
+    if ("color" in material && material.color instanceof THREE.Color) {
+      material.color.set(color);
+      material.needsUpdate = true;
+    }
+  });
+}
 
 function ExteriorHouseModel({
-  variants,
+  configuration,
   presentation = "default",
   controlsRef,
 }: ExteriorHouseModelProps & { controlsRef: React.RefObject<OrbitControlsImpl | null> }) {
   const gltf = useGLTF(EXTERIOR_HOUSE_MODEL_URL);
   const invalidate = useThree((state) => state.invalidate);
-  const { scene, center, radius, meshes, targetMeshes, variantMaterials } = useMemo(() => {
+
+  const { scene, center, radius, objects, borderMaterials } = useMemo(() => {
     const clonedScene = gltf.scene.clone(true);
-    clonedScene.updateMatrixWorld(true);
+    const indexedObjects: IndexedObjects = new Map();
 
-    const meshes = new Map<string, THREE.Mesh>();
     clonedScene.traverse((object) => {
-      if (object instanceof THREE.Mesh) meshes.set(object.name, object);
+      if (!object.name) return;
+      const matches = indexedObjects.get(object.name) ?? [];
+      matches.push(object);
+      indexedObjects.set(object.name, matches);
     });
 
-    const targets = new Map<ExteriorHouseGroupId, THREE.Mesh>();
-    const materials = new Map<string, THREE.Material | THREE.Material[]>();
+    const missingMeshes = EXTERIOR_HOUSE_REQUIRED_MESHES.filter(
+      (meshName) => !indexedObjects.has(meshName),
+    );
+    if (missingMeshes.length > 0) {
+      console.error(`Exterior House: faltan meshes requeridos: ${missingMeshes.join(", ")}`);
+    }
 
-    EXTERIOR_HOUSE_VARIANT_GROUPS.forEach((group) => {
-      const target = meshes.get(group.targetMeshName);
-      if (!target) return;
-      targets.set(group.id, target);
-
-      group.preserveChildMeshNames?.forEach((meshName) => {
-        const child = meshes.get(meshName);
-        if (child) clonedScene.attach(child);
-      });
-
-      group.sourceMeshNames.forEach((meshName) => {
-        const mesh = meshes.get(meshName);
-        if (mesh) mesh.visible = meshName === group.targetMeshName;
-      });
-
-      if (group.selectionMode === "mesh") return;
-
-      group.variants.forEach((variant) => {
-        const source = meshes.get(variant.sourceMeshName);
-        if (!source) return;
-        const sourceMaterials = Array.isArray(source.material) ? source.material : [source.material];
-        const preparedMaterials = variant.materialOverrides
-          ? sourceMaterials.map((material) => cloneMaterialWithOverrides(material, variant.materialOverrides!))
-          : sourceMaterials;
-        materials.set(
-          `${group.id}:${variant.id}`,
-          Array.isArray(source.material) ? preparedMaterials : preparedMaterials[0],
-        );
-      });
-    });
+    const preparedBorderMaterials = prepareBorderMaterials(indexedObjects);
+    applyExteriorHouseVisibility(indexedObjects, DEFAULT_EXTERIOR_HOUSE_STATE);
+    applyBorderColor(preparedBorderMaterials, DEFAULT_EXTERIOR_HOUSE_STATE.borderColor);
+    clonedScene.updateMatrixWorld(true);
 
     const box = new THREE.Box3().setFromObject(clonedScene);
     const modelCenter = box.getCenter(new THREE.Vector3());
@@ -115,30 +131,16 @@ function ExteriorHouseModel({
       scene: clonedScene,
       center: modelCenter,
       radius: sphere.radius,
-      meshes,
-      targetMeshes: targets,
-      variantMaterials: materials,
+      objects: indexedObjects,
+      borderMaterials: preparedBorderMaterials,
     };
   }, [gltf.scene]);
 
   useEffect(() => {
-    EXTERIOR_HOUSE_VARIANT_GROUPS.forEach((group) => {
-      const selectedVariant = group.variants.find((variant) => variant.id === variants[group.id]);
-      if (group.selectionMode === "mesh") {
-        group.sourceMeshNames.forEach((meshName) => {
-          const mesh = meshes.get(meshName);
-          if (mesh) mesh.visible = meshName === selectedVariant?.sourceMeshName;
-        });
-        return;
-      }
-
-      const target = targetMeshes.get(group.id);
-      const material = variantMaterials.get(`${group.id}:${variants[group.id]}`);
-      if (!target || !material) return;
-      target.material = material;
-    });
+    applyExteriorHouseVisibility(objects, configuration);
+    applyBorderColor(borderMaterials, configuration.borderColor);
     invalidate();
-  }, [invalidate, meshes, targetMeshes, variantMaterials, variants]);
+  }, [borderMaterials, configuration, invalidate, objects]);
 
   return (
     <>
@@ -197,54 +199,61 @@ function CameraAndControls({
   );
 }
 
-const ExteriorHouseScene = forwardRef<ExteriorHouseSceneHandle, ExteriorHouseModelProps>(function ExteriorHouseScene(
-  { variants, presentation = "default" },
-  ref,
-) {
-  const controlsRef = useRef<OrbitControlsImpl>(null);
-  const nudge = useCallback((azimuthDelta: number, polarDelta: number) => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-    const camera = controls.object;
-    const offset = camera.position.clone().sub(controls.target);
-    const spherical = new THREE.Spherical().setFromVector3(offset);
-    spherical.theta = THREE.MathUtils.clamp(
-      spherical.theta + azimuthDelta,
-      INITIAL_AZIMUTH - EXTERIOR_HOUSE_CAMERA_CONFIG.azimuthRange,
-      INITIAL_AZIMUTH + EXTERIOR_HOUSE_CAMERA_CONFIG.azimuthRange,
-    );
-    spherical.phi = THREE.MathUtils.clamp(
-      spherical.phi + polarDelta,
-      EXTERIOR_HOUSE_CAMERA_CONFIG.minPolarAngle,
-      EXTERIOR_HOUSE_CAMERA_CONFIG.maxPolarAngle,
-    );
-    camera.position.copy(controls.target.clone().add(offset.setFromSpherical(spherical)));
-    camera.lookAt(controls.target);
-    controls.update();
-  }, []);
+const ExteriorHouseScene = forwardRef<ExteriorHouseSceneHandle, ExteriorHouseModelProps>(
+  function ExteriorHouseScene({ configuration, presentation = "default" }, ref) {
+    const controlsRef = useRef<OrbitControlsImpl>(null);
 
-  useImperativeHandle(ref, () => ({ nudge }), [nudge]);
+    const nudge = useCallback((azimuthDelta: number, polarDelta: number) => {
+      const controls = controlsRef.current;
+      if (!controls) return;
 
-  return (
-    <div className="exterior-house-viewer" aria-hidden="true">
-      <Canvas
-        frameloop="demand"
-        dpr={[1, 1.5]}
-        camera={{ fov: EXTERIOR_HOUSE_CAMERA_CONFIG.fov, near: 0.01, far: 100 }}
-        gl={{ alpha: true, antialias: true }}
-        onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
-      >
-        <ambientLight intensity={1.25} />
-        <hemisphereLight args={[0xffffff, 0x8a8074, 1.2]} />
-        <directionalLight position={[5, 8, 6]} intensity={2.1} />
-        <directionalLight position={[-4, 3, -5]} intensity={0.65} />
-        <Suspense fallback={null}>
-          <ExteriorHouseModel variants={variants} presentation={presentation} controlsRef={controlsRef} />
-        </Suspense>
-      </Canvas>
-    </div>
-  );
-});
+      const camera = controls.object;
+      const offset = camera.position.clone().sub(controls.target);
+      const spherical = new THREE.Spherical().setFromVector3(offset);
+
+      spherical.theta = THREE.MathUtils.clamp(
+        spherical.theta + azimuthDelta,
+        INITIAL_AZIMUTH - EXTERIOR_HOUSE_CAMERA_CONFIG.azimuthRange,
+        INITIAL_AZIMUTH + EXTERIOR_HOUSE_CAMERA_CONFIG.azimuthRange,
+      );
+      spherical.phi = THREE.MathUtils.clamp(
+        spherical.phi + polarDelta,
+        EXTERIOR_HOUSE_CAMERA_CONFIG.minPolarAngle,
+        EXTERIOR_HOUSE_CAMERA_CONFIG.maxPolarAngle,
+      );
+
+      camera.position.copy(controls.target.clone().add(offset.setFromSpherical(spherical)));
+      camera.lookAt(controls.target);
+      controls.update();
+    }, []);
+
+    useImperativeHandle(ref, () => ({ nudge }), [nudge]);
+
+    return (
+      <div className="exterior-house-viewer" aria-hidden="true">
+        <Canvas
+          frameloop="demand"
+          dpr={[1, 1.5]}
+          camera={{ fov: EXTERIOR_HOUSE_CAMERA_CONFIG.fov, near: 0.01, far: 100 }}
+          gl={{ alpha: true, antialias: true }}
+          onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
+        >
+          <ambientLight intensity={1.25} />
+          <hemisphereLight args={[0xffffff, 0x8a8074, 1.2]} />
+          <directionalLight position={[5, 8, 6]} intensity={2.1} />
+          <directionalLight position={[-4, 3, -5]} intensity={0.65} />
+          <Suspense fallback={null}>
+            <ExteriorHouseModel
+              configuration={configuration}
+              presentation={presentation}
+              controlsRef={controlsRef}
+            />
+          </Suspense>
+        </Canvas>
+      </div>
+    );
+  },
+);
 
 export default ExteriorHouseScene;
 
