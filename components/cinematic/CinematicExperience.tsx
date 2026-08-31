@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { withBasePath } from "@/lib/assetPath";
 import CinematicCanvas from "./CinematicCanvas";
 import styles from "./cinematic.module.css";
 
@@ -64,7 +65,7 @@ export default function CinematicExperience() {
       <div className={styles.grain} aria-hidden="true" />
 
       <header className={styles.chrome}>
-        <a className={styles.wordmark} href="/" aria-label="Volver a Corsteno">
+        <a className={styles.wordmark} href={withBasePath("/")} aria-label="Volver a Corsteno">
           Corsteno
         </a>
         <span className={styles.location}>ESTUDIO / ARGENTINA</span>

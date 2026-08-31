@@ -256,5 +256,3 @@ const ExteriorHouseScene = forwardRef<ExteriorHouseSceneHandle, ExteriorHouseMod
 );
 
 export default ExteriorHouseScene;
-
-useGLTF.preload(EXTERIOR_HOUSE_MODEL_URL);

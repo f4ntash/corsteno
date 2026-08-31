@@ -1,11 +1,12 @@
 "use client";
 
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   forwardRef,
   Suspense,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useLayoutEffect,
   useMemo,
@@ -80,11 +81,14 @@ const INITIAL_AZIMUTH = Math.atan2(
 
 type InteriorFinishesModelProps = {
   variants: InteriorFinishState;
-  presentation?: "default" | "project";
+  presentation?: "default" | "project" | "hero";
+  comparison?: number;
 };
 
 export type InteriorFinishesViewerHandle = {
   nudge: (azimuthDelta: number, polarDelta: number) => void;
+  resetView: () => void;
+  zoom: (factor: number) => void;
 };
 
 function applyInteriorFinishVisibility(
@@ -98,6 +102,166 @@ function applyInteriorFinishVisibility(
       object.visible = visible;
     }
   });
+}
+
+const BEFORE_HIDDEN_OBJECTS = [
+  "FLOOR_ALFOMBRA_A",
+  "FLOOR_ALFOMBRA_B",
+  "MUEBLE_SILLON_DOBLE_A",
+  "MUEBLE_SILLON_TRIPLE_A",
+  "COCINA_LAVADERO",
+  "COCINA_CAFETERAS",
+] as const;
+
+const BEFORE_INTERIOR_FINISHES: InteriorFinishState = {
+  ...DEFAULT_INTERIOR_FINISHES,
+  floor: "floorB",
+};
+
+function indexSceneObjects(scene: THREE.Object3D) {
+  const objects = new Map<string, THREE.Object3D>();
+
+  scene.traverse((object) => {
+    if (object.name) objects.set(object.name, object);
+  });
+
+  return objects;
+}
+
+function addInteriorLights(scene: THREE.Scene) {
+  scene.add(new THREE.AmbientLight(0xffffff, 1.25));
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8074, 1.2));
+
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.1);
+  keyLight.position.set(5, 8, 6);
+  scene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.65);
+  fillLight.position.set(-4, 3, -5);
+  scene.add(fillLight);
+}
+
+function HeroScissorRenderer({
+  beforeScene,
+  afterScene,
+  comparison,
+}: {
+  beforeScene: THREE.Scene;
+  afterScene: THREE.Scene;
+  comparison: number;
+}) {
+  const { gl, camera } = useThree();
+  const drawingBufferSize = useMemo(() => new THREE.Vector2(), []);
+
+  useEffect(() => {
+    gl.autoClear = false;
+
+    return () => {
+      gl.setScissorTest(false);
+      gl.autoClear = true;
+    };
+  }, [gl]);
+
+  useFrame(() => {
+    gl.getDrawingBufferSize(drawingBufferSize);
+    const width = Math.max(1, Math.floor(drawingBufferSize.x));
+    const height = Math.max(1, Math.floor(drawingBufferSize.y));
+    const split = THREE.MathUtils.clamp(
+      Math.round(width * (comparison / 100)),
+      0,
+      width,
+    );
+
+    gl.setViewport(0, 0, width, height);
+    gl.setScissorTest(false);
+    gl.clear(true, true, true);
+    gl.setScissorTest(true);
+
+    if (split > 0) {
+      gl.setScissor(0, 0, split, height);
+      gl.render(beforeScene, camera);
+    }
+
+    if (split < width) {
+      gl.setScissor(split, 0, width - split, height);
+      gl.render(afterScene, camera);
+    }
+
+    gl.setScissorTest(false);
+  }, 1);
+
+  return null;
+}
+
+function InteriorFinishesComparison({
+  variants,
+  comparison,
+  controlsRef,
+}: {
+  variants: InteriorFinishState;
+  comparison: number;
+  controlsRef: React.RefObject<OrbitControlsImpl | null>;
+}) {
+  const gltf = useGLTF(INTERIOR_FINISHES_MODEL_URL);
+  const invalidate = useThree((state) => state.invalidate);
+
+  const { beforeScene, afterScene, afterObjects, radius } = useMemo(() => {
+    const beforeModel = gltf.scene.clone(true);
+    const afterModel = gltf.scene.clone(true);
+    const beforeObjects = indexSceneObjects(beforeModel);
+    const indexedAfterObjects = indexSceneObjects(afterModel);
+
+    applyInteriorFinishVisibility(beforeObjects, BEFORE_INTERIOR_FINISHES);
+    applyInteriorFinishVisibility(indexedAfterObjects, DEFAULT_INTERIOR_FINISHES);
+    BEFORE_HIDDEN_OBJECTS.forEach((name) => {
+      const object = beforeObjects.get(name);
+      if (object) object.visible = false;
+    });
+
+    afterModel.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(afterModel);
+    const center = box.getCenter(new THREE.Vector3());
+    const sphere = box.getBoundingSphere(new THREE.Sphere());
+    const offset = new THREE.Vector3(-center.x, -center.y, -center.z);
+    beforeModel.position.copy(offset);
+    afterModel.position.copy(offset);
+
+    const baseScene = new THREE.Scene();
+    const configuredScene = new THREE.Scene();
+    baseScene.add(beforeModel);
+    configuredScene.add(afterModel);
+    addInteriorLights(baseScene);
+    addInteriorLights(configuredScene);
+
+    return {
+      beforeScene: baseScene,
+      afterScene: configuredScene,
+      afterObjects: indexedAfterObjects,
+      radius: sphere.radius,
+    };
+  }, [gltf.scene]);
+
+  useLayoutEffect(() => {
+    applyInteriorFinishVisibility(afterObjects, variants);
+    const frame = window.requestAnimationFrame(invalidate);
+    return () => window.cancelAnimationFrame(frame);
+  }, [afterObjects, invalidate, variants]);
+
+  useLayoutEffect(() => {
+    const frame = window.requestAnimationFrame(invalidate);
+    return () => window.cancelAnimationFrame(frame);
+  }, [comparison, invalidate]);
+
+  return (
+    <>
+      <CameraAndControls radius={radius} presentation="hero" controlsRef={controlsRef} />
+      <HeroScissorRenderer
+        beforeScene={beforeScene}
+        afterScene={afterScene}
+        comparison={comparison}
+      />
+    </>
+  );
 }
 
 function InteriorFinishesModel({
@@ -165,12 +329,13 @@ function CameraAndControls({
   controlsRef,
 }: {
   radius: number;
-  presentation: "default" | "project";
+  presentation: "default" | "project" | "hero";
   controlsRef: React.RefObject<OrbitControlsImpl | null>;
 }) {
   const { camera, size } = useThree();
 
   const config = INTERIOR_FINISHES_CAMERA_CONFIG;
+  const interactive = presentation !== "hero";
 
   const aspect = Math.max(
     size.width / Math.max(size.height, 1),
@@ -182,8 +347,9 @@ function CameraAndControls({
   const horizontalFov =
     2 * Math.atan(Math.tan(verticalFov / 2) * aspect);
 
-  const fitPadding =
-    presentation === "project" && aspect >= 1
+  const fitPadding = presentation === "hero" && aspect >= 1
+    ? 0.58
+    : presentation === "project" && aspect >= 1
       ? 0.64
       : config.fitPadding;
 
@@ -216,7 +382,10 @@ function CameraAndControls({
     perspectiveCamera.lookAt(...config.target);
 
     perspectiveCamera.updateProjectionMatrix();
-  }, [camera, config, fitDistance]);
+    controlsRef.current?.target.set(...config.target);
+    controlsRef.current?.update();
+    controlsRef.current?.saveState();
+  }, [camera, config, controlsRef, fitDistance]);
 
   return (
     <OrbitControls
@@ -229,8 +398,8 @@ function CameraAndControls({
       dampingFactor={0.08}
 
       enablePan={false}
-      enableRotate
-      enableZoom
+      enableRotate={interactive}
+      enableZoom={interactive}
 
       // =====================================================
       // ZOOM
@@ -274,6 +443,7 @@ const InteriorFinishesViewer = forwardRef<
   {
     variants,
     presentation = "default",
+    comparison,
   },
   ref,
 ) {
@@ -344,12 +514,26 @@ const InteriorFinishesViewer = forwardRef<
     [],
   );
 
+  const resetView = useCallback(() => {
+    controlsRef.current?.reset();
+  }, []);
+
+  const zoom = useCallback((factor: number) => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    const offset = controls.object.position.clone().sub(controls.target).multiplyScalar(factor);
+    controls.object.position.copy(controls.target.clone().add(offset));
+    controls.update();
+  }, []);
+
   useImperativeHandle(
     ref,
     () => ({
       nudge,
+      resetView,
+      zoom,
     }),
-    [nudge],
+    [nudge, resetView, zoom],
   );
 
   return (
@@ -373,32 +557,26 @@ const InteriorFinishesViewer = forwardRef<
           gl.setClearColor(0x000000, 0);
         }}
       >
-        <ambientLight intensity={1.25} />
-
-        <hemisphereLight
-          args={[
-            0xffffff,
-            0x8a8074,
-            1.2,
-          ]}
-        />
-
-        <directionalLight
-          position={[5, 8, 6]}
-          intensity={2.1}
-        />
-
-        <directionalLight
-          position={[-4, 3, -5]}
-          intensity={0.65}
-        />
-
         <Suspense fallback={null}>
-          <InteriorFinishesModel
-            variants={variants}
-            presentation={presentation}
-            controlsRef={controlsRef}
-          />
+          {presentation === "hero" && comparison !== undefined ? (
+            <InteriorFinishesComparison
+              variants={variants}
+              comparison={comparison}
+              controlsRef={controlsRef}
+            />
+          ) : (
+            <>
+              <ambientLight intensity={1.25} />
+              <hemisphereLight args={[0xffffff, 0x8a8074, 1.2]} />
+              <directionalLight position={[5, 8, 6]} intensity={2.1} />
+              <directionalLight position={[-4, 3, -5]} intensity={0.65} />
+              <InteriorFinishesModel
+                variants={variants}
+                presentation={presentation}
+                controlsRef={controlsRef}
+              />
+            </>
+          )}
         </Suspense>
       </Canvas>
     </div>
@@ -406,7 +584,3 @@ const InteriorFinishesViewer = forwardRef<
 });
 
 export default InteriorFinishesViewer;
-
-useGLTF.preload(
-  INTERIOR_FINISHES_MODEL_URL,
-);

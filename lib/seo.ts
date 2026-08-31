@@ -612,7 +612,7 @@ export const homeSeo = {
   intent: "estudio de experiencias digitales, configuradores 3D y desarrollo web",
   title: "Corsteno | Configuradores 3D y Experiencias Digitales",
   description: "Corsteno crea configuradores 3D, experiencias digitales interactivas y productos web que pueden evolucionar e integrarse con sistemas de negocio.",
-  h1: "Hacemos que tus productos se puedan ver, probar y entender antes de comprarlos.",
+  h1: "Transformamos imágenes estáticas en experiencias que venden.",
 };
 
 export function findSeoPage(category: SeoPage["category"], slug: string) {
