@@ -484,10 +484,10 @@ const InteriorFinishesViewer = forwardRef<
         spherical.theta + azimuthDelta,
 
         INITIAL_AZIMUTH -
-          INTERIOR_FINISHES_CAMERA_CONFIG.leftAzimuthRange,
+        INTERIOR_FINISHES_CAMERA_CONFIG.leftAzimuthRange,
 
         INITIAL_AZIMUTH +
-          INTERIOR_FINISHES_CAMERA_CONFIG.rightAzimuthRange,
+        INTERIOR_FINISHES_CAMERA_CONFIG.rightAzimuthRange,
       );
 
       // =====================================================
@@ -542,6 +542,7 @@ const InteriorFinishesViewer = forwardRef<
       aria-hidden="true"
     >
       <Canvas
+
         frameloop="demand"
         dpr={[1, 1.5]}
         camera={{
@@ -553,9 +554,22 @@ const InteriorFinishesViewer = forwardRef<
           alpha: true,
           antialias: true,
         }}
-        onCreated={({ gl }) => {
-          gl.setClearColor(0x000000, 0);
+        onCreated={({
+          gl,
+        }) => {
+          gl.setClearColor(
+            0x000000,
+            0,
+          );
+
+          /*
+           
+Shadow map de Three.js.*/
+          gl.shadowMap.enabled = true;
+          gl.shadowMap.type =
+            THREE.PCFSoftShadowMap;
         }}
+        shadows
       >
         <Suspense fallback={null}>
           {presentation === "hero" && comparison !== undefined ? (
