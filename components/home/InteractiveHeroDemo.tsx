@@ -2,19 +2,33 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import InteriorFinishesViewer from "@/components/three/InteriorFinishesViewer";
+import HeroSliderViewer from "@/components/three/HeroSliderViewer";
 import {
-  DEFAULT_INTERIOR_FINISHES,
-  INTERIOR_FINISH_GROUPS,
-  updateInteriorFinish,
-  type InteriorFinishGroupId,
-  type InteriorFinishValue,
-} from "@/components/three/interiorFinishVariants";
+  DEFAULT_HERO_SLIDER_STATE,
+  HERO_SLIDER_GROUPS,
+  updateHeroSliderVariant,
+  type HeroSliderGroupId,
+  type HeroSliderValue,
+} from "@/components/three/heroSliderVariants";
 import { withBasePath } from "@/lib/assetPath";
 
-const GROUP_ORDER: InteriorFinishGroupId[] = ["wall", "bar", "floor", "opening"];
+const GROUP_ORDER: HeroSliderGroupId[] = ["table", "chair", "rug", "armchair"];
 const PREVIA_HOUSE_INTERIOR_PROJECT_URL = withBasePath("/proyectos/revestimientos-interactivos/");
 const CHIP_MARGIN = 14;
+const PANEL_DISPLAY_LABELS: Record<HeroSliderValue, string> = {
+  tableA: "Madera natural",
+  tableB: "Nogal medio",
+  tableC: "Nogal oscuro",
+  chairA: "Tapizado azul",
+  chairB: "Madera grafito",
+  chairC: "Madera nogal",
+  rug01: "Tejido natural",
+  rug02: "Geometría clara",
+  decorOff: "Esencial",
+  decorOn: "Completa",
+  armchair1: "Sillón verde",
+  armchair2: "Sillón lounge",
+};
 
 export default function InteractiveHeroDemo() {
   const router = useRouter();
@@ -23,7 +37,7 @@ export default function InteractiveHeroDemo() {
   const beforeChipRef = useRef<HTMLSpanElement>(null);
   const afterChipRef = useRef<HTMLSpanElement>(null);
   const [comparison, setComparison] = useState(25);
-  const [variants, setVariants] = useState({ ...DEFAULT_INTERIOR_FINISHES });
+  const [variants, setVariants] = useState({ ...DEFAULT_HERO_SLIDER_STATE });
   const [measurements, setMeasurements] = useState({
     width: 0,
     panelLeft: 0,
@@ -58,8 +72,17 @@ export default function InteractiveHeroDemo() {
     setComparison(Math.min(100, Math.max(0, value)));
   };
 
-  const selectVariant = (groupId: InteriorFinishGroupId, value: InteriorFinishValue) => {
-    setVariants((current) => updateInteriorFinish(current, groupId, value));
+  const selectVariant = (groupId: HeroSliderGroupId, value: HeroSliderValue) => {
+    setVariants((current) => updateHeroSliderVariant(current, groupId, value));
+  };
+
+  const cycleVariant = (groupId: HeroSliderGroupId) => {
+    const group = HERO_SLIDER_GROUPS.find((item) => item.id === groupId);
+    if (!group) return;
+
+    const currentIndex = group.options.findIndex((option) => option.value === variants[groupId]);
+    const nextOption = group.options[(currentIndex + 1) % group.options.length];
+    selectVariant(groupId, nextOption.value);
   };
 
   const openProject = () => router.push(PREVIA_HOUSE_INTERIOR_PROJECT_URL);
@@ -84,7 +107,7 @@ export default function InteractiveHeroDemo() {
     <div className="interactive-hero-demo">
       <div ref={stageRef} className="interactive-hero-stage">
         <div className="interactive-hero-viewer" aria-hidden="true">
-          <InteriorFinishesViewer variants={variants} presentation="hero" comparison={comparison} />
+          <HeroSliderViewer variants={variants} comparison={comparison} />
         </div>
         <span
           ref={beforeChipRef}
@@ -143,31 +166,61 @@ export default function InteractiveHeroDemo() {
 
         <aside ref={panelRef} className="interactive-hero-panel" aria-label="Personalización del ambiente">
           <h2>Personalizá tu espacio</h2>
+          <p className="interactive-hero-panel-note">Seleccioná cada acabado para explorar opciones</p>
           {GROUP_ORDER.map((groupId) => {
-            const group = INTERIOR_FINISH_GROUPS.find((item) => item.id === groupId)!;
+            const group = HERO_SLIDER_GROUPS.find((item) => item.id === groupId)!;
+            const labelId = `interactive-hero-${group.id}-label`;
+            const activeIndex = group.options.findIndex((option) => option.value === variants[group.id]);
+            const activeOption = group.options[activeIndex] ?? group.options[0];
+            const activeDisplayLabel = PANEL_DISPLAY_LABELS[activeOption.value];
+            const optionCount = group.options.length;
             return (
-              <fieldset key={group.id}>
-                <legend>{group.id === "opening" ? "Abertura" : group.id === "bar" ? "Barra" : group.label}</legend>
-                <div className={`interactive-hero-swatches is-${group.id}`}>
-                  {group.options.map((option) => (
-                    <button
-                      key={option.id}
-                      type="button"
-                      className={`interactive-hero-swatch swatch-${option.value}`}
-                      aria-label={`${group.label}: ${option.label}`}
-                      aria-pressed={variants[group.id] === option.value}
-                      title={option.label}
-                      onClick={() => selectVariant(group.id, option.value)}
-                    >
-                      <span>{option.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
+              <div
+                key={group.id}
+                className={`interactive-hero-panel-group is-${group.id}`}
+                role="group"
+                aria-labelledby={labelId}
+              >
+                <span id={labelId} className="interactive-hero-panel-label">
+                  {group.label}
+                </span>
+                {group.id === "decor" ? (
+                  <div className="interactive-hero-segmented" role="group" aria-label={group.label}>
+                    {group.options.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        className="interactive-hero-segment"
+                        aria-label={`${group.label}: ${PANEL_DISPLAY_LABELS[option.value]}`}
+                        aria-pressed={variants[group.id] === option.value}
+                        onClick={() => selectVariant(group.id, option.value)}
+                      >
+                        {PANEL_DISPLAY_LABELS[option.value]}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="interactive-hero-choice-row"
+                    aria-label={`${group.label}: ${activeDisplayLabel}. Cambiar opción`}
+                    onClick={() => cycleVariant(group.id)}
+                  >
+                    <span className="interactive-hero-choice-value">
+                      <span>{activeDisplayLabel}</span>
+                      <span className="interactive-hero-choice-arrow" aria-hidden="true">›</span>
+                    </span>
+                    <span className="interactive-hero-choice-count" aria-hidden="true">
+                      {String(activeIndex + 1).padStart(2, "0")} / {String(optionCount).padStart(2, "0")}
+                    </span>
+                  </button>
+                )}
+              </div>
             );
           })}
           <button className="interactive-hero-view-button" type="button" onClick={openProject}>
-            ◈ Ver en 3D
+            <span>VER EN 3D</span>
+            <span aria-hidden="true">→</span>
           </button>
         </aside>
 
