@@ -1,7 +1,7 @@
 import CommercialIntro from "@/components/CommercialIntro";
-import Contact from "@/components/Contact";
 import MobileCTA from "@/components/MobileCTA";
 import Navigation from "@/components/Navigation";
+import ContactSection from "@/components/organisms/ContactSection";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
 import ConnectedSystemSection from "@/components/home/ConnectedSystemSection";
@@ -24,7 +24,7 @@ export default function Home() {
         <SelectedWorkSection />
         <Team />
         <Testimonials />
-        <Contact />
+        <ContactSection />
       </main>
       <MobileCTA />
     </>

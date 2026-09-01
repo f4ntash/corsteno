@@ -1,3 +1,5 @@
+import ActionButton from "@/components/atoms/ActionButton";
+import SectionHeading from "@/components/molecules/SectionHeading";
 import { withBasePath } from "@/lib/assetPath";
 import styles from "./homeExperience.module.css";
 
@@ -47,13 +49,14 @@ const projects = [
 export default function SelectedWorkSection() {
   return (
     <section className={`${styles.section} ${styles.workSection}`} id="proyectos" data-navbar-theme="light">
-      <header className={styles.sectionHead}>
-        <span className={styles.eyebrow}>Trabajo seleccionado</span>
-        <div>
-          <h2>Trabajo seleccionado.</h2>
-          <p>Una selección de experiencias digitales, plataformas y productos interactivos.</p>
-        </div>
-      </header>
+      <SectionHeading
+        className={styles.sectionHead}
+        eyebrow="Trabajo seleccionado"
+        eyebrowClassName={styles.eyebrow}
+        title="Trabajo seleccionado."
+        description="Una selección de experiencias digitales, plataformas y productos interactivos."
+        wrapContent
+      />
 
       <div className={styles.projectGrid}>
         {projects.map((project) => (
@@ -79,7 +82,7 @@ export default function SelectedWorkSection() {
       </div>
       <div className={styles.workCta}>
         <p>Veamos qué podríamos construir alrededor de tu producto.</p>
-        <a href="#contacto" data-analytics="cta">Hablemos de tu proyecto</a>
+        <ActionButton href="#contacto" data-analytics="cta">Hablemos de tu proyecto</ActionButton>
       </div>
     </section>
   );

@@ -29,13 +29,13 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 ## Alcance y evidencia
 
-- Rutas: `/`, `/proyectos/terrambu/`, `/proyectos/mapa-punilla/`, `/proyectos/exterior-house/`, `/proyectos/revestimientos-interactivos/` y `/industrial/`.
+- Rutas auditadas: `/`, `/proyectos/terrambu/`, `/proyectos/mapa-punilla/`, `/proyectos/exterior-house/` y `/proyectos/revestimientos-interactivos/`.
 - Viewports de home: los seis solicitados. Proyectos: desktop 1920×1080 y mobile 390×844, con comprobaciones estructurales adicionales sobre el HTML exportado.
 - Build: Next.js 16.3.0, export estático de 24 páginas.
 - Estado HTTP local: 200 en todas las rutas auditadas, `robots.txt`, `sitemap.xml` y `llms.txt`.
 - Home: 1 H1, 20 links, 19 buttons, 8 imágenes, 1 formulario; ningún control o link sin nombre accesible; 0 Canvas y 0 iframes antes de hacer scroll.
 - Altura de home: 8,091 px a 1920×1080; 13,030 px a 390×844; 13,196 px a 360×800.
-- JS referenciado por ruta, suma sin comprimir: home ≈1,513.7 KB; proyectos ≈1,567.1 KB; `/industrial/` ≈1,549.4 KB.
+- JS referenciado por ruta, suma sin comprimir: home ≈1,513.7 KB; proyectos ≈1,567.1 KB.
 - Chunk Three/R3F principal: 882.2 KB sin comprimir y presente en el HTML inicial de todas las rutas auditadas.
 - GLB: `exterior_house.glb` y `previa_house_interior.glb` como modelos principales de las experiencias 3D.
 - Logo y favicon fuente: PNG de marca ≈345.6 KB, 2000×2000; favicon ≈180.1 KB, 2000×2000.
@@ -45,7 +45,7 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 ### 1. Three.js se entrega en todas las rutas iniciales
 
-**Evidencia:** `out/_next/static/chunks/0r-o916yjbu0b.js` contiene Three/WebGLRenderer, pesa 882.2 KB sin comprimir y está referenciado por home, los cuatro proyectos y `/industrial/`, incluso Terrambú y Mapa Punilla. **Importa:** eleva descarga, parseo y ejecución antes de demostrar valor, especialmente en mobile. **Severidad:** P1. **Esfuerzo:** L. **Recomendación:** separar los límites de importación para que cada ruta cargue solo su experiencia y que la home difiera el runtime 3D hasta proximidad real de la demo.
+**Evidencia:** `out/_next/static/chunks/0r-o916yjbu0b.js` contiene Three/WebGLRenderer, pesa 882.2 KB sin comprimir y está referenciado por home y los cuatro proyectos, incluso Terrambú y Mapa Punilla. **Importa:** eleva descarga, parseo y ejecución antes de demostrar valor, especialmente en mobile. **Severidad:** P1. **Esfuerzo:** L. **Recomendación:** separar los límites de importación para que cada ruta cargue solo su experiencia y que la home difiera el runtime 3D hasta proximidad real de la demo.
 
 ### 2. La categoría mental de Corsteno se abre demasiado pronto
 
@@ -57,7 +57,7 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 ### 4. La acción culminante de la demo no funciona
 
-**Evidencia:** `IndustrialConfiguratorSummary.tsx` muestra “Solicitar esta configuración” como `<button>`, sin handler, y aclara que todavía no envía información. **Importa:** corta el recorrido en el momento de mayor intención. **Severidad:** P1. **Esfuerzo:** S. **Recomendación:** definir una transferencia explícita de la configuración al contacto o convertir la acción en un CTA honesto y funcional.
+**Evidencia:** `ProductConfiguratorSummary.tsx` concentra el cierre del flujo de configuración. **Importa:** el recorrido debe mantener una transferencia explícita hacia contacto. **Severidad:** P1. **Esfuerzo:** S. **Recomendación:** conservar una acción honesta y funcional al final de la demo.
 
 ### 5. Los case studies explican capacidad, no demuestran resolución
 
@@ -114,14 +114,13 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 
 | ID | Finding concreto | Impacto | Sev. | Esf. | Recomendación |
 |---|---|---|---:|---:|---|
-| F09 | Varias labels/meta usan 8–10 px, especialmente en industrial y mobile. | Lectura difícil aun con contraste suficiente. | P2 | S | Revisar mínimos tipográficos sin alterar jerarquía editorial. |
+| F09 | Varias labels/meta usan 8–10 px, especialmente en demos y mobile. | Lectura difícil aun con contraste suficiente. | P2 | S | Revisar mínimos tipográficos sin alterar jerarquía editorial. |
 | F10 | Los cuatro case studies comparten casi toda la composición y bloques. | Se perciben como plantilla más que relato específico. | P1 | L | Permitir módulos de evidencia propios por proyecto. |
 | F11 | Cards mezclan “Web development”, “Interactive web”, “3D experience” y “3D configurator” con cuerpo en español. | Pequeña inconsistencia de marca y tono. | P3 | XS | Elegir una convención bilingüe explícita o unificar idioma. |
-| F12 | `/industrial/` utiliza un sistema visual y header propios frente a la home. | Si se descubre, puede parecer otra marca o versión competidora. | P2 | M | Mantenerlo aislado mientras sea experimento; definir destino antes de publicarlo. |
 | F13 | El logo fuente 2000×2000 pesa ~345.6 KB para mostrarse a 30–40 px. | Transferencia y decodificación innecesarias. | P2 | S | Generar derivado optimizado conservando el original de marca. |
 | F14 | El favicon fuente 2000×2000 pesa ~180.1 KB. | Costo evitable y asset sobredimensionado. | P2 | XS | Exportar tamaños de favicon adecuados. |
 | F15 | El nuevo ritmo dark/light/dark funciona; dentro de cards, imágenes claras ocupan gran superficie sobre fondo oscuro. | La sección puede percibirse menos oscura según la imagen dominante. | P3 | XS | No tocar salvo evidencia de contraste contextual insuficiente. |
-| F16 | Industrial mantiene muchas labels de 9 px y mayor densidad técnica. | Menor legibilidad y coherencia con la home comercial. | P2 | M | Si se reutiliza, armonizar escala y densidad con el sistema principal. |
+| F16 | El configurador mantiene muchas labels de 9 px y mayor densidad técnica. | Menor legibilidad y coherencia con la home comercial. | P2 | M | Si se reutiliza, armonizar escala y densidad con el sistema principal. |
 
 ### Marketing, posicionamiento, venta y copy
 
@@ -151,7 +150,7 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 | F33 | El formulario pide solo nombre, email, empresa y mensaje. | Baja fricción, pero califica poco alcance, urgencia o tipo de proyecto. | P2 | S | Decidir explícitamente si se prioriza volumen o calificación. |
 | F34 | No existe tracking de inicio, validación, error o éxito del formulario. | El funnel de conversión no se puede diagnosticar. | P1 | S | Instrumentar estados sin enviar contenido sensible. |
 | F35 | La demo principal no registra inicio, cambios, reset ni CTA final. | No se conoce si la interacción aumenta intención. | P1 | M | Definir eventos y parámetros de configuración no sensibles. |
-| F36 | Analytics identifica clases del showroom anterior, no los controles del configurador industrial actual. | Cobertura aparente, pero evento principal ausente. | P2 | S | Migrar selectores/eventos al componente vigente. |
+| F36 | Analytics identifica clases del showroom anterior, no los controles del configurador de producto actual. | Cobertura aparente, pero evento principal ausente. | P2 | S | Migrar selectores/eventos al componente vigente. |
 | F37 | Las aperturas de cards actuales no tienen `data-analytics` específico. | No se compara interés por proyecto. | P2 | XS | Emitir `project_open` con slug/origen/tamaño de card. |
 | F38 | Si faltan variables de canales alternativos, el formulario solo informa que existen “canales alternativos”. | En una caída de Formspree puede no haber salida real. | P3 | XS | Mostrar solo canales efectivamente configurados. |
 | F39 | El submit exitoso resetea y redirige correctamente; ante error conserva datos. No existe test automatizado del flujo. | Una regresión podría romper la conversión sin señal previa. | P2 | M | Agregar test E2E con endpoint simulado. |
@@ -163,8 +162,7 @@ El producto renderizado es robusto en responsive: no se detectó overflow horizo
 |---|---|---|---:|---:|---|
 | F42 | La metadata de los proyectos es correcta, pero el cuerpo comparte frases y secciones genéricas. | Reduce diferenciación semántica entre casos. | P2 | M | Agregar contenido específico factual por ruta. |
 | F43 | Imágenes HTML de hero, cards y SEO no declaran dimensiones intrínsecas. | Riesgo de CLS y menor previsibilidad del render. | P1 | S | Reservar espacio con dimensiones/aspect-ratio. |
-| F44 | `/industrial/` está correctamente `noindex,nofollow`, sin canonical y fuera del sitemap, pero sigue accesible por URL. | Bien para experimento; riesgo solo si se enlaza o difunde. | P3 | XS | Mantener aislamiento y revisar antes de cualquier publicación. |
-| F45 | Sitemap contiene 17 URLs válidas y excluye confirmación/industrial; no hay señales de rutas de proyecto rotas. | Estado saludable, pero requiere disciplina al escalar. | P3 | S | Generarlo desde una única fuente de rutas. |
+| F45 | Sitemap contiene 17 URLs válidas y excluye la confirmación; no hay señales de rutas de proyecto rotas. | Estado saludable, pero requiere disciplina al escalar. | P3 | S | Generarlo desde una única fuente de rutas. |
 | F46 | `llms.txt` describe servicios y proyectos, pero replica la amplitud de AR/VR próximos. | Un LLM puede sobreestimar oferta disponible. | P2 | XS | Separar claramente disponible, demo y roadmap. |
 | F47 | JSON-LD usa ProfessionalService y CreativeWork, pero los proyectos no incluyen resultados/autores/cliente verificables. | Entidad válida pero poco rica para citación. | P2 | M | Completar solo propiedades respaldadas. |
 | F48 | El contenido define Corsteno, servicios y proyectos en texto HTML; el diferencial competitivo sigue implícito. | LLMs responden qué hace, no por qué elegirlo. | P2 | M | Formular diferenciación factual y consistente. |
@@ -272,7 +270,6 @@ Los mayores quiebres son `PRUEBA → CONFÍA` y `CONFÍA → VALORA`: la experie
 - La estructura responsive que evita overflow en los seis viewports.
 - El lazy mounting de Canvas por IntersectionObserver.
 - La conservación de datos del formulario ante error.
-- `noindex,nofollow` y exclusión de sitemap de `/industrial/`.
 - Canonicals, robots, sitemap actual y JSON-LD base.
 - Reduced motion, labels de iframe y nombres accesibles actuales.
 - La demo interactiva como pieza central; mejorar su resultado, no eliminarla.

@@ -17,7 +17,7 @@ Resueltos / aceptados:
 
 ## Verificaciones
 
-- Sitemap: correcto, 17 URLs bajo `https://corsteno.com`; incluye Exterior House y Revestimientos Interactivos. No incluye ATLAS, páginas experimentales, `/industrial` ni confirmación de formulario.
+- Sitemap: correcto, 17 URLs bajo `https://corsteno.com`; incluye Exterior House y Revestimientos Interactivos. No incluye ATLAS, páginas experimentales ni confirmación de formulario.
 - Robots: correcto; permite indexación pública y referencia `https://corsteno.com/sitemap.xml`.
 - Canonical: correcto en home, privacidad, servicios, sectores y proyectos generados. Las páginas deliberadamente no indexables no declaran canonical.
 - Metadata: title, description, metadataBase, Open Graph, Twitter e icono configurados. Cada página pública principal genera un H1 y las imágenes relevantes tienen `alt`.

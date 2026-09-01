@@ -1,3 +1,6 @@
+import ActionButton from "@/components/atoms/ActionButton";
+import Eyebrow from "@/components/atoms/Eyebrow";
+import ActionGroup from "@/components/molecules/ActionGroup";
 import JsonLd from "@/components/seo/JsonLd";
 import ShareButton from "@/components/seo/ShareButton";
 import {
@@ -57,15 +60,15 @@ export default function SeoLandingPage({ page }: SeoLandingPageProps) {
 
         <section className="seo-hero">
           <div className="seo-hero-copy">
-            <span className="label">{page.eyebrow}</span>
+            <Eyebrow className="label">{page.eyebrow}</Eyebrow>
             <h1>{page.h1}</h1>
             <p>{page.intro}</p>
-            <div className="seo-actions">
-              <a href={`${site.basePath}/#contacto`} data-analytics="cta">
+            <ActionGroup className="seo-actions">
+              <ActionButton href={`${site.basePath}/#contacto`} data-analytics="cta">
                 {page.cta}
-              </a>
+              </ActionButton>
               <ShareButton title={page.title} text={page.description} url={canonicalUrl(page.path)} />
-            </div>
+            </ActionGroup>
           </div>
           {page.image && (
             <figure className="seo-hero-media">

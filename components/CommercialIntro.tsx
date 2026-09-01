@@ -1,13 +1,16 @@
 import DigitalLayerSection from "./home/DigitalLayerSection";
 import InteractiveHeroDemo from "./home/InteractiveHeroDemo";
 import ProcessComparisonSection from "./home/ProcessComparisonSection";
+import ActionButton from "./atoms/ActionButton";
+import Eyebrow from "./atoms/Eyebrow";
+import ActionGroup from "./molecules/ActionGroup";
 
 export default function CommercialIntro() {
   return (
     <>
       <section className="commercial-hero" id="inicio" data-od-id="que-hacemos" data-navbar-theme="light">
         <div className="commercial-hero-copy">
-          <span className="label">Experiencias digitales para productos, marcas y negocios</span>
+          <Eyebrow className="label">Experiencias digitales para productos, marcas y negocios</Eyebrow>
           <h1>
             Transformamos
             <br />
@@ -26,10 +29,10 @@ export default function CommercialIntro() {
             <li><strong>3D</strong><span>tiempo real</span></li>
             <li><strong>100%</strong><span>integrado a tu web</span></li>
           </ul>
-          <div className="commercial-actions">
-            <a className="commercial-action-primary" href="#contacto">Contanos sobre tu producto</a>
-            <a className="commercial-action-secondary" href="#proyectos">Ver proyectos</a>
-          </div>
+          <ActionGroup className="commercial-actions">
+            <ActionButton className="commercial-action-primary" href="#contacto">Contanos sobre tu producto</ActionButton>
+            <ActionButton className="commercial-action-secondary" href="#proyectos">Ver proyectos</ActionButton>
+          </ActionGroup>
           <div className="commercial-proof" aria-label="Áreas de trabajo">
             <span>3D</span>
             <span>Interacción</span>

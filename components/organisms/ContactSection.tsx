@@ -1,14 +1,15 @@
+import ContactForm from "@/components/contact/ContactForm";
 import { contactChannels, socialLinks } from "@/lib/contact";
 import { site } from "@/lib/seo";
-import ContactForm from "@/components/contact/ContactForm";
+import Eyebrow from "@/components/atoms/Eyebrow";
 
-export default function Contact() {
+export default function ContactSection() {
   const hasContactChannel = Boolean(contactChannels.whatsappUrl || contactChannels.email);
 
   return (
     <section className="contact dark" id="contacto" data-od-id="contacto" data-navbar-theme="dark">
       <div className="contact-copy">
-        <span className="label">Contacto</span>
+        <Eyebrow className="label">Contacto</Eyebrow>
         <h2 data-od-id="contacto-titulo">
           Veamos cómo presentar mejor
           <br />

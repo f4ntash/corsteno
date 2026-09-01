@@ -865,7 +865,7 @@ export default function HeroSliderViewer({
            */
           gl.shadowMap.enabled = true;
           gl.shadowMap.type =
-            THREE.PCFSoftShadowMap;
+            THREE.PCFShadowMap;
         }}
       >
         <Suspense

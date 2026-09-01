@@ -38,6 +38,7 @@ export default function InteractiveHeroDemo() {
   const afterChipRef = useRef<HTMLSpanElement>(null);
   const [comparison, setComparison] = useState(25);
   const [variants, setVariants] = useState({ ...DEFAULT_HERO_SLIDER_STATE });
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [measurements, setMeasurements] = useState({
     width: 0,
     panelLeft: 0,
@@ -164,23 +165,51 @@ export default function InteractiveHeroDemo() {
           <span aria-hidden="true">↔</span>
         </div>
 
-        <aside ref={panelRef} className="interactive-hero-panel" aria-label="Personalización del ambiente">
-          <h2>Personalizá tu espacio</h2>
-          <p className="interactive-hero-panel-note">Seleccioná cada acabado para explorar opciones</p>
-          {GROUP_ORDER.map((groupId) => {
+        {!mobilePanelOpen && (
+          <button
+            className="interactive-hero-panel-trigger"
+            type="button"
+            aria-controls="interactive-hero-personalization"
+            aria-expanded="false"
+            onClick={() => setMobilePanelOpen(true)}
+          >
+            Personalizar
+          </button>
+        )}
+
+        <aside
+          ref={panelRef}
+          id="interactive-hero-personalization"
+          className="interactive-hero-panel"
+          aria-label="Personalización del ambiente"
+          data-mobile-open={mobilePanelOpen}
+        >
+          <button
+            className="interactive-hero-panel-close"
+            type="button"
+            aria-label="Cerrar personalización"
+            onClick={() => setMobilePanelOpen(false)}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+          <div className="interactive-hero-panel-content">
+            <h2>Personalizá tu espacio</h2>
+            <p className="interactive-hero-panel-note">Seleccioná cada acabado para explorar opciones</p>
+            <div className="interactive-hero-options">
+              {GROUP_ORDER.map((groupId) => {
             const group = HERO_SLIDER_GROUPS.find((item) => item.id === groupId)!;
             const labelId = `interactive-hero-${group.id}-label`;
             const activeIndex = group.options.findIndex((option) => option.value === variants[group.id]);
             const activeOption = group.options[activeIndex] ?? group.options[0];
             const activeDisplayLabel = PANEL_DISPLAY_LABELS[activeOption.value];
             const optionCount = group.options.length;
-            return (
-              <div
-                key={group.id}
-                className={`interactive-hero-panel-group is-${group.id}`}
-                role="group"
-                aria-labelledby={labelId}
-              >
+                return (
+                  <div
+                    key={group.id}
+                    className={`interactive-hero-panel-group is-${group.id}`}
+                    role="group"
+                    aria-labelledby={labelId}
+                  >
                 <span id={labelId} className="interactive-hero-panel-label">
                   {group.label}
                 </span>
@@ -215,11 +244,13 @@ export default function InteractiveHeroDemo() {
                     </span>
                   </button>
                 )}
-              </div>
-            );
-          })}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
           <button className="interactive-hero-view-button" type="button" onClick={openProject}>
-            <span>VER EN 3D</span>
+               <span>VER EN 3D</span>
             <span aria-hidden="true">→</span>
           </button>
         </aside>

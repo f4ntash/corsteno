@@ -5,13 +5,13 @@ import type { WindowConfiguration } from "./types";
 import { WINDOW_LABELS } from "./types";
 import { trackEvent } from "@/lib/analytics";
 import {
-  buildDemoConfigurationPayload,
-  sendDemoConfiguration,
-} from "@/lib/demoConfiguration";
+  buildProductDemoPayload,
+  sendProductDemo,
+} from "@/lib/productDemo";
 import { withBasePath } from "@/lib/assetPath";
-import styles from "./industrial.module.css";
+import styles from "./productConfigurator.module.css";
 
-export default function IndustrialConfiguratorSummary({
+export default function ProductConfiguratorSummary({
   configuration,
   contactHref,
 }: {
@@ -52,7 +52,7 @@ export default function IndustrialConfiguratorSummary({
       return;
     }
 
-    const payload = buildDemoConfigurationPayload(
+    const payload = buildProductDemoPayload(
       normalizedEmail,
       marketingConsent,
       window.location.pathname,
@@ -61,7 +61,7 @@ export default function IndustrialConfiguratorSummary({
     setStatus("sending");
     setMessage("");
 
-    const result = await sendDemoConfiguration(payload);
+    const result = await sendProductDemo(payload);
     if (result.status === "error") {
       setStatus("error");
       setMessage(result.message);

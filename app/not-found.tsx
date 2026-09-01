@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import ActionButton from "@/components/atoms/ActionButton";
+import Eyebrow from "@/components/atoms/Eyebrow";
+import ActionGroup from "@/components/molecules/ActionGroup";
 import { site } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -14,14 +17,14 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main className="not-found-page" id="main-content">
-      <span className="label">404</span>
+      <Eyebrow className="label">404</Eyebrow>
       <h1>Página no encontrada</h1>
       <p>El enlace no está disponible o cambió de ubicación.</p>
-      <div>
-        <a href={`${site.basePath}/`}>Volver al inicio</a>
-        <a href={`${site.basePath}/servicios/configuradores-3d/`}>Servicios</a>
-        <a href={`${site.basePath}/#proyectos`}>Proyectos</a>
-      </div>
+      <ActionGroup>
+        <ActionButton href={`${site.basePath}/`}>Volver al inicio</ActionButton>
+        <ActionButton href={`${site.basePath}/servicios/configuradores-3d/`}>Servicios</ActionButton>
+        <ActionButton href={`${site.basePath}/#proyectos`}>Proyectos</ActionButton>
+      </ActionGroup>
     </main>
   );
 }

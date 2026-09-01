@@ -174,13 +174,6 @@
   color: #aaaca4;
 }
 
-.anchor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  scroll-margin-top: 84px;
-}
-
 .solutionList {
   border-top: 1px solid #3d413b;
 }

@@ -1,6 +1,6 @@
 import type { FrameColor, GlassType, OpeningType, WindowConfiguration, WindowModel } from "./types";
 import { WINDOW_LABELS } from "./types";
-import styles from "./industrial.module.css";
+import styles from "./productConfigurator.module.css";
 
 type ControlsProps = {
   configuration: WindowConfiguration;
@@ -12,7 +12,7 @@ const frameColors = Object.keys(WINDOW_LABELS.frameColor) as FrameColor[];
 const glassTypes = Object.keys(WINDOW_LABELS.glassType) as GlassType[];
 const openings = Object.keys(WINDOW_LABELS.opening) as OpeningType[];
 
-export default function IndustrialConfiguratorControls({ configuration, onChange }: ControlsProps) {
+export default function ProductConfiguratorControls({ configuration, onChange }: ControlsProps) {
   const update = <Key extends keyof WindowConfiguration>(key: Key, value: WindowConfiguration[Key]) => {
     onChange(key, value);
   };

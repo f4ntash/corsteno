@@ -1,3 +1,4 @@
+import SectionHeading from "@/components/molecules/SectionHeading";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeCommercial.module.css";
 
@@ -19,10 +20,12 @@ export default function ProcessComparisonSection() {
   return (
     <HomeSectionReveal className={styles.lightBackground}>
       <section className={`${styles.section} ${styles.processSection}`} data-navbar-theme="light">
-        <header className={styles.sectionHead}>
-          <span className={styles.eyebrow}>Cambio de proceso</span>
-          <h2>Tu producto puede venderse de otra manera.</h2>
-        </header>
+        <SectionHeading
+          className={styles.sectionHead}
+          eyebrow="Cambio de proceso"
+          eyebrowClassName={styles.eyebrow}
+          title="Tu producto puede venderse de otra manera."
+        />
 
         <div className={styles.pipelineComparison}>
           {pipelines.map((pipeline) => (

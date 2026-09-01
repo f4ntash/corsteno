@@ -1,9 +1,9 @@
-import type { WindowConfiguration } from "@/components/industrial/types";
-import { WINDOW_LABELS } from "@/components/industrial/types";
+import type { WindowConfiguration } from "@/components/home/configurator/types";
+import { WINDOW_LABELS } from "@/components/home/configurator/types";
 
 const demoEndpoint = process.env.NEXT_PUBLIC_DEMO_FORM_ENDPOINT?.trim() ?? "";
 
-export type DemoConfigurationPayload = {
+export type ProductDemoPayload = {
   demoId: string;
   email: string;
   marketingConsent: boolean;
@@ -35,12 +35,12 @@ function createDemoId() {
   return `DEMO-CORSTENO-${token}`;
 }
 
-export function buildDemoConfigurationPayload(
+export function buildProductDemoPayload(
   email: string,
   marketingConsent: boolean,
   page: string,
   configuration: WindowConfiguration,
-): DemoConfigurationPayload {
+): ProductDemoPayload {
   const extras = [
     configuration.mosquitoNet ? "Mosquitero" : null,
     configuration.blind ? "Persiana" : null,
@@ -83,6 +83,6 @@ async function postPayload(endpoint: string, payload: unknown): Promise<Delivery
   }
 }
 
-export function sendDemoConfiguration(payload: DemoConfigurationPayload) {
+export function sendProductDemo(payload: ProductDemoPayload) {
   return postPayload(demoEndpoint, payload);
 }

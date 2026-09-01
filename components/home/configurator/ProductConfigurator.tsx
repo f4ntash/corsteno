@@ -1,19 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import IndustrialConfiguratorCanvas from "./IndustrialConfiguratorCanvas";
-import IndustrialConfiguratorControls from "./IndustrialConfiguratorControls";
-import IndustrialConfiguratorSummary from "./IndustrialConfiguratorSummary";
+import ProductConfiguratorCanvas from "./ProductConfiguratorCanvas";
+import ProductConfiguratorControls from "./ProductConfiguratorControls";
+import ProductConfiguratorSummary from "./ProductConfiguratorSummary";
 import { DEFAULT_WINDOW_CONFIGURATION, type WindowConfiguration } from "./types";
 import { trackEvent } from "@/lib/analytics";
-import styles from "./industrial.module.css";
+import styles from "./productConfigurator.module.css";
 
-type IndustrialConfiguratorProps = {
+type ProductConfiguratorProps = {
   className?: string;
   constrained?: boolean;
 };
 
-export default function IndustrialConfigurator({ className = "", constrained = false }: IndustrialConfiguratorProps) {
+export default function ProductConfigurator({ className = "", constrained = false }: ProductConfiguratorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [configuration, setConfiguration] = useState<WindowConfiguration>({ ...DEFAULT_WINDOW_CONFIGURATION });
   const [canvasReady, setCanvasReady] = useState(false);
@@ -57,16 +57,16 @@ export default function IndustrialConfigurator({ className = "", constrained = f
     >
       <div ref={canvasRef} className={styles.configuratorVisual}>
         {canvasReady ? (
-          <IndustrialConfiguratorCanvas configuration={configuration} />
+          <ProductConfiguratorCanvas configuration={configuration} />
         ) : (
           <span className={styles.configuratorPlaceholder}>Preparando configurador 3D</span>
         )}
       </div>
       <div className={styles.configuratorPanel}>
-        <IndustrialConfiguratorControls configuration={configuration} onChange={updateConfiguration} />
-        <IndustrialConfiguratorSummary
+        <ProductConfiguratorControls configuration={configuration} onChange={updateConfiguration} />
+        <ProductConfiguratorSummary
           configuration={configuration}
-          contactHref={constrained ? "#contacto" : "#industrial-contact"}
+          contactHref={constrained ? "#contacto" : "#configurator-contact"}
         />
       </div>
     </div>

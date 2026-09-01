@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import ActionButton from "@/components/atoms/ActionButton";
+import Eyebrow from "@/components/atoms/Eyebrow";
+import ActionGroup from "@/components/molecules/ActionGroup";
 import { site } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -14,12 +17,12 @@ export const metadata: Metadata = {
 export default function SolicitudEnviadaPage() {
   return (
     <main className="not-found-page" id="main-content">
-      <span className="label">Contacto</span>
+      <Eyebrow className="label">Contacto</Eyebrow>
       <h1>Solicitud enviada</h1>
       <p>Recibimos tu consulta. Te responderemos a la brevedad.</p>
-      <div>
-        <a href={`${site.basePath}/`}>Volver al inicio</a>
-      </div>
+      <ActionGroup>
+        <ActionButton href={`${site.basePath}/`}>Volver al inicio</ActionButton>
+      </ActionGroup>
     </main>
   );
 }

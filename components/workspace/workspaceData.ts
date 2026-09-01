@@ -1,12 +1,3 @@
-export const sceneCount = 3;
-
-export type ShowroomCategory = "3d" | "web" | "immersive";
-
-export type ShowroomProjectTarget = {
-  category: ShowroomCategory;
-  project: string;
-};
-
 export const digitalProjects = [
   {
     id: "terrambu",
@@ -41,5 +32,3 @@ export const digitalProjects = [
     trustLabel: "",
   },
 ] as const;
-
-export type SceneIndex = 0 | 1 | 2;

@@ -1,3 +1,5 @@
+import Eyebrow from "@/components/atoms/Eyebrow";
+import SectionHeading from "@/components/molecules/SectionHeading";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeCommercial.module.css";
 
@@ -31,10 +33,12 @@ export default function DigitalLayerSection() {
         id="soluciones"
         data-navbar-theme="dark"
       >
-        <header className={styles.sectionHead}>
-          <span className={styles.eyebrow}>Soluciones</span>
-          <h2>Una capa digital alrededor de tu producto.</h2>
-        </header>
+        <SectionHeading
+          className={styles.sectionHead}
+          eyebrow="Soluciones"
+          eyebrowClassName={styles.eyebrow}
+          title="Una capa digital alrededor de tu producto."
+        />
 
         <div className={styles.solutionList}>
           {solutions.map((solution) => (
@@ -51,7 +55,7 @@ export default function DigitalLayerSection() {
           ))}
         </div>
         <div className={styles.integrationCapability}>
-          <span className={styles.eyebrow}>Capacidad de evolución</span>
+          <Eyebrow className={styles.eyebrow}>Capacidad de evolución</Eyebrow>
           <div>
             <h3>Software conectado</h3>
             <p>

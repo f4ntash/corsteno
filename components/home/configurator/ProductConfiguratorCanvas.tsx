@@ -5,7 +5,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import type { WindowConfiguration } from "./types";
-import styles from "./industrial.module.css";
+import styles from "./productConfigurator.module.css";
 
 const FRAME_COLORS = {
   black: "#141514",
@@ -110,13 +110,13 @@ function WindowFrame({ configuration }: { configuration: WindowConfiguration }) 
   );
 }
 
-export default function IndustrialConfiguratorCanvas({ configuration }: { configuration: WindowConfiguration }) {
+export default function ProductConfiguratorCanvas({ configuration }: { configuration: WindowConfiguration }) {
   return (
-    <div className={styles.configuratorCanvas} data-three-slot="industrial-window-configurator">
+    <div className={styles.configuratorCanvas} data-three-slot="product-window-configurator">
       <Canvas
         frameloop="demand"
         dpr={[1, 1.35]}
-        shadows
+        shadows={THREE.PCFShadowMap}
         camera={{ fov: 38, near: 0.05, far: 100, position: [6.8, 3.8, 8.6] }}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}

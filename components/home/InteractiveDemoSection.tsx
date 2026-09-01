@@ -1,4 +1,6 @@
-import IndustrialConfigurator from "@/components/industrial/IndustrialConfigurator";
+
+import SectionHeading from "@/components/molecules/SectionHeading";
+import ProductConfigurator from "@/components/home/configurator/ProductConfigurator";
 import styles from "./homeExperience.module.css";
 
 export default function InteractiveDemoSection() {
@@ -8,14 +10,15 @@ export default function InteractiveDemoSection() {
       id="demo"
       data-navbar-theme="light"
     >
-      <header className={styles.sectionHead}>
-        <span className={styles.eyebrow}>Demo interactiva</span>
-        <div>
-          <h2>No te lo contamos. Probalo.</h2>
-          <p>Configurá el producto como si fuera parte de tu catálogo.</p>
-        </div>
-      </header>
-      <IndustrialConfigurator constrained />
+      <SectionHeading
+        className={styles.sectionHead}
+        eyebrow="Demo interactiva"
+        eyebrowClassName={styles.eyebrow}
+        title="No te lo contamos. Probalo."
+        description="Configurá el producto como si fuera parte de tu catálogo."
+        wrapContent
+      />
+      <ProductConfigurator constrained />
     </section>
   );
 }

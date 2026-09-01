@@ -1,3 +1,4 @@
+import Eyebrow from "@/components/atoms/Eyebrow";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeExperience.module.css";
 
@@ -8,7 +9,7 @@ export default function ConnectedSystemSection() {
     <HomeSectionReveal className={styles.connectedBackground}>
       <section className={styles.connectedSection} data-navbar-theme="dark">
         <div className={styles.connectedCopy}>
-          <span className={styles.eyebrow}>Sistema conectado</span>
+          <Eyebrow className={styles.eyebrow}>Sistema conectado</Eyebrow>
           <h2>El 3D es solo la interfaz.</h2>
           <p>
             La experiencia puede evolucionar y conectarse con ventas, precios, stock, cotizaciones y producción según

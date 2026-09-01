@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import SectionHeading from "@/components/molecules/SectionHeading";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeExperience.module.css";
 
@@ -13,13 +14,14 @@ export default function ProductDataSection() {
   return (
     <HomeSectionReveal className={styles.dataBackground}>
       <section className={`${styles.section} ${styles.dataSection}`} data-navbar-theme="dark">
-        <header className={styles.sectionHead}>
-          <span className={styles.eyebrow}>Datos de producto</span>
-          <div>
-            <h2>Cada configuración también genera información.</h2>
-            <p>Entendé qué buscan tus clientes antes de que lleguen a una cotización.</p>
-          </div>
-        </header>
+        <SectionHeading
+          className={styles.sectionHead}
+          eyebrow="Datos de producto"
+          eyebrowClassName={styles.eyebrow}
+          title="Cada configuración también genera información."
+          description="Entendé qué buscan tus clientes antes de que lleguen a una cotización."
+          wrapContent
+        />
 
         <div className={styles.dataGrid}>
           {dataSignals.map((signal, index) => (

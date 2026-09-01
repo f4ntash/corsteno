@@ -1,6 +1,10 @@
 import dynamic from "next/dynamic";
-import Contact from "@/components/Contact";
+import ActionButton from "@/components/atoms/ActionButton";
+import Eyebrow from "@/components/atoms/Eyebrow";
+import ActionGroup from "@/components/molecules/ActionGroup";
+import SectionHeading from "@/components/molecules/SectionHeading";
 import Navigation from "@/components/Navigation";
+import ContactSection from "@/components/organisms/ContactSection";
 import JsonLd from "@/components/seo/JsonLd";
 import LiveWebsiteFrame from "@/components/workspace/LiveWebsiteFrame";
 import { digitalProjects } from "@/components/workspace/workspaceData";
@@ -147,7 +151,7 @@ export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
           <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
             <a href={`${site.basePath}/#proyectos`}>← Volver a proyectos</a>
           </nav>
-          <span className={styles.eyebrow}>{config.category}</span>
+          <Eyebrow className={styles.eyebrow}>{config.category}</Eyebrow>
           <h1>{page.h1}</h1>
           <p>{config.description}</p>
         </header>
@@ -157,39 +161,42 @@ export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
           aria-labelledby="project-live-title"
           data-navbar-theme="light"
         >
-          <header className={styles.sectionHead}>
-            <span className={styles.eyebrow}>Experiencia live</span>
-            <h2 id="project-live-title">{config.liveTitle}</h2>
-          </header>
+          <SectionHeading
+            className={styles.sectionHead}
+            eyebrow="Experiencia live"
+            eyebrowClassName={styles.eyebrow}
+            title={config.liveTitle}
+            titleId="project-live-title"
+          />
           <ProjectExperience config={config} />
         </section>
 
         <section className={styles.caseStudy} data-navbar-theme="light">
           <article>
-            <span className={styles.eyebrow}>{config.firstLabel}</span>
+            <Eyebrow className={styles.eyebrow}>{config.firstLabel}</Eyebrow>
             <h2>{config.firstTitle}</h2>
             <p>{config.firstBody}</p>
           </article>
           <article>
-            <span className={styles.eyebrow}>{config.secondLabel}</span>
+            <Eyebrow className={styles.eyebrow}>{config.secondLabel}</Eyebrow>
             <h2>{config.secondTitle}</h2>
             <p>{config.secondBody}</p>
           </article>
         </section>
 
         <section className={styles.capabilities} aria-labelledby="project-capabilities-title" data-navbar-theme="light">
-          <span className={styles.eyebrow}>Capacidades</span>
+          <Eyebrow className={styles.eyebrow}>Capacidades</Eyebrow>
           <h2 id="project-capabilities-title">Tecnología aplicada con un objetivo concreto.</h2>
           <ul>
             {config.capabilities.map((capability) => <li key={capability}>{capability}</li>)}
           </ul>
-          <div className={styles.actions}>
-            <a href={config.relatedHref}>{config.relatedLabel}</a>
-            <a href={`${site.basePath}/#proyectos`}>Volver a proyectos</a>
-            <a href="#contacto" data-analytics="cta">Contanos sobre tu proyecto</a>
-          </div>
+          <ActionGroup className={styles.actions}>
+            <ActionButton href={config.relatedHref}>{config.relatedLabel}</ActionButton>
+            <ActionButton href={`${site.basePath}/#proyectos`}>Volver a proyectos</ActionButton>
+            <ActionButton href="#contacto" data-analytics="cta">Contanos sobre tu proyecto</ActionButton>
+          </ActionGroup>
         </section>
-        <Contact />
+        <ContactSection />
       </main>
     </>
   );

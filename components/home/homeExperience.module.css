@@ -44,9 +44,7 @@
 }
 
 .demoSection {
-  --industrial-muted: #62665f;
-  --industrial-line: #aeb2aa;
-  --industrial-signal: #596159;
+  --configurator-muted: #62665f;
   background: #dfe1dc;
   color: #161815;
 }

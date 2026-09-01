@@ -567,7 +567,7 @@ const InteriorFinishesViewer = forwardRef<
 Shadow map de Three.js.*/
           gl.shadowMap.enabled = true;
           gl.shadowMap.type =
-            THREE.PCFSoftShadowMap;
+            THREE.PCFShadowMap;
         }}
         shadows
       >

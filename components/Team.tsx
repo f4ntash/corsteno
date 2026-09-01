@@ -1,10 +1,11 @@
+import Eyebrow from "@/components/atoms/Eyebrow";
 import { teamMembers } from "@/lib/content";
 
 export default function Team() {
   return (
     <section className="team" id="equipo" aria-labelledby="team-title" data-navbar-theme="light">
       <header className="team-head">
-        <span className="label">Quiénes somos</span>
+        <Eyebrow className="label">Quiénes somos</Eyebrow>
         <div>
           <h2 id="team-title">Un estudio tecnológico argentino.</h2>
           <p>

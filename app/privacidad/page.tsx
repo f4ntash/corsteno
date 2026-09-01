@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Eyebrow from "@/components/atoms/Eyebrow";
 import Navigation from "@/components/Navigation";
 import { contactChannels } from "@/lib/contact";
 import { canonicalUrl, site } from "@/lib/seo";
@@ -30,7 +31,7 @@ export default function PrivacyPage() {
       <Navigation />
       <main className="privacy-page" id="main-content" data-navbar-theme="light">
         <header>
-          <span className="label">Información legal</span>
+          <Eyebrow className="label">Información legal</Eyebrow>
           <h1>Política de privacidad</h1>
           <p>Última actualización: 26 de agosto de 2026.</p>
         </header>
