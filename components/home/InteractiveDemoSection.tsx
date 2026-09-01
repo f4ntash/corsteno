@@ -9,13 +9,14 @@ export default function InteractiveDemoSection() {
       className={`${styles.section} ${styles.demoSection}`}
       id="demo"
       data-navbar-theme="light"
+      data-nav-section="demo"
     >
       <SectionHeading
         className={styles.sectionHead}
         eyebrow="Demo interactiva"
         eyebrowClassName={styles.eyebrow}
         title="No te lo contamos. Probalo."
-        description="Configurá el producto como si fuera parte de tu catálogo."
+        description="Elegí modelo, medidas y terminaciones. El producto y el pedido se actualizan en el momento."
         wrapContent
       />
       <ProductConfigurator constrained />

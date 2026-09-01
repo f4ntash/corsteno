@@ -169,7 +169,7 @@
 }
 
 .checkList label {
-  min-height: 38px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   gap: 8px;

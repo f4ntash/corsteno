@@ -1,4 +1,3 @@
-import DigitalLayerSection from "./home/DigitalLayerSection";
 import InteractiveHeroDemo from "./home/InteractiveHeroDemo";
 import ProcessComparisonSection from "./home/ProcessComparisonSection";
 import ActionButton from "./atoms/ActionButton";
@@ -8,9 +7,9 @@ import ActionGroup from "./molecules/ActionGroup";
 export default function CommercialIntro() {
   return (
     <>
-      <section className="commercial-hero" id="inicio" data-od-id="que-hacemos" data-navbar-theme="light">
+      <section className="commercial-hero" id="inicio" data-od-id="que-hacemos" data-navbar-theme="light" data-nav-section="inicio">
         <div className="commercial-hero-copy">
-          <Eyebrow className="label">Experiencias digitales para productos, marcas y negocios</Eyebrow>
+          <Eyebrow className="label">Tecnología interactiva para productos y proyectos</Eyebrow>
           <h1>
             Transformamos
             <br />
@@ -21,13 +20,13 @@ export default function CommercialIntro() {
             <em>que venden.</em>
           </h1>
           <p>
-            Combinamos 3D, interacción y tecnología web para que tus clientes puedan explorar, personalizar y decidir
-            con confianza.
+            Creamos experiencias web donde tus clientes pueden explorar, comparar y personalizar lo que ofrecés antes
+            de iniciar una consulta comercial.
           </p>
-          <ul className="commercial-hero-metrics" aria-label="Resultados y capacidades">
-            <li><strong>+40%</strong><span>más engagement</span></li>
-            <li><strong>3D</strong><span>tiempo real</span></li>
-            <li><strong>100%</strong><span>integrado a tu web</span></li>
+          <ul className="commercial-hero-metrics" aria-label="Capacidades de la experiencia">
+            <li><strong>3D</strong><span>en tiempo real</span></li>
+            <li><strong>Web</strong><span>desde el navegador</span></li>
+            <li><strong>Datos</strong><span>listos para consultar</span></li>
           </ul>
           <ActionGroup className="commercial-actions">
             <ActionButton className="commercial-action-primary" href="#contacto">Contanos sobre tu producto</ActionButton>
@@ -46,7 +45,6 @@ export default function CommercialIntro() {
       </section>
 
       <ProcessComparisonSection />
-      <DigitalLayerSection />
     </>
   );
 }

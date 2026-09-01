@@ -116,7 +116,7 @@ export default function ProductConfiguratorCanvas({ configuration }: { configura
       <Canvas
         frameloop="demand"
         dpr={[1, 1.35]}
-        shadows
+        shadows={{ type: THREE.PCFShadowMap }}
         camera={{ fov: 38, near: 0.05, far: 100, position: [6.8, 3.8, 8.6] }}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}

@@ -1,10 +1,11 @@
 import CommercialIntro from "@/components/CommercialIntro";
-import MobileCTA from "@/components/MobileCTA";
+import FloatingContactCTA from "@/components/FloatingContactCTA";
 import Navigation from "@/components/Navigation";
 import ContactSection from "@/components/organisms/ContactSection";
 import Team from "@/components/Team";
 import Testimonials from "@/components/Testimonials";
 import ConnectedSystemSection from "@/components/home/ConnectedSystemSection";
+import DigitalLayerSection from "@/components/home/DigitalLayerSection";
 import InteractiveDemoSection from "@/components/home/InteractiveDemoSection";
 import ProductDataSection from "@/components/home/ProductDataSection";
 import SelectedWorkSection from "@/components/home/SelectedWorkSection";
@@ -18,15 +19,16 @@ export default function Home() {
       <Navigation home />
       <main id="main-content">
         <CommercialIntro />
+        <SelectedWorkSection />
         <InteractiveDemoSection />
         <ConnectedSystemSection />
+        <DigitalLayerSection />
         <ProductDataSection />
-        <SelectedWorkSection />
         <Team />
         <Testimonials />
         <ContactSection />
       </main>
-      <MobileCTA />
+      <FloatingContactCTA />
     </>
   );
 }

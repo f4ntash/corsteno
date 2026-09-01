@@ -16,7 +16,7 @@ const businessId = `${site.url}/#business`;
 const serviceCatalog = [
   "Configuradores 3D interactivos",
   "Experiencias digitales interactivas",
-  "Desarrollo web",
+  "Plataformas web para productos y proyectos",
 ];
 
 export type SeoLink = {
@@ -609,9 +609,9 @@ export const indexablePages = seoPages;
 
 export const homeSeo = {
   path: "/",
-  intent: "estudio de experiencias digitales, configuradores 3D y desarrollo web",
-  title: "Corsteno | Configuradores 3D y Experiencias Digitales",
-  description: "Corsteno crea configuradores 3D, experiencias digitales interactivas y productos web que pueden evolucionar e integrarse con sistemas de negocio.",
+  intent: "estudio de tecnología interactiva para productos y proyectos",
+  title: "Corsteno | Tecnología Interactiva para Productos",
+  description: "Corsteno desarrolla configuradores 3D, experiencias web interactivas y herramientas comerciales para presentar, explorar y configurar productos y proyectos.",
   h1: "Transformamos imágenes estáticas en experiencias que venden.",
 };
 
@@ -663,6 +663,7 @@ export function organizationJsonLd() {
         "@type": "ProfessionalService",
         "@id": businessId,
         name: site.name,
+        description: homeSeo.description,
         url: site.url,
         areaServed: ["Argentina", "Córdoba", "Remoto"],
         ...(contactPoint ? { contactPoint } : {}),

@@ -11,7 +11,7 @@ const pipelines = [
   {
     number: "02",
     title: "Con Corsteno",
-    steps: ["Producto", "Configura", "Visualiza", "Cotiza", "Envía", "CRM / Vendedor", "Producción"],
+    steps: ["Producto", "Configura", "Visualiza", "Cotiza", "Envía", "Ventas / CRM", "Producción"],
     active: true,
   },
 ];
@@ -19,7 +19,7 @@ const pipelines = [
 export default function ProcessComparisonSection() {
   return (
     <HomeSectionReveal className={styles.lightBackground}>
-      <section className={`${styles.section} ${styles.processSection}`} data-navbar-theme="light">
+      <section className={`${styles.section} ${styles.processSection}`} data-navbar-theme="light" data-nav-section="inicio">
         <SectionHeading
           className={styles.sectionHead}
           eyebrow="Cambio de proceso"
@@ -43,6 +43,9 @@ export default function ProcessComparisonSection() {
             </article>
           ))}
         </div>
+        <p className={styles.processConclusion}>
+          Más autonomía para elegir. Menos ida y vuelta antes de hablar con ventas.
+        </p>
       </section>
     </HomeSectionReveal>
   );

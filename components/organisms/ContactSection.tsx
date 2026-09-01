@@ -7,7 +7,7 @@ export default function ContactSection() {
   const hasContactChannel = Boolean(contactChannels.whatsappUrl || contactChannels.email);
 
   return (
-    <section className="contact dark" id="contacto" data-od-id="contacto" data-navbar-theme="dark">
+    <section className="contact dark" id="contacto" data-od-id="contacto" data-navbar-theme="dark" data-nav-section="contacto">
       <div className="contact-copy">
         <Eyebrow className="label">Contacto</Eyebrow>
         <h2 data-od-id="contacto-titulo">

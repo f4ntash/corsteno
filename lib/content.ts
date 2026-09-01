@@ -8,14 +8,14 @@ export type TeamMember = {
 export const teamMembers: TeamMember[] = [
   {
     name: "Matias Gerstner",
-    role: "Co-Founder · Product Engineer",
-    specialties: "Web Experiences, Product & Interactive 3D",
+    role: "Cofundador · Ingeniería de producto",
+    specialties: "Experiencias web, producto y 3D interactivo",
     linkedinUrl: "https://www.linkedin.com/in/matiasgerstner/",
   },
   {
     name: "Elias Correa",
-    role: "Co-Founder · Unity & XR Engineer",
-    specialties: "Immersive Experiences, Real-Time 3D & Education",
+    role: "Cofundador · Ingeniería Unity y XR",
+    specialties: "Experiencias inmersivas, 3D en tiempo real y educación",
     linkedinUrl: "https://www.linkedin.com/in/elias-correa-/",
   },
 ];

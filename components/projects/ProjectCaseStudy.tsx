@@ -30,7 +30,6 @@ type ProjectConfig = {
   secondLabel: string;
   secondTitle: string;
   secondBody: string;
-  capabilities: string[];
   relatedHref: string;
   relatedLabel: string;
   experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house";
@@ -50,7 +49,6 @@ const projectConfigs: Record<string, ProjectConfig> = {
     secondTitle: "La identidad del lugar, llevada al navegador.",
     secondBody:
       "Diseñamos y desarrollamos una experiencia responsive centrada en contenido visual, exploración de habitaciones y acceso claro a la información del hotel.",
-    capabilities: ["UX/UI", "React / Next.js", "Responsive", "Performance", "SEO"],
     relatedHref: `${site.basePath}/servicios/desarrollo-web/`,
     relatedLabel: "Ver desarrollo web",
     experience: "terrambu",
@@ -68,7 +66,6 @@ const projectConfigs: Record<string, ProjectConfig> = {
     secondTitle: "El territorio como producto digital.",
     secondBody:
       "Desarrollamos una plataforma interactiva basada en mapas, estructura de datos y una interfaz responsive para explorar información territorial.",
-    capabilities: ["Interactive Map", "UX/UI", "Data", "Web Development", "Responsive"],
     relatedHref: `${site.basePath}/servicios/desarrollo-web/`,
     relatedLabel: "Ver desarrollo web",
     experience: "mapa-punilla",
@@ -86,7 +83,6 @@ const projectConfigs: Record<string, ProjectConfig> = {
     secondTitle: "Revestimientos en contexto.",
     secondBody:
       "La demo combina variantes incluidas en el modelo, navegación 3D, controles táctiles, reinicio y pantalla completa sin convertir el mobiliario en una opción configurable.",
-    capabilities: ["Interior Finishes", "Material Comparison", "Real-time 3D", "Three.js", "Interactive Web"],
     relatedHref: `${site.basePath}/servicios/visualizacion-3d/`,
     relatedLabel: "Ver visualización 3D",
     experience: "interior-finishes",
@@ -104,7 +100,6 @@ const projectConfigs: Record<string, ProjectConfig> = {
     secondTitle: "Terminaciones exteriores en contexto.",
     secondBody:
       "La demo combina variantes incluidas en el modelo, cambio de color del borde, navegación 3D, reinicio y pantalla completa.",
-    capabilities: ["Architectural 3D", "Material Comparison", "Real-time 3D", "Three.js", "Interactive Web"],
     relatedHref: `${site.basePath}/servicios/visualizacion-3d/`,
     relatedLabel: "Ver visualización 3D",
     experience: "exterior-house",
@@ -184,18 +179,13 @@ export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
           </article>
         </section>
 
-        <section className={styles.capabilities} aria-labelledby="project-capabilities-title" data-navbar-theme="light">
-          <Eyebrow className={styles.eyebrow}>Capacidades</Eyebrow>
-          <h2 id="project-capabilities-title">Tecnología aplicada con un objetivo concreto.</h2>
-          <ul>
-            {config.capabilities.map((capability) => <li key={capability}>{capability}</li>)}
-          </ul>
+        <div className={styles.caseActions} data-navbar-theme="light">
           <ActionGroup className={styles.actions}>
             <ActionButton href={config.relatedHref}>{config.relatedLabel}</ActionButton>
             <ActionButton href={`${site.basePath}/#proyectos`}>Volver a proyectos</ActionButton>
             <ActionButton href="#contacto" data-analytics="cta">Contanos sobre tu proyecto</ActionButton>
           </ActionGroup>
-        </section>
+        </div>
         <ContactSection />
       </main>
     </>

@@ -3,18 +3,18 @@ import { teamMembers } from "@/lib/content";
 
 export default function Team() {
   return (
-    <section className="team" id="equipo" aria-labelledby="team-title" data-navbar-theme="light">
+    <section className="team" id="equipo" aria-labelledby="team-title" data-navbar-theme="light" data-nav-section="soluciones">
       <header className="team-head">
         <Eyebrow className="label">Quiénes somos</Eyebrow>
         <div>
           <h2 id="team-title">Un estudio tecnológico argentino.</h2>
           <p>
-            Somos un estudio tecnológico argentino especializado en desarrollo web, experiencias digitales y
-            visualización interactiva 3D.
+            Trabajás directamente con quienes definen y construyen cada solución, desde la experiencia hasta su base
+            técnica.
           </p>
           <p>
-            Diseñamos y desarrollamos herramientas que ayudan a empresas a mostrar, explicar y presentar mejor sus
-            productos y servicios.
+            No empezamos cada proyecto desde cero: reutilizamos componentes, configuradores y arquitectura probada,
+            y adaptamos esa base al producto y al proceso de cada empresa.
           </p>
         </div>
       </header>

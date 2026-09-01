@@ -6,13 +6,11 @@ import logoCorsteno from "./logoSombreado.png";
 
 const navItems = [
   { href: "#inicio", key: "inicio", label: "Inicio" },
-  { href: "#soluciones", key: "soluciones", label: "Soluciones" },
-  { href: "#demo", key: "demo", label: "Demo" },
   { href: "#proyectos", key: "proyectos", label: "Proyectos" },
+  { href: "#demo", key: "demo", label: "Demo" },
+  { href: "#soluciones", key: "soluciones", label: "Soluciones" },
   { href: "#contacto", key: "contacto", label: "Contacto" },
 ];
-
-const navKeys = new Set(navItems.map((item) => item.key));
 
 type ChromeState = {
   dark?: boolean;
@@ -61,43 +59,32 @@ export default function Navigation({ home = false }: NavigationProps) {
   }, []);
 
   useEffect(() => {
-    const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-navbar-theme]"));
-    const syncTheme = () => {
-      const section = document
-        .elementFromPoint(window.innerWidth / 2, window.innerHeight * 0.35)
-        ?.closest<HTMLElement>("[data-navbar-theme]");
+    const themedSections = Array.from(document.querySelectorAll<HTMLElement>("[data-navbar-theme]"));
+    const syncChrome = () => {
+      const point = document.elementFromPoint(window.innerWidth / 2, window.innerHeight * 0.35);
+      const section = point?.closest<HTMLElement>("[data-navbar-theme]");
+      const navSection = point?.closest<HTMLElement>("[data-nav-section]");
 
-      if (!section) return;
-      activeThemeSectionRef.current = section.id;
-      setDark(section.dataset.navbarTheme === "dark");
+      if (section) {
+        activeThemeSectionRef.current = section.id;
+        setDark(section.dataset.navbarTheme === "dark");
+      }
+      if (navSection?.dataset.navSection) setActiveNav(navSection.dataset.navSection);
     };
-    const requestThemeSync = () => window.requestAnimationFrame(syncTheme);
+    const requestChromeSync = () => window.requestAnimationFrame(syncChrome);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const section = entry.target as HTMLElement;
-          if (navKeys.has(section.id)) setActiveNav(section.id);
-        });
-      },
-      { rootMargin: "-35% 0px -60% 0px" },
-    );
+    const themeObserver = new MutationObserver(syncChrome);
 
-    const themeObserver = new MutationObserver(syncTheme);
-
-    sections.forEach((section) => {
-      observer.observe(section);
+    themedSections.forEach((section) => {
       themeObserver.observe(section, { attributes: true, attributeFilter: ["data-navbar-theme"] });
     });
-    window.addEventListener("scroll", requestThemeSync, { passive: true });
-    window.addEventListener("resize", requestThemeSync);
-    syncTheme();
+    window.addEventListener("scroll", requestChromeSync, { passive: true });
+    window.addEventListener("resize", requestChromeSync);
+    syncChrome();
     return () => {
-      observer.disconnect();
       themeObserver.disconnect();
-      window.removeEventListener("scroll", requestThemeSync);
-      window.removeEventListener("resize", requestThemeSync);
+      window.removeEventListener("scroll", requestChromeSync);
+      window.removeEventListener("resize", requestChromeSync);
     };
   }, []);
 
@@ -110,7 +97,15 @@ export default function Navigation({ home = false }: NavigationProps) {
       aria-label="Navegación principal"
       data-od-id="navegacion-principal"
     >
-      <a className="brand" href={navigationHref("#inicio")} data-od-id="marca-corsteno" onClick={closeMenu}>
+      <a
+        className="brand"
+        href={navigationHref("#inicio")}
+        data-od-id="marca-corsteno"
+        onClick={() => {
+          setActiveNav("inicio");
+          closeMenu();
+        }}
+      >
         {/* CORSTENO_LOGO_HERE — Logo oficial de Corsteno */}
         <img
           className="brand-logo"
@@ -144,7 +139,10 @@ export default function Navigation({ home = false }: NavigationProps) {
             data-nav={item.key}
             data-od-id={`nav-${item.key}`}
             aria-current={activeNav === item.key ? "location" : undefined}
-            onClick={closeMenu}
+            onClick={() => {
+              setActiveNav(item.key);
+              closeMenu();
+            }}
           >
             {item.label}
           </a>

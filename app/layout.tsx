@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: site.locale,
     type: "website",
-    images: [{ url: HOME_SOCIAL_IMAGE, alt: "Experiencias web y 3D desarrolladas por Corsteno" }],
+    images: [{ url: HOME_SOCIAL_IMAGE, alt: "Tecnología interactiva para productos desarrollada por Corsteno" }],
   },
   twitter: {
     card: "summary_large_image",

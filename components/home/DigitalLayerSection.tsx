@@ -7,21 +7,21 @@ const solutions = [
   {
     number: "01",
     title: "Configuradores 3D",
-    description: "Tus clientes pueden explorar modelos, materiales, colores, componentes y variantes en tiempo real.",
+    description: "Ayudan a entender y elegir un producto antes de consultar, con sus opciones visibles en un mismo lugar.",
     capabilities: ["3D en tiempo real", "Materiales", "Variantes", "Dimensiones", "Componentes"],
   },
   {
     number: "02",
     title: "Experiencias digitales",
-    description: "Showrooms, catálogos y experiencias interactivas diseñadas alrededor de tu producto.",
-    capabilities: ["Showrooms", "Catálogos interactivos", "Visualización", "AR-ready", "Experiencias web"],
+    description: "Transforman catálogos, espacios o proyectos en recorridos que se pueden explorar y compartir.",
+    capabilities: ["Showrooms", "Catálogos interactivos", "Visualización", "Preparado para RA", "Experiencias web"],
   },
   {
     number: "03",
     title: "Desarrollo web",
     description:
-      "Diseñamos y desarrollamos sitios y plataformas web rápidas, claras y pensadas para convertir visitas en oportunidades reales.",
-    capabilities: ["Sitios corporativos", "Ecommerce", "Landing pages", "Plataformas web", "Performance", "Responsive"],
+      "Es la base donde contenido, interacción y herramientas comerciales funcionan como una sola experiencia.",
+    capabilities: ["Sitios corporativos", "Comercio electrónico", "Páginas de campaña", "Plataformas web", "Rendimiento", "Adaptable"],
   },
 ];
 
@@ -30,8 +30,9 @@ export default function DigitalLayerSection() {
     <HomeSectionReveal className={styles.darkBackground}>
       <section
         className={`${styles.section} ${styles.digitalSection}`}
-        id="soluciones"
+        id="capacidades"
         data-navbar-theme="dark"
+        data-nav-section="soluciones"
       >
         <SectionHeading
           className={styles.sectionHead}
@@ -57,10 +58,10 @@ export default function DigitalLayerSection() {
         <div className={styles.integrationCapability}>
           <Eyebrow className={styles.eyebrow}>Capacidad de evolución</Eyebrow>
           <div>
-            <h3>Software conectado</h3>
+            <h3>Conectado a tu proceso comercial</h3>
             <p>
-              Estas experiencias pueden evolucionar e integrarse con ecommerce, cotizaciones, pricing, CRM, ERP,
-              APIs y analytics según las necesidades reales del negocio.
+              La experiencia puede evolucionar para consultar precios, enviar configuraciones o intercambiar datos
+              con comercio electrónico, CRM, ERP y otras herramientas, según las necesidades reales del negocio.
             </p>
           </div>
         </div>

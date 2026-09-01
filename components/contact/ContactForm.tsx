@@ -50,6 +50,7 @@ export default function ContactForm() {
       email: formData.get("email"),
       company: formData.get("company"),
       interest: formData.get("interest"),
+      projectStage: formData.get("projectStage"),
       message: formData.get("message"),
       _gotcha: formData.get("_gotcha"),
     });
@@ -78,6 +79,7 @@ export default function ContactForm() {
       submission.set("email", validation.data.email);
       submission.set("company", validation.data.company);
       submission.set("interest", validation.data.interest);
+      submission.set("projectStage", validation.data.projectStage);
       submission.set("message", validation.data.message);
       submission.set("_gotcha", validation.data._gotcha);
 
@@ -180,6 +182,26 @@ export default function ContactForm() {
             <option value="no-estoy-seguro">No estoy seguro</option>
           </select>
           {errors.interest ? <span id="contact-interest-error" className="contact-field-error">{errors.interest}</span> : null}
+        </div>
+        <div className="contact-field contact-field-wide">
+          <label htmlFor="contact-project-stage">¿En qué etapa está el proyecto?</label>
+          <select
+            id="contact-project-stage"
+            name="projectStage"
+            required
+            defaultValue=""
+            aria-invalid={Boolean(errors.projectStage)}
+            aria-describedby={errors.projectStage ? "contact-project-stage-error" : undefined}
+          >
+            <option value="" disabled>Seleccionar</option>
+            <option value="explorando-idea">Estoy explorando una idea</option>
+            <option value="evaluando-alternativas">Estoy evaluando alternativas</option>
+            <option value="proyecto-definido">Ya tengo el proyecto definido</option>
+            <option value="implementacion-pronta">Necesito implementarlo pronto</option>
+          </select>
+          {errors.projectStage ? (
+            <span id="contact-project-stage-error" className="contact-field-error">{errors.projectStage}</span>
+          ) : null}
         </div>
         <div className="contact-field contact-field-wide">
           <label htmlFor="contact-message">Mensaje</label>

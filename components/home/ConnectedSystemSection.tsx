@@ -2,18 +2,18 @@ import Eyebrow from "@/components/atoms/Eyebrow";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeExperience.module.css";
 
-const systemNodes = ["Website", "Ecommerce", "CRM", "ERP", "Pricing", "Cotizaciones", "Producción", "Analytics"];
+const systemNodes = ["Sitio web", "Comercio", "Ventas · CRM", "Gestión · ERP", "Precios", "Cotizaciones", "Producción", "Analítica"];
 
 export default function ConnectedSystemSection() {
   return (
     <HomeSectionReveal className={styles.connectedBackground}>
-      <section className={styles.connectedSection} data-navbar-theme="dark">
+      <section className={styles.connectedSection} id="soluciones" data-navbar-theme="dark" data-nav-section="soluciones">
         <div className={styles.connectedCopy}>
           <Eyebrow className={styles.eyebrow}>Sistema conectado</Eyebrow>
           <h2>El 3D es solo la interfaz.</h2>
           <p>
-            La experiencia puede evolucionar y conectarse con ventas, precios, stock, cotizaciones y producción según
-            el proceso de cada empresa.
+            Cada elección puede convertirse en una consulta con el producto ya configurado. Según el proceso de cada
+            empresa, la experiencia puede conectarse con ventas, precios, stock, cotizaciones o producción.
           </p>
         </div>
 

@@ -59,7 +59,9 @@ export default function ProductConfigurator({ className = "", constrained = fals
         {canvasReady ? (
           <ProductConfiguratorCanvas configuration={configuration} />
         ) : (
-          <span className={styles.configuratorPlaceholder}>Preparando configurador 3D</span>
+          <span className={styles.configuratorPlaceholder} role="status" aria-live="polite">
+            Preparando configurador 3D
+          </span>
         )}
       </div>
       <div className={styles.configuratorPanel}>

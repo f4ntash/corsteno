@@ -34,11 +34,11 @@ export default function ProductConfiguratorControls({ configuration, onChange }:
         <legend>Medidas</legend>
         <label className={styles.rangeControl}>
           <span>Ancho <output>{configuration.width} mm</output></span>
-          <input type="range" min="800" max="3000" step="50" value={configuration.width} onChange={(event) => update("width", Number(event.target.value))} />
+          <input aria-label="Ancho en milímetros" type="range" min="800" max="3000" step="50" value={configuration.width} onChange={(event) => update("width", Number(event.target.value))} />
         </label>
         <label className={styles.rangeControl}>
           <span>Alto <output>{configuration.height} mm</output></span>
-          <input type="range" min="800" max="2600" step="50" value={configuration.height} onChange={(event) => update("height", Number(event.target.value))} />
+          <input aria-label="Alto en milímetros" type="range" min="800" max="2600" step="50" value={configuration.height} onChange={(event) => update("height", Number(event.target.value))} />
         </label>
       </fieldset>
 

@@ -6,9 +6,10 @@ import styles from "./homeExperience.module.css";
 const projects = [
   {
     id: "terrambu",
-    label: "CLIENT PROJECT",
+    label: "PROYECTO CLIENTE",
     title: "Terrambú",
-    description: "Sitio web para hotel boutique y restaurante.",
+    description: "Experiencia web para presentar el hotel, sus espacios y facilitar la consulta directa.",
+    action: "Ver proyecto",
     image: withBasePath("/projects/terrambu-hotel-web.webp"),
     href: withBasePath("/proyectos/terrambu/"),
     className: styles.projectTerrambu,
@@ -16,9 +17,10 @@ const projects = [
   },
   {
     id: "mapa-punilla",
-    label: "CLIENT PROJECT",
+    label: "PROYECTO CLIENTE",
     title: "Mapa Punilla",
-    description: "Plataforma interactiva para descubrir el Valle de Punilla.",
+    description: "Plataforma interactiva para organizar información territorial y explorar el Valle de Punilla.",
+    action: "Ver proyecto",
     image: withBasePath("/projects/mapa-punilla-web.webp"),
     href: withBasePath("/proyectos/mapa-punilla/"),
     className: styles.projectMap,
@@ -29,6 +31,7 @@ const projects = [
     label: "CORSTENO LAB",
     title: "Revestimientos Interactivos",
     description: "Comparación de pisos, paredes y terminaciones en un ambiente 3D.",
+    action: "Explorar experiencia",
     image: withBasePath("/projects/revestimientos-interactivos.png"),
     href: withBasePath("/proyectos/revestimientos-interactivos/"),
     className: styles.projectFinishes,
@@ -39,6 +42,7 @@ const projects = [
     label: "CORSTENO LAB",
     title: "Exterior House",
     description: "Configuración interactiva de pileta, agua y terminaciones exteriores.",
+    action: "Explorar experiencia",
     image: withBasePath("/projects/exterior-house-3d.png"),
     href: withBasePath("/proyectos/exterior-house/"),
     className: styles.projectExterior,
@@ -48,7 +52,7 @@ const projects = [
 
 export default function SelectedWorkSection() {
   return (
-    <section className={`${styles.section} ${styles.workSection}`} id="proyectos" data-navbar-theme="light">
+    <section className={`${styles.section} ${styles.workSection}`} id="proyectos" data-navbar-theme="light" data-nav-section="proyectos">
       <SectionHeading
         className={styles.sectionHead}
         eyebrow="Trabajo seleccionado"
@@ -75,7 +79,8 @@ export default function SelectedWorkSection() {
             <span className={styles.projectCopy}>
               <small>{project.label}</small>
               <strong>{project.title}</strong>
-              <span>{project.description}</span>
+              <span className={styles.projectDescription}>{project.description}</span>
+              <span className={styles.projectAction}>{project.action} <span aria-hidden="true">→</span></span>
             </span>
           </a>
         ))}
