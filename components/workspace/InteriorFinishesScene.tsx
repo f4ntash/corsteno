@@ -132,7 +132,7 @@ export default function InteriorFinishesScene({
               <div className="demo-panel-intro">
                 <span className="scene-number">01 / 03</span>
                 <span className="project-trust-label">CORSTENO LAB · INTERIOR FINISHES 3D</span>
-                <span className="kind">Revestimientos interactivos</span>
+                <span className="kind">Modifica el espacio a tu medida</span>
                 <h2 data-od-id="producto-titulo">Revestimientos Interactivos</h2>
               </div>
               <span className="interior-finishes-detail-group">{activeGroup.label}</span>
