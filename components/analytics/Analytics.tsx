@@ -15,6 +15,7 @@ const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
 
 function eventNameForAnchor(anchor: HTMLAnchorElement) {
   const href = anchor.href;
+  const url = new URL(href, window.location.href);
 
   if (href.includes("wa.me") || href.includes("whatsapp")) {
     return "whatsapp_click";
@@ -22,7 +23,7 @@ function eventNameForAnchor(anchor: HTMLAnchorElement) {
 
   if (
     href.startsWith("mailto:") ||
-    anchor.getAttribute("href") === "#contacto"
+    url.hash === "#contacto"
   ) {
     return "contact_click";
   }

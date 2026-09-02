@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import { useRouter } from "next/navigation";
-import HeroSliderViewer from "@/components/three/HeroSliderViewer";
 import {
   DEFAULT_HERO_SLIDER_STATE,
   HERO_SLIDER_GROUPS,
   updateHeroSliderVariant,
   type HeroSliderGroupId,
+  type HeroSliderState,
   type HeroSliderValue,
 } from "@/components/three/heroSliderVariants";
 import { withBasePath } from "@/lib/assetPath";
@@ -15,6 +15,7 @@ import { withBasePath } from "@/lib/assetPath";
 const GROUP_ORDER: HeroSliderGroupId[] = ["table", "chair", "rug", "armchair"];
 const PREVIA_HOUSE_INTERIOR_PROJECT_URL = withBasePath("/proyectos/revestimientos-interactivos/");
 const CHIP_MARGIN = 14;
+type HeroViewer = ComponentType<{ variants: HeroSliderState; comparison: number }>;
 const PANEL_DISPLAY_LABELS: Record<HeroSliderValue, string> = {
   tableA: "Madera natural",
   tableB: "Nogal medio",
@@ -39,6 +40,7 @@ export default function InteractiveHeroDemo() {
   const [comparison, setComparison] = useState(25);
   const [variants, setVariants] = useState({ ...DEFAULT_HERO_SLIDER_STATE });
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+  const [HeroSliderViewer, setHeroSliderViewer] = useState<HeroViewer | null>(null);
   const [measurements, setMeasurements] = useState({
     width: 0,
     panelLeft: 0,
@@ -64,6 +66,35 @@ export default function InteractiveHeroDemo() {
     observer.observe(stage);
     if (panelRef.current) observer.observe(panelRef.current);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let idleId: number | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let cancelled = false;
+
+    const initializeViewer = () => {
+      void import("@/components/three/HeroSliderViewer").then((module) => {
+        if (!cancelled) setHeroSliderViewer(() => module.default);
+      });
+    };
+    const scheduleViewer = () => {
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(initializeViewer, { timeout: 1500 });
+      } else {
+        timeoutId = globalThis.setTimeout(initializeViewer, 400);
+      }
+    };
+
+    if (document.readyState === "complete") scheduleViewer();
+    else window.addEventListener("load", scheduleViewer, { once: true });
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", scheduleViewer);
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+    };
   }, []);
 
   const setComparisonFromPointer = (clientX: number) => {
@@ -108,7 +139,7 @@ export default function InteractiveHeroDemo() {
     <div className="interactive-hero-demo">
       <div ref={stageRef} className="interactive-hero-stage">
         <div className="interactive-hero-viewer" aria-hidden="true">
-          <HeroSliderViewer variants={variants} comparison={comparison} />
+          {HeroSliderViewer ? <HeroSliderViewer variants={variants} comparison={comparison} /> : null}
         </div>
         <span
           ref={beforeChipRef}

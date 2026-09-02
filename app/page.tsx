@@ -1,5 +1,4 @@
 import CommercialIntro from "@/components/CommercialIntro";
-import FloatingContactCTA from "@/components/FloatingContactCTA";
 import Navigation from "@/components/Navigation";
 import ContactSection from "@/components/organisms/ContactSection";
 import Team from "@/components/Team";
@@ -28,7 +27,6 @@ export default function Home() {
         <Testimonials />
         <ContactSection />
       </main>
-      <FloatingContactCTA />
     </>
   );
 }

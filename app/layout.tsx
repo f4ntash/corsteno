@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Analytics from "@/components/analytics/Analytics";
+import FloatingContactCTA from "@/components/FloatingContactCTA";
 import { assetUrl, canonicalUrl, homeSeo, site } from "@/lib/seo";
 import favicon from "./favicon.icon.webp";
 import "../styles/globals.css";
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f6f3",
+  themeColor: "#222220",
 };
 
 export default function RootLayout({
@@ -48,6 +49,7 @@ export default function RootLayout({
       <body>
         <a className="skip-link" href="#main-content">Saltar al contenido</a>
         {children}
+        <FloatingContactCTA />
         <Analytics />
       </body>
     </html>

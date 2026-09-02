@@ -72,7 +72,13 @@ export default function SeoLandingPage({ page }: SeoLandingPageProps) {
           </div>
           {page.image && (
             <figure className="seo-hero-media">
-              <img src={`${site.basePath}${page.image}`} alt={page.imageAlt ?? page.h1} />
+              <img
+                src={`${site.basePath}${page.image}`}
+                alt={page.imageAlt ?? page.h1}
+                width="1600"
+                height="1200"
+                decoding="async"
+              />
             </figure>
           )}
         </section>

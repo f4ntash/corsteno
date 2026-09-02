@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import ProductConfiguratorCanvas from "./ProductConfiguratorCanvas";
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
 import ProductConfiguratorControls from "./ProductConfiguratorControls";
 import ProductConfiguratorSummary from "./ProductConfiguratorSummary";
 import { DEFAULT_WINDOW_CONFIGURATION, type WindowConfiguration } from "./types";
@@ -13,10 +12,12 @@ type ProductConfiguratorProps = {
   constrained?: boolean;
 };
 
+type ConfiguratorCanvas = ComponentType<{ configuration: WindowConfiguration }>;
+
 export default function ProductConfigurator({ className = "", constrained = false }: ProductConfiguratorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [configuration, setConfiguration] = useState<WindowConfiguration>({ ...DEFAULT_WINDOW_CONFIGURATION });
-  const [canvasReady, setCanvasReady] = useState(false);
+  const [ConfiguratorCanvas, setConfiguratorCanvas] = useState<ConfiguratorCanvas | null>(null);
   const demoStartedRef = useRef(false);
 
   const updateConfiguration = useCallback(
@@ -41,8 +42,10 @@ export default function ProductConfigurator({ className = "", constrained = fals
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        setCanvasReady(true);
         observer.disconnect();
+        void import("./ProductConfiguratorCanvas").then((module) => {
+          setConfiguratorCanvas(() => module.default);
+        });
       },
       { rootMargin: "320px" },
     );
@@ -56,8 +59,8 @@ export default function ProductConfigurator({ className = "", constrained = fals
       className={`${styles.configurator}${constrained ? ` ${styles.configuratorConstrained}` : ""} ${className}`.trim()}
     >
       <div ref={canvasRef} className={styles.configuratorVisual}>
-        {canvasReady ? (
-          <ProductConfiguratorCanvas configuration={configuration} />
+        {ConfiguratorCanvas ? (
+          <ConfiguratorCanvas configuration={configuration} />
         ) : (
           <span className={styles.configuratorPlaceholder} role="status" aria-live="polite">
             Preparando configurador 3D

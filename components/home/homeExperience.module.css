@@ -44,18 +44,18 @@
 }
 
 .demoSection {
-  --configurator-muted: #62665f;
-  background: #dfe1dc;
-  color: #161815;
+  --configurator-muted: #c4c6c0;
+  background: #0b0d0b;
+  color: #f2f1ea;
 }
 
 .demoSection .eyebrow,
 .demoSection .sectionHead p {
-  color: #62665f;
+  color: #c4c6c0;
 }
 
 .connectedBackground {
-  background: #0b0d0b;
+  background: #222220;
 }
 
 .connectedSection {
@@ -68,7 +68,7 @@
   padding: 104px max(var(--page-padding), calc((100vw - var(--container)) / 2));
   border-top: 1px solid #3d413b;
   border-bottom: 1px solid #3d413b;
-  background: #0b0d0b;
+  background: #222220;
   color: #f2f1ea;
 }
 
@@ -119,8 +119,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #7a847b;
-  background: #141714;
+  border: 1px solid #4f504a;
+  background: #2e2e29;
   text-align: center;
   font-size: 12px;
   line-height: 1.5;
@@ -137,7 +137,7 @@
   justify-content: center;
   padding: 8px 12px;
   border: 1px solid #3d413b;
-  background: #111310;
+  background: #0b0d0b;
   color: #aaaca4;
   font-size: 9px;
   text-transform: uppercase;
@@ -167,8 +167,8 @@
 
 .workSection {
   min-height: min(980px, 110svh);
-  background: var(--accent);
-  color: var(--bg);
+  background: #2e2e29;
+  color: var(--fg);
 }
 
 .workSection .eyebrow,
@@ -189,8 +189,8 @@
   min-width: 0;
   overflow: hidden;
   border: 1px solid #3d413b;
-  background: #111310;
-  color: var(--bg);
+  background: #0b0d0b;
+  color: var(--fg);
   text-decoration: none;
   scroll-margin-top: 120px;
   transition: border-color 220ms var(--ease), transform 220ms var(--ease);
@@ -199,7 +199,7 @@
 .projectItem:hover,
 .projectItem:focus-visible,
 .projectItem:target {
-  border-color: var(--bg);
+  border-color: var(--fg);
 }
 
 .projectItem:hover {
@@ -229,8 +229,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--bg);
-  color: var(--bg);
+  border: 1px solid var(--fg);
+  color: var(--fg);
   padding: 0 18px;
   font-size: 11px;
   text-transform: uppercase;
@@ -239,8 +239,8 @@
 
 .workCta a:hover,
 .workCta a:focus-visible {
-  background: var(--bg);
-  color: var(--fg);
+  background: var(--fg);
+  color: var(--accent);
 }
 
 .projectMedia {
@@ -267,7 +267,7 @@
 .projectFinishes .projectMedia img,
 .projectExterior .projectMedia img {
   object-fit: contain;
-  background: #eef0eb;
+  background: #2e2e29;
 }
 
 .projectItem:hover .projectMedia img,
@@ -284,7 +284,7 @@
   bottom: 20px;
   display: grid;
   gap: 5px;
-  color: #f6f6f3;
+  color: #f2f1ea;
   transition: transform 260ms var(--ease);
 }
 
@@ -318,11 +318,11 @@
 }
 
 .dataBackground {
-  background: var(--bg);
+  background: #0b0d0b;
 }
 
 .dataSection {
-  background: var(--bg);
+  background: #0b0d0b;
   color: var(--fg);
 }
 

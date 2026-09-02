@@ -1,6 +1,6 @@
 "use client";
 
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Suspense,
@@ -10,7 +10,6 @@ import {
   useRef,
 } from "react";
 import * as THREE from "three";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 import {
   BEFORE_HERO_SLIDER_STATE,
@@ -435,14 +434,7 @@ function HeroScissorRenderer({
   return null;
 }
 
-function CameraAndControls({
-  radius,
-  controlsRef,
-}: {
-  radius: number;
-  controlsRef:
-    React.RefObject<OrbitControlsImpl | null>;
-}) {
+function HeroCamera({ radius }: { radius: number }) {
   const { camera, size } =
     useThree();
 
@@ -546,49 +538,20 @@ function CameraAndControls({
 
     perspectiveCamera.updateProjectionMatrix();
 
-    controlsRef.current?.target.copy(
-      cameraTarget,
-    );
-
-    controlsRef.current?.update();
-
-    controlsRef.current?.saveState();
   }, [
     camera,
     cameraTarget,
     config,
-    controlsRef,
     fitDistance,
   ]);
 
-  return (
-    <OrbitControls
-      ref={controlsRef}
-      makeDefault
-      target={cameraTarget.toArray()}
-      enableDamping
-      dampingFactor={0.08}
-      enablePan={false}
-      enableRotate={false}
-      enableZoom={false}
-      minPolarAngle={
-        config.minPolarAngle
-      }
-      maxPolarAngle={
-        config.maxPolarAngle
-      }
-    />
-  );
+  return null;
 }
 
 function HeroSliderComparison({
   variants,
   comparison,
-  controlsRef,
-}: HeroSliderViewerProps & {
-  controlsRef:
-    React.RefObject<OrbitControlsImpl | null>;
-}) {
+}: HeroSliderViewerProps) {
   const gltf =
     useGLTF(
       RESOLVED_HERO_SLIDER_MODEL_URL,
@@ -796,12 +759,7 @@ function HeroSliderComparison({
 
   return (
     <>
-      <CameraAndControls
-        radius={radius}
-        controlsRef={
-          controlsRef
-        }
-      />
+      <HeroCamera radius={radius} />
 
       <HeroScissorRenderer
         beforeScene={
@@ -822,11 +780,6 @@ export default function HeroSliderViewer({
   variants,
   comparison,
 }: HeroSliderViewerProps) {
-  const controlsRef =
-    useRef<OrbitControlsImpl>(
-      null,
-    );
-
   if (
     !HERO_SLIDER_MODEL_URL
   ) {
@@ -877,9 +830,6 @@ export default function HeroSliderViewer({
             }
             comparison={
               comparison
-            }
-            controlsRef={
-              controlsRef
             }
           />
         </Suspense>

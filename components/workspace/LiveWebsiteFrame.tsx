@@ -22,7 +22,13 @@ export default function LiveWebsiteFrame({ title, url, externalUrl, projectSlug,
           Abrir sitio ↗
         </a>
       </header>
-      <iframe className="live-website-iframe" src={url} title={`Sitio web navegable de ${title}`} loading="lazy" />
+      <iframe
+        className="live-website-iframe"
+        src={url}
+        title={`Sitio web navegable de ${title}`}
+        loading="lazy"
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
     </section>
   );
 }

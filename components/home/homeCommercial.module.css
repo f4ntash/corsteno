@@ -3,11 +3,11 @@
 }
 
 .lightBackground {
-  background: #e7e6df;
+  background: #222220;
 }
 
 .darkBackground {
-  background: #111310;
+  background: #2e2e29;
 }
 
 .section {
@@ -45,13 +45,13 @@
 }
 
 .processSection {
-  background: #e7e6df;
-  color: #171915;
+  background: #222220;
+  color: #f2f1ea;
 }
 
 .processSection .eyebrow,
 .pipeline {
-  color: #666960;
+  color: #c4c6c0;
 }
 
 .pipelineComparison {
@@ -65,7 +65,7 @@
   font-size: clamp(20px, 2vw, 28px);
   line-height: 1.25;
   text-wrap: balance;
-  color: #172219;
+  color: #f2f1ea;
 }
 
 .pipeline {
@@ -74,8 +74,8 @@
   gap: 38px;
   align-items: start;
   padding: 28px 0;
-  border-top: 1px solid #b8b9b2;
-  border-bottom: 1px solid #b8b9b2;
+  border-top: 1px solid #4f504a;
+  border-bottom: 1px solid #4f504a;
 }
 
 .pipelineLabel {
@@ -143,7 +143,7 @@
 }
 
 .pipelineActive {
-  color: #172219;
+  color: #f2f1ea;
 }
 
 .reveal[data-visible="true"] .pipeline ol::before {
@@ -175,7 +175,7 @@
 .pipeline li:nth-child(7)::before { transition-delay: 620ms; }
 
 .digitalSection {
-  background: #111310;
+  background: #2e2e29;
   color: #f2f1ea;
 }
 
@@ -200,7 +200,7 @@
 }
 
 .solutionItem:hover {
-  background: #1a1c19;
+  background: #2e2e29;
 }
 
 .solutionItem h3 {

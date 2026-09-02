@@ -18,8 +18,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1.85fr) minmax(340px, 1fr);
   min-height: 760px;
-  border: 1px solid #aeb2aa;
-  background: #cfd2cc;
+  border: 1px solid #4f504a;
+  background: #2e2e29;
 }
 
 .configuratorConstrained {
@@ -42,8 +42,8 @@
   min-width: 0;
   min-height: 700px;
   overflow: hidden;
-  border-right: 1px solid #aeb2aa;
-  background: #c6cac3;
+  border-right: 1px solid #4f504a;
+  background: #2e2e29;
 }
 
 .configuratorCanvas {
@@ -57,7 +57,7 @@
   bottom: 18px;
   font-size: 9px;
   text-transform: uppercase;
-  color: #555a53;
+  color: #c4c6c0;
   pointer-events: none;
 }
 
@@ -65,7 +65,7 @@
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   min-width: 0;
-  background: #ecece7;
+  background: #222220;
 }
 
 .configuratorControls {
@@ -78,7 +78,7 @@
   margin: 0;
   padding: 20px 0;
   border: 0;
-  border-bottom: 1px solid #c4c6c0;
+  border-bottom: 1px solid #4f504a;
 }
 
 .configuratorControls legend {
@@ -86,7 +86,7 @@
   margin-bottom: 12px;
   font-size: 10px;
   text-transform: uppercase;
-  color: #5d615a;
+  color: #c4c6c0;
 }
 
 .segmentedControl {
@@ -97,9 +97,9 @@
 .segmentedControl button,
 .swatches button {
   min-height: 44px;
-  border: 1px solid #b8bbb4;
+  border: 1px solid #4f504a;
   background: transparent;
-  color: #20231f;
+  color: #f2f1ea;
   font-size: 10px;
   cursor: pointer;
 }
@@ -110,8 +110,8 @@
 
 .segmentedControl button[aria-pressed="true"],
 .swatches button[aria-pressed="true"] {
-  background: #20231f;
-  color: #f1f0ea;
+  background: #f2f1ea;
+  color: #0b0d0b;
 }
 
 .rangeControl {
@@ -128,12 +128,12 @@
 }
 
 .rangeControl output {
-  color: #666b63;
+  color: #c4c6c0;
 }
 
 .rangeControl input {
   width: 100%;
-  accent-color: #20231f;
+  accent-color: #f2f1ea;
 }
 
 .swatches {
@@ -182,13 +182,13 @@
 
 .configuratorSummary {
   padding: 24px 26px 28px;
-  border-top: 1px solid #c4c6c0;
+  border-top: 1px solid #4f504a;
 }
 
 .configuratorSummary > span {
   font-size: 10px;
   text-transform: uppercase;
-  color: #5d615a;
+  color: #c4c6c0;
 }
 
 .configuratorSummary dl {
@@ -201,11 +201,11 @@
   justify-content: space-between;
   gap: 18px;
   padding: 7px 0;
-  border-bottom: 1px solid #d0d2cd;
+  border-bottom: 1px solid #4f504a;
   font-size: 11px;
 }
 
-.configuratorSummary dt { color: #656961; }
+.configuratorSummary dt { color: #c4c6c0; }
 .configuratorSummary dd { margin: 0; text-align: right; }
 
 .demoPrice {
@@ -226,15 +226,15 @@
 .configuratorSummary > p {
   font-size: 9px;
   text-transform: uppercase;
-  color: #686d65;
+  color: #c4c6c0;
 }
 
 .configuratorSummary button {
   width: 100%;
   min-height: 46px;
-  border: 1px solid #20231f;
-  background: #20231f;
-  color: #f1f0ea;
+  border: 1px solid #f2f1ea;
+  background: #f2f1ea;
+  color: #0b0d0b;
   font-size: 10px;
   text-transform: uppercase;
   cursor: pointer;
@@ -268,7 +268,7 @@
   min-height: 32px !important;
   border: 0 !important;
   background: transparent !important;
-  color: #5d615a !important;
+  color: #c4c6c0 !important;
   padding: 0 !important;
   text-align: left;
 }
@@ -281,17 +281,17 @@
 .demoEmailForm > label:first-child {
   font-size: 10px;
   text-transform: uppercase;
-  color: #5d615a;
+  color: #c4c6c0;
 }
 
 .demoEmailForm > input {
   width: 100%;
   min-height: 42px;
   border: 0;
-  border-bottom: 1px solid #8b8f87;
+  border-bottom: 1px solid #4f504a;
   border-radius: 0;
   background: transparent;
-  color: #20231f;
+  color: #f2f1ea;
   padding: 8px 0;
   font: inherit;
   font-size: 13px;
@@ -309,20 +309,20 @@
   padding-top: 7px;
   font-size: 10px;
   line-height: 1.4;
-  color: #4f544d;
+  color: #c4c6c0;
   cursor: pointer;
 }
 
 .demoConsent input {
   margin-top: 1px;
-  accent-color: #20231f;
+  accent-color: #f2f1ea;
 }
 
 .demoPrivacy {
   margin: 0;
   font-size: 9px;
   line-height: 1.45;
-  color: #686d65;
+  color: #c4c6c0;
 }
 
 .demoPrivacy a {
@@ -335,7 +335,7 @@
   display: grid;
   gap: 4px;
   padding: 10px;
-  border: 1px solid #aeb2aa;
+  border: 1px solid #4f504a;
   font-size: 10px;
   line-height: 1.45;
 }
@@ -347,7 +347,7 @@
 
 .demoPrepared small,
 .demoError small {
-  color: #686d65;
+  color: #c4c6c0;
 }
 
 .demoError {
@@ -360,9 +360,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #20231f;
-  background: #20231f;
-  color: #f1f0ea;
+  border: 1px solid #f2f1ea;
+  background: #f2f1ea;
+  color: #0b0d0b;
   padding: 0 14px;
   font-size: 10px;
   text-transform: uppercase;
@@ -378,18 +378,18 @@
   .configuratorConstrained { height: auto; min-height: 0; }
   .configuratorConstrained .configuratorPanel { overflow: visible; }
   .configuratorConstrained .configuratorVisual { min-height: max(360px, 44svh); }
-  .configuratorVisual { min-height: max(430px, 56svh); border-right: 0; border-bottom: 1px solid #aeb2aa; }
+  .configuratorVisual { min-height: max(430px, 56svh); border-right: 0; border-bottom: 1px solid #4f504a; }
   .configuratorPanel { grid-template-rows: auto auto; }
   .configuratorControls { overflow: visible; padding: 20px; }
 }
 
 @media (max-width: 520px) {
   .segmentedControl { grid-template-columns: 1fr; }
-  .segmentedControl button + button { border-left: 1px solid #b8bbb4; border-top: 0; }
+  .segmentedControl button + button { border-left: 1px solid #4f504a; border-top: 0; }
   .swatches,
   .checkList { grid-template-columns: 1fr; }
   .configuratorConstrained .segmentedControl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .configuratorConstrained .segmentedControl button + button { border-top: 1px solid #b8bbb4; border-left: 0; }
+  .configuratorConstrained .segmentedControl button + button { border-top: 1px solid #4f504a; border-left: 0; }
   .configuratorConstrained .swatches,
   .configuratorConstrained .checkList { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .demoPrice { align-items: flex-start; flex-direction: column; }

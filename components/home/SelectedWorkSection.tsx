@@ -11,6 +11,7 @@ const projects = [
     description: "Experiencia web para presentar el hotel, sus espacios y facilitar la consulta directa.",
     action: "Ver proyecto",
     image: withBasePath("/projects/terrambu-hotel-web.webp"),
+    imageSrcSet: `${withBasePath("/projects/terrambu-hotel-web-480.webp")} 480w, ${withBasePath("/projects/terrambu-hotel-web-960.webp")} 960w, ${withBasePath("/projects/terrambu-hotel-web.webp")} 1425w`,
     href: withBasePath("/proyectos/terrambu/"),
     className: styles.projectTerrambu,
     type: "client_project",
@@ -22,6 +23,7 @@ const projects = [
     description: "Plataforma interactiva para organizar información territorial y explorar el Valle de Punilla.",
     action: "Ver proyecto",
     image: withBasePath("/projects/mapa-punilla-web.webp"),
+    imageSrcSet: `${withBasePath("/projects/mapa-punilla-web-480.webp")} 480w, ${withBasePath("/projects/mapa-punilla-web-960.webp")} 960w, ${withBasePath("/projects/mapa-punilla-web.webp")} 1800w`,
     href: withBasePath("/proyectos/mapa-punilla/"),
     className: styles.projectMap,
     type: "client_project",
@@ -33,6 +35,7 @@ const projects = [
     description: "Comparación de pisos, paredes y terminaciones en un ambiente 3D.",
     action: "Explorar experiencia",
     image: withBasePath("/projects/revestimientos-interactivos.png"),
+    imageSrcSet: `${withBasePath("/projects/revestimientos-interactivos-480.webp")} 480w, ${withBasePath("/projects/revestimientos-interactivos.png")} 630w`,
     href: withBasePath("/proyectos/revestimientos-interactivos/"),
     className: styles.projectFinishes,
     type: "corsteno_lab",
@@ -44,6 +47,7 @@ const projects = [
     description: "Configuración interactiva de pileta, agua y terminaciones exteriores.",
     action: "Explorar experiencia",
     image: withBasePath("/projects/exterior-house-3d.png"),
+    imageSrcSet: `${withBasePath("/projects/exterior-house-3d-480.webp")} 480w, ${withBasePath("/projects/exterior-house-3d.png")} 650w`,
     href: withBasePath("/proyectos/exterior-house/"),
     className: styles.projectExterior,
     type: "corsteno_lab",
@@ -74,7 +78,16 @@ export default function SelectedWorkSection() {
             data-project-type={project.type}
           >
             <span className={styles.projectMedia}>
-              <img src={project.image} alt={`Preview de ${project.title}`} loading="lazy" decoding="async" />
+              <img
+                src={project.image}
+                srcSet={project.imageSrcSet}
+                sizes="(max-width: 900px) calc(100vw - 40px), 50vw"
+                alt={`Preview de ${project.title}`}
+                width="650"
+                height="300"
+                loading="lazy"
+                decoding="async"
+              />
             </span>
             <span className={styles.projectCopy}>
               <small>{project.label}</small>
