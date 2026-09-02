@@ -43,7 +43,7 @@ const projects = [
   {
     id: "exterior-house",
     label: "CORSTENO LAB",
-    title: "Exterior House",
+    title: "Revestimientos de exterior",
     description: "Configuración interactiva de pileta, agua y terminaciones exteriores.",
     action: "Explorar experiencia",
     image: withBasePath("/projects/exterior-house-3d.png"),

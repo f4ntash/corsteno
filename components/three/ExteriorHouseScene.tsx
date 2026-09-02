@@ -1,7 +1,9 @@
 "use client";
 
-import { OrbitControls, useGLTF } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
+
+import { OrbitControls, useGLTF, useTexture } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Water } from "three-stdlib";
 import {
   forwardRef,
   Suspense,
@@ -25,6 +27,7 @@ import {
 } from "./exteriorHouseVariants";
 
 const EXTERIOR_HOUSE_MODEL_URL = withBasePath("/models/exterior_house.glb");
+const EXTERIOR_HOUSE_WATER_NORMALS_URL = withBasePath("/textures/waternormals.jpg");
 
 const EXTERIOR_HOUSE_CAMERA_CONFIG = {
   direction: [4.4, 1.5, 4] as [number, number, number],
@@ -33,9 +36,9 @@ const EXTERIOR_HOUSE_CAMERA_CONFIG = {
   fitPadding: 0.82,
   minDistanceFactor: 0,
   maxDistanceFactor: 1.8,
-  azimuthRange: THREE.MathUtils.degToRad(60),
-  minPolarAngle: THREE.MathUtils.degToRad(36),
-  maxPolarAngle: THREE.MathUtils.degToRad(82),
+  azimuthRange: THREE.MathUtils.degToRad(40),
+  minPolarAngle: THREE.MathUtils.degToRad(10),
+  maxPolarAngle: THREE.MathUtils.degToRad(60),
 };
 
 const INITIAL_AZIMUTH = Math.atan2(
@@ -92,24 +95,147 @@ function applyBorderColor(materials: THREE.Material[], color: string) {
   });
 }
 
+function replaceWaterMeshesWithWaterSurface(
+  objects: IndexedObjects,
+  waterNormals: THREE.Texture,
+): WaterMesh[] {
+  const createdWaterMeshes: WaterMesh[] = [];
+
+  WATER_SURFACE_MESH_NAMES.forEach((meshName) => {
+    const originalNodes = objects.get(meshName);
+    if (!originalNodes || originalNodes.length === 0) return;
+
+    const replacedNodes = originalNodes.map((originalNode) => {
+      if (!(originalNode instanceof THREE.Mesh)) return originalNode;
+
+      // agua_superficie ya es un plano: reutilizamos su propia geometría
+      // (forma y tamaño reales) en vez de reconstruir una nueva a partir
+      // de position/scale.
+      const waterMesh = new Water(originalNode.geometry.clone(), {
+        textureWidth: EXTERIOR_HOUSE_WATER_CONFIG.textureWidth,
+        textureHeight: EXTERIOR_HOUSE_WATER_CONFIG.textureHeight,
+        waterNormals,
+        sunDirection: new THREE.Vector3(...EXTERIOR_HOUSE_WATER_CONFIG.sunDirection),
+        sunColor: 0xffffff,
+        waterColor: new THREE.Color(EXTERIOR_HOUSE_WATER_CONFIG.color),
+        distortionScale: EXTERIOR_HOUSE_WATER_CONFIG.distortionScale,
+        alpha: EXTERIOR_HOUSE_WATER_CONFIG.opacity,
+        fog: false,
+      });
+
+      waterMesh.name = originalNode.name;
+      waterMesh.position.copy(originalNode.position);
+      waterMesh.rotation.copy(originalNode.rotation);
+      waterMesh.scale.copy(originalNode.scale);
+      waterMesh.material.transparent = true;
+
+      originalNode.parent?.add(waterMesh);
+      originalNode.parent?.remove(originalNode);
+
+      originalNode.geometry.dispose();
+      (Array.isArray(originalNode.material) ? originalNode.material : [originalNode.material])
+        .forEach((material) => material.dispose());
+
+      createdWaterMeshes.push(waterMesh);
+      return waterMesh;
+    });
+
+    objects.set(meshName, replacedNodes);
+  });
+
+  return createdWaterMeshes;
+}
+
+const WATER_SURFACE_MESH_NAMES = ["agua_cascada", "agua_superficie"] as const;
+
+const EXTERIOR_HOUSE_WATER_CONFIG = {
+  color: "#6ac5f3",
+  opacity: 0.45,
+  distortionScale: 1.0,
+  textureWidth: 1024,
+  textureHeight: 1024,
+  sunDirection: [0, 1, 0] as [number, number, number],
+};
+
+type WaterMesh = InstanceType<typeof Water>;
+
+function createWaterSurfaceMaterial() {
+  return new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color("#2f7fa6"),
+    roughness: 0.08,
+    metalness: 0,
+    transmission: 0.55,
+    thickness: 0.2,
+    transparent: true,
+    opacity: 0.92,
+    side: THREE.DoubleSide,
+  });
+}
+
+/**
+ * Ignora la malla original de "agua_cascada" y "agua_superficie"
+ * (geometría con volumen) y la reemplaza por un plano simple.
+ * Solo se conservan position y scale ya definidos en el .glb;
+ * la rotation se resetea porque la orientación horizontal queda
+ * horneada directamente en la geometría del plano.
+ */
+function replaceWaterMeshesWithSurfacePlane(objects: IndexedObjects) {
+  const waterMaterial = createWaterSurfaceMaterial();
+  const flatPlaneGeometry = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+  let replacedAny = false;
+
+  WATER_SURFACE_MESH_NAMES.forEach((meshName) => {
+    objects.get(meshName)?.forEach((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+
+      object.geometry.dispose();
+      object.geometry = flatPlaneGeometry.clone();
+      object.rotation.set(0, 0, 0);
+
+      if (Array.isArray(object.material)) {
+        object.material.forEach((material) => material.dispose());
+      } else {
+        object.material.dispose();
+      }
+      object.material = waterMaterial;
+
+      replacedAny = true;
+    });
+  });
+
+  if (!replacedAny) {
+    console.warn(
+      `Exterior House: no se encontró ningún mesh de agua (${WATER_SURFACE_MESH_NAMES.join(", ")}) para reemplazar por el plano de superficie.`,
+    );
+  }
+}
+
 function ExteriorHouseModel({
   configuration,
   presentation = "default",
   controlsRef,
 }: ExteriorHouseModelProps & { controlsRef: React.RefObject<OrbitControlsImpl | null> }) {
   const gltf = useGLTF(EXTERIOR_HOUSE_MODEL_URL);
+  const waterNormals = useTexture(EXTERIOR_HOUSE_WATER_NORMALS_URL);
   const invalidate = useThree((state) => state.invalidate);
 
-  const { scene, center, radius, objects, borderMaterials } = useMemo(() => {
+  useEffect(() => {
+    waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+  }, [waterNormals]);
+
+  const { scene, center, radius, objects, borderMaterials, waterMeshes } = useMemo(() => {
     const clonedScene = gltf.scene.clone(true);
     const indexedObjects: IndexedObjects = new Map();
 
     clonedScene.traverse((object) => {
+      console.log("waterNormals:", waterNormals.image ? "loaded" : "not loaded");
       if (!object.name) return;
       const matches = indexedObjects.get(object.name) ?? [];
       matches.push(object);
       indexedObjects.set(object.name, matches);
     });
+
+    const waterSurfaceMeshes = replaceWaterMeshesWithWaterSurface(indexedObjects, waterNormals);
 
     const missingMeshes = EXTERIOR_HOUSE_REQUIRED_MESHES.filter(
       (meshName) => !indexedObjects.has(meshName),
@@ -133,14 +259,22 @@ function ExteriorHouseModel({
       radius: sphere.radius,
       objects: indexedObjects,
       borderMaterials: preparedBorderMaterials,
+      waterMeshes: waterSurfaceMeshes,
     };
-  }, [gltf.scene]);
+  }, [gltf.scene, waterNormals]);
 
   useEffect(() => {
     applyExteriorHouseVisibility(objects, configuration);
     applyBorderColor(borderMaterials, configuration.borderColor);
     invalidate();
   }, [borderMaterials, configuration, invalidate, objects]);
+
+  useFrame((_, delta) => {
+    if (!configuration.water) return;
+    waterMeshes.forEach((waterMesh) => {
+      waterMesh.material.uniforms.time.value += delta;
+    });
+  });
 
   return (
     <>
@@ -232,7 +366,7 @@ const ExteriorHouseScene = forwardRef<ExteriorHouseSceneHandle, ExteriorHouseMod
     return (
       <div className="exterior-house-viewer" aria-hidden="true">
         <Canvas
-          frameloop="demand"
+          frameloop={configuration.water ? "always" : "demand"}
           dpr={[1, 1.5]}
           camera={{ fov: EXTERIOR_HOUSE_CAMERA_CONFIG.fov, near: 0.01, far: 100 }}
           gl={{ alpha: true, antialias: true }}
