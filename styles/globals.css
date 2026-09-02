@@ -448,7 +448,6 @@ button:disabled:hover{background:transparent;color:inherit}
 @media(max-width:420px){
   .interactive-hero-options{grid-template-columns:1fr}
 }
-@media(hover:hover) and (pointer:fine){[data-cursor]{cursor:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}.scene,.motion-title,.motion-heading{transform:none!important}}
 
 .seo-page{min-height:100vh;padding:112px max(var(--gutter),calc((100vw - var(--container)) / 2)) 88px;background:var(--bg);color:var(--fg)}
