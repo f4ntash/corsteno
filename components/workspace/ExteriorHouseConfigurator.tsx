@@ -52,7 +52,7 @@ export default function ExteriorHouseConfigurator({
       ? {
           group: "Borde",
           title: "Color",
-          description: "Color aplicado sobre el material original del borde de la pileta.",
+          description: "TU color personalizado para el borde de la pileta.",
           details: [{ label: "Color", value: configuration.borderColor.toUpperCase() }],
         }
       : {
@@ -125,7 +125,7 @@ export default function ExteriorHouseConfigurator({
               <div className="demo-panel-intro">
                 <span className="project-trust-label">CORSTENO LAB · ARCHITECTURAL 3D</span>
                 <span className="kind">Visualización exterior</span>
-                <h2>Exterior House</h2>
+                <h2>Revestimientos de exterior</h2>
               </div>
               <span className="exterior-config-detail-group">{detail.group}</span>
               <h3>{detail.title}</h3>
