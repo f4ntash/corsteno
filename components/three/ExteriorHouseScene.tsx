@@ -36,9 +36,9 @@ const EXTERIOR_HOUSE_CAMERA_CONFIG = {
   fitPadding: 0.82,
   minDistanceFactor: 0,
   maxDistanceFactor: 1.8,
-  azimuthRange: THREE.MathUtils.degToRad(60),
-  minPolarAngle: THREE.MathUtils.degToRad(36),
-  maxPolarAngle: THREE.MathUtils.degToRad(82),
+  azimuthRange: THREE.MathUtils.degToRad(40),
+  minPolarAngle: THREE.MathUtils.degToRad(10),
+  maxPolarAngle: THREE.MathUtils.degToRad(60),
 };
 
 const INITIAL_AZIMUTH = Math.atan2(
@@ -147,7 +147,6 @@ function replaceWaterMeshesWithWaterSurface(
 }
 
 const WATER_SURFACE_MESH_NAMES = ["agua_cascada", "agua_superficie"] as const;
-const WATER_SURFACE_BASE_GEOMETRY = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
 
 const EXTERIOR_HOUSE_WATER_CONFIG = {
   color: "#6ac5f3",
