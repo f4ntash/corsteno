@@ -1,23 +1,19 @@
 import Eyebrow from "@/components/atoms/Eyebrow";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeExperience.module.css";
+import type { HomeDictionary } from "@/lib/i18n";
 
-const systemNodes = ["Sitio web", "Comercio", "Ventas · CRM", "Gestión · ERP", "Precios", "Cotizaciones", "Producción", "Analítica"];
-
-export default function ConnectedSystemSection() {
+export default function ConnectedSystemSection({ dictionary: t }: { dictionary: HomeDictionary }) {
   return (
     <HomeSectionReveal className={styles.connectedBackground}>
       <section className={styles.connectedSection} id="soluciones" data-navbar-theme="dark" data-nav-section="soluciones">
         <div className={styles.connectedCopy}>
-          <Eyebrow className={styles.eyebrow}>Sistema conectado</Eyebrow>
-          <h2>El 3D es solo la interfaz.</h2>
-          <p>
-            Cada elección puede convertirse en una consulta con el producto ya configurado. Según el proceso de cada
-            empresa, la experiencia puede conectarse con ventas, precios, stock, cotizaciones o producción.
-          </p>
+          <Eyebrow className={styles.eyebrow}>{t.system.eyebrow}</Eyebrow>
+          <h2>{t.system.title}</h2>
+          <p>{t.system.body}</p>
         </div>
 
-        <div className={styles.systemNetwork} aria-label="Tu producto conectado con sistemas comerciales">
+        <div className={styles.systemNetwork} aria-label={t.system.aria}>
           <svg viewBox="0 0 1000 560" aria-hidden="true">
             <g>
               <line x1="500" y1="280" x2="130" y2="90" />
@@ -30,8 +26,8 @@ export default function ConnectedSystemSection() {
               <line x1="500" y1="280" x2="870" y2="470" />
             </g>
           </svg>
-          <strong>Tu producto</strong>
-          {systemNodes.map((node) => <span key={node}>{node}</span>)}
+          <strong>{t.system.product}</strong>
+          {t.system.nodes.map((node) => <span key={node}>{node}</span>)}
         </div>
       </section>
     </HomeSectionReveal>

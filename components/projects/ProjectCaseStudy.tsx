@@ -16,6 +16,10 @@ import {
   type SeoPage,
 } from "@/lib/seo";
 import styles from "./projectCaseStudy.module.css";
+import type { Locale } from "@/lib/i18n";
+import { enHome } from "@/lib/i18n/en/home";
+import { englishProjects } from "@/lib/i18n/en/projects";
+import { localizedRoutes } from "@/lib/i18n/routes";
 
 const InteriorFinishesProjectExperience = dynamic(() => import("./InteriorFinishesProjectExperience"));
 const ExteriorHouseProjectExperience = dynamic(() => import("./ExteriorHouseProjectExperience"));
@@ -32,6 +36,8 @@ type ProjectConfig = {
   secondBody: string;
   relatedHref: string;
   relatedLabel: string;
+  commercialQuestion: string;
+  commercialCta: string;
   experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house";
 };
 
@@ -51,6 +57,8 @@ const projectConfigs: Record<string, ProjectConfig> = {
       "Diseñamos y desarrollamos una experiencia responsive centrada en contenido visual, exploración de habitaciones y acceso claro a la información del hotel.",
     relatedHref: `${site.basePath}/servicios/desarrollo-web/`,
     relatedLabel: "Ver desarrollo web",
+    commercialQuestion: "¿Querés aplicar algo así a tu negocio?",
+    commercialCta: "Hablemos de tu proyecto",
     experience: "terrambu",
   },
   "mapa-punilla": {
@@ -68,6 +76,8 @@ const projectConfigs: Record<string, ProjectConfig> = {
       "Desarrollamos una plataforma interactiva basada en mapas, estructura de datos y una interfaz responsive para explorar información territorial.",
     relatedHref: `${site.basePath}/servicios/desarrollo-web/`,
     relatedLabel: "Ver desarrollo web",
+    commercialQuestion: "¿Querés aplicar algo así a tu negocio?",
+    commercialCta: "Hablemos de tu proyecto",
     experience: "mapa-punilla",
   },
   "revestimientos-interactivos": {
@@ -85,6 +95,8 @@ const projectConfigs: Record<string, ProjectConfig> = {
       "La demo combina variantes incluidas en el modelo, navegación 3D, controles táctiles, reinicio y pantalla completa sin convertir el mobiliario en una opción configurable.",
     relatedHref: `${site.basePath}/servicios/visualizacion-3d/`,
     relatedLabel: "Ver visualización 3D",
+    commercialQuestion: "¿Querés aplicar algo así a tu negocio?",
+    commercialCta: "Hablemos de tu proyecto",
     experience: "interior-finishes",
   },
   "exterior-house": {
@@ -102,6 +114,8 @@ const projectConfigs: Record<string, ProjectConfig> = {
       "La demo combina variantes incluidas en el modelo, cambio de color del borde, navegación 3D, reinicio y pantalla completa.",
     relatedHref: `${site.basePath}/servicios/visualizacion-3d/`,
     relatedLabel: "Ver visualización 3D",
+    commercialQuestion: "¿Querés aplicar algo así a tu negocio?",
+    commercialCta: "Hablemos de tu proyecto",
     experience: "exterior-house",
   },
 };
@@ -124,31 +138,37 @@ function ProjectExperience({ config }: { config: ProjectConfig }) {
   );
 }
 
-export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
+export default function ProjectCaseStudy({ page, locale = "es" }: { page: SeoPage; locale?: Locale }) {
   const config = projectConfigs[page.slug];
   if (!config) return null;
+  const english = locale === "en";
+  const copy = english ? englishProjects[page.slug as keyof typeof englishProjects] : config;
+  const route = localizedRoutes.projects[page.slug as keyof typeof localizedRoutes.projects];
+  const relatedHref = english
+    ? (page.slug === "terrambu" || page.slug === "mapa-punilla" ? `${site.basePath}/en/services/web-development/` : `${site.basePath}/en/services/interactive-3d-visualization/`)
+    : config.relatedHref;
   const isThreeD = config.experience === "interior-finishes" || config.experience === "exterior-house";
 
   const breadcrumbItems = [
-    { label: "Inicio", href: `${site.basePath}/` },
-    { label: "Proyectos", href: `${site.basePath}/#proyectos` },
+    { label: english ? "Home" : "Inicio", href: `${site.basePath}/${english ? "en/" : ""}` },
+    { label: english ? "Projects" : "Proyectos", href: `${site.basePath}/${english ? "en/" : ""}#proyectos` },
     { label: page.h1, href: `${site.basePath}${page.path}/` },
   ];
 
   return (
     <>
-      <JsonLd data={organizationJsonLd()} />
+      {route ? <Navigation locale={locale} dictionary={english ? enHome : undefined} languageHref={english ? route.es : route.en} homePathPrefix={english ? "/en" : undefined} /> : <Navigation />}
+      <JsonLd data={organizationJsonLd(locale)} />
       <JsonLd data={projectJsonLd(page)} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
-      <Navigation />
       <main className={styles.page} id="main-content">
         <header className={styles.hero} id="inicio" data-navbar-theme="light">
           <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-            <a href={`${site.basePath}/#proyectos`}>← Volver a proyectos</a>
+            <a href={`${site.basePath}/${english ? "en/" : ""}#proyectos`}>← {english ? "Back to projects" : "Volver a proyectos"}</a>
           </nav>
-          <Eyebrow className={styles.eyebrow}>{config.category}</Eyebrow>
+          <Eyebrow className={styles.eyebrow}>{copy.category}</Eyebrow>
           <h1>{page.h1}</h1>
-          <p>{config.description}</p>
+          <p>{copy.description}</p>
         </header>
 
         <section
@@ -158,9 +178,9 @@ export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
         >
           <SectionHeading
             className={styles.sectionHead}
-            eyebrow="Experiencia live"
+            eyebrow={english ? "Live experience" : "Experiencia live"}
             eyebrowClassName={styles.eyebrow}
-            title={config.liveTitle}
+            title={copy.liveTitle}
             titleId="project-live-title"
           />
           <ProjectExperience config={config} />
@@ -168,25 +188,28 @@ export default function ProjectCaseStudy({ page }: { page: SeoPage }) {
 
         <section className={styles.caseStudy} data-navbar-theme="light">
           <article>
-            <Eyebrow className={styles.eyebrow}>{config.firstLabel}</Eyebrow>
-            <h2>{config.firstTitle}</h2>
-            <p>{config.firstBody}</p>
+            <Eyebrow className={styles.eyebrow}>{copy.firstLabel}</Eyebrow>
+            <h2>{copy.firstTitle}</h2>
+            <p>{copy.firstBody}</p>
           </article>
           <article>
-            <Eyebrow className={styles.eyebrow}>{config.secondLabel}</Eyebrow>
-            <h2>{config.secondTitle}</h2>
-            <p>{config.secondBody}</p>
+            <Eyebrow className={styles.eyebrow}>{copy.secondLabel}</Eyebrow>
+            <h2>{copy.secondTitle}</h2>
+            <p>{copy.secondBody}</p>
           </article>
         </section>
 
         <div className={styles.caseActions} data-navbar-theme="light">
+          <div className={styles.commercialCta}>
+            <p>{copy.commercialQuestion}</p>
+            <ActionButton href="#contacto" data-analytics="cta">{copy.commercialCta}</ActionButton>
+          </div>
           <ActionGroup className={styles.actions}>
-            <ActionButton href={config.relatedHref}>{config.relatedLabel}</ActionButton>
-            <ActionButton href={`${site.basePath}/#proyectos`}>Volver a proyectos</ActionButton>
-            <ActionButton href="#contacto" data-analytics="cta">Contanos sobre tu proyecto</ActionButton>
+            <ActionButton href={relatedHref}>{copy.relatedLabel}</ActionButton>
+            <ActionButton href={`${site.basePath}/${english ? "en/" : ""}#proyectos`}>{english ? "Back to projects" : "Volver a proyectos"}</ActionButton>
           </ActionGroup>
         </div>
-        <ContactSection />
+        <ContactSection locale={locale} dictionary={english ? enHome : undefined} />
       </main>
     </>
   );

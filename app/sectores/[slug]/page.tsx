@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import SeoLandingPage from "@/components/seo/SeoLandingPage";
-import { findSeoPage, pageMetadata, sectorPages } from "@/lib/seo";
+import { findSeoPage, pageMetadata, sectorPages, spanishPageMetadata } from "@/lib/seo";
+import { localizedRoutes } from "@/lib/i18n/routes";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -14,7 +15,8 @@ export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const page = findSeoPage("sector", slug);
   if (!page) return {};
-  return pageMetadata(page);
+  const route = localizedRoutes.sectors[slug as keyof typeof localizedRoutes.sectors];
+  return route ? spanishPageMetadata({ ...page, spanishPath: route.es, englishPath: route.en }) : pageMetadata(page);
 }
 
 export default async function SectorPage({ params }: PageProps) {

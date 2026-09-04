@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CONTACT_LIMITS, validateContactPayload, type ContactErrors } from "@/lib/contactForm";
 import { withBasePath } from "@/lib/assetPath";
 import { trackEvent } from "@/lib/analytics";
+import type { HomeDictionary, Locale } from "@/lib/i18n";
 
 type FormStatus = "idle" | "validating" | "sending" | "error" | "success";
 
@@ -14,7 +15,7 @@ type FormspreeResponse = {
   errors?: Array<{ message?: string }>;
 };
 
-export default function ContactForm() {
+export default function ContactForm({ dictionary: t, locale }: { dictionary: HomeDictionary; locale: Locale }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const contactStartedRef = useRef(false);
@@ -53,7 +54,7 @@ export default function ContactForm() {
       projectStage: formData.get("projectStage"),
       message: formData.get("message"),
       _gotcha: formData.get("_gotcha"),
-    });
+    }, t.contact.form.errors);
 
     if (!validation.success) {
       setErrors(validation.errors);
@@ -66,7 +67,7 @@ export default function ContactForm() {
 
     setErrors({});
     if (!endpoint) {
-      setSubmitError("El formulario no está disponible en este momento. Podés contactarnos por los canales alternativos.");
+      setSubmitError(t.contact.form.unavailable);
       setStatus("error");
       return;
     }
@@ -93,17 +94,17 @@ export default function ContactForm() {
       if (!response.ok) {
         const providerMessage = result?.errors?.find((item) => item.message)?.message;
         const message = response.status === 429
-          ? "Se alcanzó el límite de envíos. Esperá un momento e intentá nuevamente."
-          : providerMessage || "No se pudo enviar la consulta. Intentá nuevamente.";
+          ? t.contact.form.rateLimit
+          : providerMessage || t.contact.form.sendError;
         throw new Error(message);
       }
 
       setStatus("success");
-      trackEvent("contact_submitted", { source: "contact-form" });
+      trackEvent("contact_submitted", { source: "contact-form", language: locale });
       formRef.current?.reset();
-      router.push(withBasePath("/solicitud-enviada/"));
+      router.push(withBasePath(locale === "en" ? "/en/request-sent/" : "/solicitud-enviada/"));
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : "No se pudo enviar la consulta. Intentá nuevamente.");
+      setSubmitError(error instanceof Error ? error.message : t.contact.form.sendError);
       setStatus("error");
     }
   }
@@ -116,14 +117,14 @@ export default function ContactForm() {
       onFocusCapture={() => {
         if (contactStartedRef.current) return;
         contactStartedRef.current = true;
-        trackEvent("contact_started", { source: "contact-form" });
+        trackEvent("contact_started", { source: "contact-form", language: locale });
       }}
       noValidate
       aria-busy={isSubmitting}
     >
       <div className="contact-form-grid">
         <div className="contact-field">
-          <label htmlFor="contact-name">Nombre</label>
+          <label htmlFor="contact-name">{t.contact.form.name}</label>
           <input
             id="contact-name"
             name="name"
@@ -137,7 +138,7 @@ export default function ContactForm() {
           {errors.name ? <span id="contact-name-error" className="contact-field-error">{errors.name}</span> : null}
         </div>
         <div className="contact-field">
-          <label htmlFor="contact-email">Email</label>
+          <label htmlFor="contact-email">{t.contact.form.email}</label>
           <input
             id="contact-email"
             name="email"
@@ -152,7 +153,7 @@ export default function ContactForm() {
           {errors.email ? <span id="contact-email-error" className="contact-field-error">{errors.email}</span> : null}
         </div>
         <div className="contact-field contact-field-wide">
-          <label htmlFor="contact-company">Empresa <span>(opcional)</span></label>
+          <label htmlFor="contact-company">{t.contact.form.company} <span>({t.contact.form.optional})</span></label>
           <input
             id="contact-company"
             name="company"
@@ -165,7 +166,7 @@ export default function ContactForm() {
           {errors.company ? <span id="contact-company-error" className="contact-field-error">{errors.company}</span> : null}
         </div>
         <div className="contact-field contact-field-wide">
-          <label htmlFor="contact-interest">¿Qué necesitás?</label>
+          <label htmlFor="contact-interest">{t.contact.form.interest}</label>
           <select
             id="contact-interest"
             name="interest"
@@ -174,17 +175,13 @@ export default function ContactForm() {
             aria-invalid={Boolean(errors.interest)}
             aria-describedby={errors.interest ? "contact-interest-error" : undefined}
           >
-            <option value="" disabled>Seleccionar</option>
-            <option value="configurador-3d">Configurador 3D</option>
-            <option value="experiencia-interactiva">Experiencia interactiva</option>
-            <option value="desarrollo-web">Desarrollo web</option>
-            <option value="integracion-software-conectado">Integración / software conectado</option>
-            <option value="no-estoy-seguro">No estoy seguro</option>
+            <option value="" disabled>{t.contact.form.select}</option>
+            {t.contact.form.interests.map((label, index) => <option key={label} value={["configurador-3d", "experiencia-interactiva", "desarrollo-web", "integracion-software-conectado", "no-estoy-seguro"][index]}>{label}</option>)}
           </select>
           {errors.interest ? <span id="contact-interest-error" className="contact-field-error">{errors.interest}</span> : null}
         </div>
         <div className="contact-field contact-field-wide">
-          <label htmlFor="contact-project-stage">¿En qué etapa está el proyecto?</label>
+          <label htmlFor="contact-project-stage">{t.contact.form.stage}</label>
           <select
             id="contact-project-stage"
             name="projectStage"
@@ -193,18 +190,15 @@ export default function ContactForm() {
             aria-invalid={Boolean(errors.projectStage)}
             aria-describedby={errors.projectStage ? "contact-project-stage-error" : undefined}
           >
-            <option value="" disabled>Seleccionar</option>
-            <option value="explorando-idea">Estoy explorando una idea</option>
-            <option value="evaluando-alternativas">Estoy evaluando alternativas</option>
-            <option value="proyecto-definido">Ya tengo el proyecto definido</option>
-            <option value="implementacion-pronta">Necesito implementarlo pronto</option>
+            <option value="" disabled>{t.contact.form.select}</option>
+            {t.contact.form.stages.map((label, index) => <option key={label} value={["explorando-idea", "evaluando-alternativas", "proyecto-definido", "implementacion-pronta"][index]}>{label}</option>)}
           </select>
           {errors.projectStage ? (
             <span id="contact-project-stage-error" className="contact-field-error">{errors.projectStage}</span>
           ) : null}
         </div>
         <div className="contact-field contact-field-wide">
-          <label htmlFor="contact-message">Mensaje</label>
+          <label htmlFor="contact-message">{t.contact.form.message}</label>
           <textarea
             id="contact-message"
             name="message"
@@ -218,22 +212,22 @@ export default function ContactForm() {
         </div>
       </div>
       {Object.keys(errors).length > 0 ? (
-        <p className="contact-validation-summary" role="alert">Revisá los campos indicados antes de enviar.</p>
+        <p className="contact-validation-summary" role="alert">{t.contact.form.validationSummary}</p>
       ) : null}
       <div className="contact-honeypot" aria-hidden="true">
-        <label htmlFor="contact-gotcha">Sitio web</label>
+        <label htmlFor="contact-gotcha">{t.contact.form.website}</label>
         <input id="contact-gotcha" name="_gotcha" type="text" tabIndex={-1} autoComplete="off" />
       </div>
       {submitError ? <p className="contact-submit-error" role="alert">{submitError}</p> : null}
       <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Enviando..." : "Enviar consulta"}
+        {isSubmitting ? t.contact.form.sending : t.contact.form.submit}
       </button>
       <p className="contact-form-reassurance">
-        Contanos qué querés hacer. Evaluamos la idea y te respondemos con los próximos pasos.
-        <span>Respuesta habitual: 24–48 h.</span>
+        {t.contact.form.reassurance}
+        <span>{t.contact.form.responseTime}</span>
       </p>
       <p className="contact-form-privacy">
-        Usamos tus datos para responder la consulta. <a href={withBasePath("/privacidad/")}>Política de privacidad</a>
+        {t.contact.form.privacy} <a href={withBasePath(locale === "en" ? "/en/privacy/" : "/privacidad/")}>{t.contact.form.privacyLink}</a>
       </p>
     </form>
   );

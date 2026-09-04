@@ -1,32 +1,10 @@
-import CommercialIntro from "@/components/CommercialIntro";
-import Navigation from "@/components/Navigation";
-import ContactSection from "@/components/organisms/ContactSection";
-import Team from "@/components/Team";
-import Testimonials from "@/components/Testimonials";
-import ConnectedSystemSection from "@/components/home/ConnectedSystemSection";
-import DigitalLayerSection from "@/components/home/DigitalLayerSection";
-import InteractiveDemoSection from "@/components/home/InteractiveDemoSection";
-import ProductDataSection from "@/components/home/ProductDataSection";
-import SelectedWorkSection from "@/components/home/SelectedWorkSection";
-import JsonLd from "@/components/seo/JsonLd";
-import { organizationJsonLd } from "@/lib/seo";
+import type { Metadata } from "next";
+import HomePage from "@/components/home/HomePage";
+import { getDictionary } from "@/lib/i18n";
+import { homeMetadata } from "@/lib/seo";
 
-export default function Home() {
-  return (
-    <>
-      <JsonLd data={organizationJsonLd()} />
-      <Navigation home />
-      <main id="main-content">
-        <CommercialIntro />
-        <SelectedWorkSection />
-        <InteractiveDemoSection />
-        <ConnectedSystemSection />
-        <DigitalLayerSection />
-        <ProductDataSection />
-        <Team />
-        <Testimonials />
-        <ContactSection />
-      </main>
-    </>
-  );
+export const metadata: Metadata = homeMetadata("es");
+
+export default async function Home() {
+  return <HomePage locale="es" dictionary={await getDictionary("es")} />;
 }

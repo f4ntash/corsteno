@@ -228,7 +228,6 @@ function ExteriorHouseModel({
     const indexedObjects: IndexedObjects = new Map();
 
     clonedScene.traverse((object) => {
-      console.log("waterNormals:", waterNormals.image ? "loaded" : "not loaded");
       if (!object.name) return;
       const matches = indexedObjects.get(object.name) ?? [];
       matches.push(object);

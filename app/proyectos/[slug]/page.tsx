@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import ProjectCaseStudy from "@/components/projects/ProjectCaseStudy";
-import { findSeoPage, pageMetadata, projectPages } from "@/lib/seo";
+import { findSeoPage, pageMetadata, projectPages, spanishPageMetadata } from "@/lib/seo";
+import { localizedRoutes } from "@/lib/i18n/routes";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -14,7 +15,8 @@ export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const page = findSeoPage("proyecto", slug);
   if (!page) return {};
-  return pageMetadata(page);
+  const route = localizedRoutes.projects[slug as keyof typeof localizedRoutes.projects];
+  return route ? spanishPageMetadata({ ...page, spanishPath: route.es, englishPath: route.en }) : pageMetadata(page);
 }
 
 export default async function ProjectPage({ params }: PageProps) {

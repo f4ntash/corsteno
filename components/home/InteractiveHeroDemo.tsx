@@ -11,27 +11,14 @@ import {
   type HeroSliderValue,
 } from "@/components/three/heroSliderVariants";
 import { withBasePath } from "@/lib/assetPath";
+import type { HomeDictionary, Locale } from "@/lib/i18n";
 
-const GROUP_ORDER: HeroSliderGroupId[] = ["table", "chair", "rug", "armchair"];
+type VisibleHeroGroupId = Exclude<HeroSliderGroupId, "decor">;
+const GROUP_ORDER: VisibleHeroGroupId[] = ["table", "chair", "rug", "armchair"];
 const PREVIA_HOUSE_INTERIOR_PROJECT_URL = withBasePath("/proyectos/revestimientos-interactivos/");
 const CHIP_MARGIN = 14;
 type HeroViewer = ComponentType<{ variants: HeroSliderState; comparison: number }>;
-const PANEL_DISPLAY_LABELS: Record<HeroSliderValue, string> = {
-  tableA: "Madera natural",
-  tableB: "Nogal medio",
-  tableC: "Nogal oscuro",
-  chairA: "Tapizado azul",
-  chairB: "Madera grafito",
-  chairC: "Madera nogal",
-  rug01: "Tejido natural",
-  rug02: "Geometría clara",
-  decorOff: "Esencial",
-  decorOn: "Completa",
-  armchair1: "Sillón verde",
-  armchair2: "Sillón lounge",
-};
-
-export default function InteractiveHeroDemo() {
+export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: HomeDictionary; locale: Locale }) {
   const router = useRouter();
   const stageRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
@@ -147,7 +134,7 @@ export default function InteractiveHeroDemo() {
           aria-hidden={!beforeVisible}
           style={{ left: beforeChipLeft, opacity: beforeVisible ? 1 : 0 }}
         >
-          Antes
+          {t.hero.comparison.before}
         </span>
         <span
           ref={afterChipRef}
@@ -155,7 +142,7 @@ export default function InteractiveHeroDemo() {
           aria-hidden={!afterVisible}
           style={{ left: afterChipLeft, opacity: afterVisible ? 1 : 0 }}
         >
-          Después: experiencia interactiva
+          {t.hero.comparison.after}
         </span>
 
         <div className="interactive-hero-divider" style={{ left: `${comparison}%` }} aria-hidden="true" />
@@ -163,7 +150,7 @@ export default function InteractiveHeroDemo() {
           className="interactive-hero-slider"
           role="slider"
           tabIndex={0}
-          aria-label="Comparar espacio base y experiencia interactiva"
+          aria-label={t.hero.comparison.aria}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(comparison)}
@@ -204,7 +191,7 @@ export default function InteractiveHeroDemo() {
             aria-expanded="false"
             onClick={() => setMobilePanelOpen(true)}
           >
-            Personalizar
+            {t.hero.panel.trigger}
           </button>
         )}
 
@@ -212,27 +199,28 @@ export default function InteractiveHeroDemo() {
           ref={panelRef}
           id="interactive-hero-personalization"
           className="interactive-hero-panel"
-          aria-label="Personalización del ambiente"
+          aria-label={t.hero.panel.aria}
           data-mobile-open={mobilePanelOpen}
         >
           <button
             className="interactive-hero-panel-close"
             type="button"
-            aria-label="Cerrar personalización"
+            aria-label={t.hero.panel.close}
             onClick={() => setMobilePanelOpen(false)}
           >
             <span aria-hidden="true">×</span>
           </button>
           <div className="interactive-hero-panel-content">
-            <h2>Personalizá tu espacio</h2>
-            <p className="interactive-hero-panel-note">Seleccioná cada acabado para explorar opciones</p>
+            <h2>{t.hero.panel.title}</h2>
+            <p className="interactive-hero-panel-note">{t.hero.panel.note}</p>
             <div className="interactive-hero-options">
               {GROUP_ORDER.map((groupId) => {
             const group = HERO_SLIDER_GROUPS.find((item) => item.id === groupId)!;
             const labelId = `interactive-hero-${group.id}-label`;
             const activeIndex = group.options.findIndex((option) => option.value === variants[group.id]);
             const activeOption = group.options[activeIndex] ?? group.options[0];
-            const activeDisplayLabel = PANEL_DISPLAY_LABELS[activeOption.value];
+            const groupLabel = t.hero.panel.groups[groupId];
+            const activeDisplayLabel = t.hero.panel.values[activeOption.value];
             const optionCount = group.options.length;
                 return (
                   <div
@@ -242,20 +230,20 @@ export default function InteractiveHeroDemo() {
                     aria-labelledby={labelId}
                   >
                 <span id={labelId} className="interactive-hero-panel-label">
-                  {group.label}
+                  {groupLabel}
                 </span>
                 {group.id === "decor" ? (
-                  <div className="interactive-hero-segmented" role="group" aria-label={group.label}>
+                  <div className="interactive-hero-segmented" role="group" aria-label={groupLabel}>
                     {group.options.map((option) => (
                       <button
                         key={option.id}
                         type="button"
                         className="interactive-hero-segment"
-                        aria-label={`${group.label}: ${PANEL_DISPLAY_LABELS[option.value]}`}
+                        aria-label={`${groupLabel}: ${t.hero.panel.values[option.value]}`}
                         aria-pressed={variants[group.id] === option.value}
                         onClick={() => selectVariant(group.id, option.value)}
                       >
-                        {PANEL_DISPLAY_LABELS[option.value]}
+                        {t.hero.panel.values[option.value]}
                       </button>
                     ))}
                   </div>
@@ -263,7 +251,7 @@ export default function InteractiveHeroDemo() {
                   <button
                     type="button"
                     className="interactive-hero-choice-row"
-                    aria-label={`${group.label}: ${activeDisplayLabel}. Cambiar opción`}
+                    aria-label={`${groupLabel}: ${activeDisplayLabel}. ${t.hero.panel.change}`}
                     onClick={() => cycleVariant(group.id)}
                   >
                     <span className="interactive-hero-choice-value">
@@ -281,7 +269,7 @@ export default function InteractiveHeroDemo() {
             </div>
           </div>
           <button className="interactive-hero-view-button" type="button" onClick={openProject}>
-               <span>VER EN 3D</span>
+               <span>{t.hero.panel.view3d}</span>
             <span aria-hidden="true">→</span>
           </button>
         </aside>

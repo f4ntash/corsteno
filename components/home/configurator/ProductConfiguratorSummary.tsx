@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { WindowConfiguration } from "./types";
-import { WINDOW_LABELS } from "./types";
 import { trackEvent } from "@/lib/analytics";
 import {
   buildProductDemoPayload,
@@ -10,13 +9,18 @@ import {
 } from "@/lib/productDemo";
 import { withBasePath } from "@/lib/assetPath";
 import styles from "./productConfigurator.module.css";
+import type { HomeDictionary, Locale } from "@/lib/i18n";
 
 export default function ProductConfiguratorSummary({
   configuration,
   contactHref,
+  dictionary: t,
+  locale,
 }: {
   configuration: WindowConfiguration;
   contactHref: string;
+  dictionary: HomeDictionary;
+  locale: Locale;
 }) {
   const [step, setStep] = useState<"summary" | "email" | "success">("summary");
   const [email, setEmail] = useState("");
@@ -30,16 +34,16 @@ export default function ProductConfiguratorSummary({
   }, [step]);
 
   const extras = [
-    configuration.mosquitoNet ? "Mosquitero" : null,
-    configuration.blind ? "Persiana" : null,
-    configuration.security ? "Seguridad" : null,
+    configuration.mosquitoNet ? t.configurator.labels.extras.mosquitoNet : null,
+    configuration.blind ? t.configurator.labels.extras.blind : null,
+    configuration.security ? t.configurator.labels.extras.security : null,
   ].filter((item): item is string => Boolean(item));
 
   const openEmailStep = () => {
     setStep("email");
     setStatus("idle");
     setMessage("");
-    trackEvent("demo_email_opened", { source: "configurator-demo" });
+    trackEvent("demo_email_opened", { source: "configurator-demo", language: locale });
   };
 
   const submitDemo = async (event: FormEvent<HTMLFormElement>) => {
@@ -47,7 +51,7 @@ export default function ProductConfiguratorSummary({
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       setStatus("error");
-      setMessage("Ingresá un email de trabajo válido.");
+      setMessage(t.configurator.summary.invalidEmail);
       emailRef.current?.focus();
       return;
     }
@@ -57,11 +61,12 @@ export default function ProductConfiguratorSummary({
       marketingConsent,
       window.location.pathname,
       configuration,
+      t,
     );
     setStatus("sending");
     setMessage("");
 
-    const result = await sendProductDemo(payload);
+    const result = await sendProductDemo(payload, t.contact.form.sendError);
     if (result.status === "error") {
       setStatus("error");
       setMessage(result.message);
@@ -71,6 +76,7 @@ export default function ProductConfiguratorSummary({
     trackEvent("demo_email_submitted", {
       source: payload.source,
       marketing_consent: marketingConsent,
+      language: locale,
     });
     setStatus("idle");
     setStep("success");
@@ -79,9 +85,9 @@ export default function ProductConfiguratorSummary({
   if (step === "success") {
     return (
       <aside className={`${styles.configuratorSummary} ${styles.demoFlow}`} aria-live="polite">
-        <span>Pedido de prueba enviado</span>
-        <h3>Así podría llegar cada configuración de tus clientes.</h3>
-        <p>El configurador puede convertirse en una entrada directa al proceso comercial de tu empresa.</p>
+        <span>{t.configurator.summary.sent}</span>
+        <h3>{t.configurator.summary.sentTitle}</h3>
+        <p>{t.configurator.summary.sentBody}</p>
         <a
           className={styles.demoFlowCta}
           href={contactHref}
@@ -90,12 +96,12 @@ export default function ProductConfiguratorSummary({
             window.dispatchEvent(new CustomEvent("corsteno:prefill-contact", {
               detail: {
                 interest: "configurador-3d",
-                message: "Me interesa una experiencia como el configurador demo.",
+                message: t.configurator.summary.prefill,
               },
             }));
           }}
         >
-          Hablemos de tu producto
+          {t.configurator.summary.productCta}
         </a>
       </aside>
     );
@@ -104,18 +110,18 @@ export default function ProductConfiguratorSummary({
   if (step === "email") {
     return (
       <aside className={`${styles.configuratorSummary} ${styles.demoFlow}`} aria-labelledby="demo-email-title">
-        <button className={styles.demoBack} type="button" onClick={() => setStep("summary")}>← Volver</button>
-        <h3 id="demo-email-title">Probá también el otro lado de la experiencia.</h3>
-        <p>Ingresá tu email y te enviamos esta configuración como si fueras la empresa que recibe la solicitud de un cliente.</p>
+        <button className={styles.demoBack} type="button" onClick={() => setStep("summary")}>← {t.configurator.summary.back}</button>
+        <h3 id="demo-email-title">{t.configurator.summary.emailTitle}</h3>
+        <p>{t.configurator.summary.emailBody}</p>
         <form className={styles.demoEmailForm} onSubmit={submitDemo} noValidate>
-          <label htmlFor="demo-work-email">Email de trabajo</label>
+          <label htmlFor="demo-work-email">{t.configurator.summary.emailLabel}</label>
           <input
             ref={emailRef}
             id="demo-work-email"
             name="email"
             type="email"
             value={email}
-            placeholder="nombre@empresa.com"
+            placeholder={t.configurator.summary.emailPlaceholder}
             autoComplete="email"
             required
             aria-describedby={message ? "demo-email-status" : "demo-email-privacy"}
@@ -129,16 +135,16 @@ export default function ProductConfiguratorSummary({
               onChange={(event) => {
                 const checked = event.target.checked;
                 setMarketingConsent(checked);
-                if (checked) trackEvent("demo_marketing_consent", { source: "configurator-demo" });
+                if (checked) trackEvent("demo_marketing_consent", { source: "configurator-demo", language: locale });
               }}
             />
-            <span>Quiero recibir novedades, demos y casos de Corsteno.</span>
+            <span>{t.configurator.summary.consent}</span>
           </label>
           <p id="demo-email-privacy" className={styles.demoPrivacy}>
-            El pedido demo no te suscribe a comunicaciones. <a href={withBasePath("/privacidad/")}>Privacidad</a>
+            {t.configurator.summary.privacy} <a href={withBasePath(locale === "en" ? "/en/privacy/" : "/privacidad/")}>{t.configurator.summary.privacyLink}</a>
           </p>
           <button type="submit" disabled={status === "sending"}>
-            {status === "sending" ? "Preparando..." : "Enviarme pedido de prueba"}
+            {status === "sending" ? t.configurator.summary.preparing : t.configurator.summary.send}
           </button>
         </form>
         {message ? (
@@ -156,21 +162,21 @@ export default function ProductConfiguratorSummary({
 
   return (
     <aside className={styles.configuratorSummary} aria-live="polite">
-      <span>Configuración estimada</span>
+      <span>{t.configurator.summary.estimated}</span>
       <dl>
-        <div><dt>Modelo</dt><dd>{WINDOW_LABELS.model[configuration.model]}</dd></div>
-        <div><dt>Medidas</dt><dd>{configuration.width} × {configuration.height} mm</dd></div>
-        <div><dt>Marco</dt><dd>{WINDOW_LABELS.frameColor[configuration.frameColor]}</dd></div>
-        <div><dt>Vidrio</dt><dd>{WINDOW_LABELS.glassType[configuration.glassType]}</dd></div>
-        <div><dt>Apertura</dt><dd>{WINDOW_LABELS.opening[configuration.opening]}</dd></div>
-        <div><dt>Extras</dt><dd>{extras.length > 0 ? extras.join(", ") : "Sin extras"}</dd></div>
+        <div><dt>{t.configurator.fields.model}</dt><dd>{t.configurator.labels.model[configuration.model]}</dd></div>
+        <div><dt>{t.configurator.fields.dimensions}</dt><dd>{configuration.width} × {configuration.height} mm</dd></div>
+        <div><dt>{t.configurator.fields.frame}</dt><dd>{t.configurator.labels.frameColor[configuration.frameColor]}</dd></div>
+        <div><dt>{t.configurator.fields.glass}</dt><dd>{t.configurator.labels.glassType[configuration.glassType]}</dd></div>
+        <div><dt>{t.configurator.fields.opening}</dt><dd>{t.configurator.labels.opening[configuration.opening]}</dd></div>
+        <div><dt>{t.configurator.fields.extras}</dt><dd>{extras.length > 0 ? extras.join(", ") : t.configurator.labels.extras.none}</dd></div>
       </dl>
       <div className={styles.demoPrice}>
         <strong>USD 1.840</strong>
-        <small>Precio ilustrativo del producto</small>
+        <small>{t.configurator.summary.price}</small>
       </div>
-      <button type="button" onClick={openEmailStep}>Probar cómo recibiría este pedido</button>
-      <p>Demo del flujo comercial de una configuración.</p>
+      <button type="button" onClick={openEmailStep}>{t.configurator.summary.tryOrder}</button>
+      <p>{t.configurator.summary.caption}</p>
     </aside>
   );
 }

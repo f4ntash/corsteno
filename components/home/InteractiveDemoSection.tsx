@@ -2,8 +2,9 @@
 import SectionHeading from "@/components/molecules/SectionHeading";
 import ProductConfigurator from "@/components/home/configurator/ProductConfigurator";
 import styles from "./homeExperience.module.css";
+import type { HomeDictionary, Locale } from "@/lib/i18n";
 
-export default function InteractiveDemoSection() {
+export default function InteractiveDemoSection({ dictionary: t, locale }: { dictionary: HomeDictionary; locale: Locale }) {
   return (
     <section
       className={`${styles.section} ${styles.demoSection}`}
@@ -13,13 +14,13 @@ export default function InteractiveDemoSection() {
     >
       <SectionHeading
         className={styles.sectionHead}
-        eyebrow="Demo interactiva"
+        eyebrow={t.demo.eyebrow}
         eyebrowClassName={styles.eyebrow}
-        title="No te lo contamos. Probalo."
-        description="Elegí modelo, medidas y terminaciones. El producto y el pedido se actualizan en el momento."
+        title={t.demo.title}
+        description={t.demo.description}
         wrapContent
       />
-      <ProductConfigurator constrained />
+      <ProductConfigurator constrained dictionary={t} locale={locale} />
     </section>
   );
 }

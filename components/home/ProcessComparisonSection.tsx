@@ -1,34 +1,27 @@
 import SectionHeading from "@/components/molecules/SectionHeading";
 import HomeSectionReveal from "./HomeSectionReveal";
 import styles from "./homeCommercial.module.css";
+import type { HomeDictionary } from "@/lib/i18n";
 
 const pipelines = [
-  {
-    number: "01",
-    title: "Proceso tradicional",
-    steps: ["Catálogo", "Consulta", "WhatsApp / Email", "Vendedor", "Presupuesto", "Correcciones", "Pedido"],
-  },
-  {
-    number: "02",
-    title: "Con Corsteno",
-    steps: ["Producto", "Configura", "Visualiza", "Cotiza", "Envía", "Ventas / CRM", "Producción"],
-    active: true,
-  },
+  { number: "01" },
+  { number: "02", active: true },
 ];
 
-export default function ProcessComparisonSection() {
+export default function ProcessComparisonSection({ dictionary: t }: { dictionary: HomeDictionary }) {
+  const localizedPipelines = pipelines.map((pipeline, index) => ({ ...pipeline, ...t.process.pipelines[index] }));
   return (
     <HomeSectionReveal className={styles.lightBackground}>
       <section className={`${styles.section} ${styles.processSection}`} data-navbar-theme="light" data-nav-section="inicio">
         <SectionHeading
           className={styles.sectionHead}
-          eyebrow="Cambio de proceso"
+          eyebrow={t.process.eyebrow}
           eyebrowClassName={styles.eyebrow}
-          title="Tu producto puede venderse de otra manera."
+          title={t.process.title}
         />
 
         <div className={styles.pipelineComparison}>
-          {pipelines.map((pipeline) => (
+          {localizedPipelines.map((pipeline) => (
             <article
               className={`${styles.pipeline}${pipeline.active ? ` ${styles.pipelineActive}` : ""}`}
               key={pipeline.number}
@@ -44,7 +37,7 @@ export default function ProcessComparisonSection() {
           ))}
         </div>
         <p className={styles.processConclusion}>
-          Más autonomía para elegir. Menos ida y vuelta antes de hablar con ventas.
+          {t.process.conclusion}
         </p>
       </section>
     </HomeSectionReveal>

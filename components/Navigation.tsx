@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { withBasePath } from "@/lib/assetPath";
 import logoCorsteno from "./logoSombreado.png";
+import { esHome, type HomeDictionary, type Locale } from "@/lib/i18n";
+import { homePath } from "@/lib/i18n/routes";
 
 const navItems = [
-  { href: "#inicio", key: "inicio", label: "Inicio" },
-  { href: "#proyectos", key: "proyectos", label: "Proyectos" },
-  { href: "#demo", key: "demo", label: "Demo" },
-  { href: "#soluciones", key: "soluciones", label: "Soluciones" },
-  { href: "#contacto", key: "contacto", label: "Contacto" },
+  { href: "#inicio", key: "inicio" },
+  { href: "#proyectos", key: "proyectos" },
+  { href: "#demo", key: "demo" },
+  { href: "#soluciones", key: "soluciones" },
+  { href: "#contacto", key: "contacto" },
 ];
 
 type ChromeState = {
@@ -19,9 +21,13 @@ type ChromeState = {
 
 type NavigationProps = {
   home?: boolean;
+  locale?: Locale;
+  dictionary?: HomeDictionary;
+  languageHref?: string;
+  homePathPrefix?: string;
 };
 
-export default function Navigation({ home = false }: NavigationProps) {
+export default function Navigation({ home = false, locale = "es", dictionary = esHome, languageHref, homePathPrefix }: NavigationProps) {
   const activeThemeSectionRef = useRef("");
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -89,12 +95,12 @@ export default function Navigation({ home = false }: NavigationProps) {
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
-  const navigationHref = (anchor: string) => home ? anchor : withBasePath(`/${anchor}`);
+  const navigationHref = (anchor: string) => home ? anchor : withBasePath(`${homePathPrefix ?? ""}/${anchor}`);
 
   return (
     <nav
       className={`workspace-nav${compact ? " compact" : ""}${dark ? " dark" : ""}`}
-      aria-label="Navegación principal"
+      aria-label={dictionary.nav.aria}
       data-od-id="navegacion-principal"
     >
       <a
@@ -129,10 +135,10 @@ export default function Navigation({ home = false }: NavigationProps) {
         data-od-id="abrir-navegacion"
         onClick={() => setMenuOpen((open) => !open)}
       >
-        {menuOpen ? "Cerrar" : "Menú"}
+        {menuOpen ? dictionary.nav.close : dictionary.nav.open}
       </button>
       <div className={`nav-links${menuOpen ? " open" : ""}`} id="nav-links">
-        {navItems.map((item) => (
+        {navItems.map((item, index) => (
           <a
             key={item.key}
             href={navigationHref(item.href)}
@@ -144,9 +150,16 @@ export default function Navigation({ home = false }: NavigationProps) {
               closeMenu();
             }}
           >
-            {item.label}
+            {dictionary.nav.items[index]}
           </a>
         ))}
+        {home || languageHref ? (
+          <div className="nav-language" aria-label={dictionary.nav.language}>
+            <a aria-current={locale === "es" ? "page" : undefined} href={withBasePath(home ? homePath("es") : languageHref!)} onClick={() => localStorage.setItem("corsteno-locale", "es")}>ES</a>
+            <span aria-hidden="true">/</span>
+            <a aria-current={locale === "en" ? "page" : undefined} aria-label={dictionary.nav.switchLabel} href={withBasePath(home ? homePath("en") : languageHref!)} onClick={() => localStorage.setItem("corsteno-locale", "en")}>EN</a>
+          </div>
+        ) : null}
       </div>
     </nav>
   );

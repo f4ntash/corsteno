@@ -25,12 +25,24 @@ type ValidationResult =
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+export type ContactValidationMessages = {
+  nameRequired: string; maxChars: string; emailRequired: string; emailInvalid: string;
+  interestRequired: string; stageRequired: string; messageRequired: string; invalidRequest: string;
+};
+
+const defaultMessages: ContactValidationMessages = {
+  nameRequired: "Ingresá tu nombre.", maxChars: "Usá hasta {count} caracteres.", emailRequired: "Ingresá tu email.",
+  emailInvalid: "Ingresá un email válido.", interestRequired: "Seleccioná el tipo de proyecto.",
+  stageRequired: "Seleccioná la etapa del proyecto.", messageRequired: "Contanos brevemente sobre tu consulta.",
+  invalidRequest: "No pudimos validar la solicitud.",
+};
+
 function readString(input: Record<string, unknown>, key: keyof ContactPayload) {
   const value = input[key];
   return typeof value === "string" ? value.trim() : "";
 }
 
-export function validateContactPayload(value: unknown): ValidationResult {
+export function validateContactPayload(value: unknown, messages: ContactValidationMessages = defaultMessages): ValidationResult {
   const input = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
   const data: ContactPayload = {
     name: readString(input, "name"),
@@ -43,29 +55,30 @@ export function validateContactPayload(value: unknown): ValidationResult {
   };
   const errors: ContactErrors = {};
 
-  if (!data.name) errors.name = "Ingresá tu nombre.";
-  else if (data.name.length > CONTACT_LIMITS.name) errors.name = `Usá hasta ${CONTACT_LIMITS.name} caracteres.`;
+  const maxChars = (count: number) => messages.maxChars.replace("{count}", String(count));
+  if (!data.name) errors.name = messages.nameRequired;
+  else if (data.name.length > CONTACT_LIMITS.name) errors.name = maxChars(CONTACT_LIMITS.name);
 
-  if (!data.email) errors.email = "Ingresá tu email.";
+  if (!data.email) errors.email = messages.emailRequired;
   else if (data.email.length > CONTACT_LIMITS.email || !EMAIL_PATTERN.test(data.email)) {
-    errors.email = "Ingresá un email válido.";
+    errors.email = messages.emailInvalid;
   }
 
   if (data.company.length > CONTACT_LIMITS.company) {
-    errors.company = `Usá hasta ${CONTACT_LIMITS.company} caracteres.`;
+    errors.company = maxChars(CONTACT_LIMITS.company);
   }
 
-  if (!data.interest) errors.interest = "Seleccioná el tipo de proyecto.";
+  if (!data.interest) errors.interest = messages.interestRequired;
 
-  if (!data.projectStage) errors.projectStage = "Seleccioná la etapa del proyecto.";
+  if (!data.projectStage) errors.projectStage = messages.stageRequired;
 
-  if (!data.message) errors.message = "Contanos brevemente sobre tu consulta.";
+  if (!data.message) errors.message = messages.messageRequired;
   else if (data.message.length > CONTACT_LIMITS.message) {
-    errors.message = `Usá hasta ${CONTACT_LIMITS.message} caracteres.`;
+    errors.message = maxChars(CONTACT_LIMITS.message);
   }
 
   if (data._gotcha.length > CONTACT_LIMITS.gotcha) {
-    return { success: false, data: null, errors: { message: "No pudimos validar la solicitud." } };
+    return { success: false, data: null, errors: { message: messages.invalidRequest } };
   }
 
   return Object.keys(errors).length > 0

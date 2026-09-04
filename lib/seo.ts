@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { contactChannels } from "@/lib/contact";
 import { BASE_PATH } from "@/lib/assetPath";
+import { esHome, type Locale } from "@/lib/i18n";
+import { enHome } from "@/lib/i18n/en/home";
+import { homePath } from "@/lib/i18n/routes";
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://corsteno.com").replace(/\/$/, "");
 
@@ -56,8 +59,34 @@ export type SeoPage = {
 };
 
 const p = (path: string) => `${site.basePath}${path.endsWith("/") ? path : `${path}/`}`;
-export const canonicalUrl = (path: string) => `${site.url}${path === "/" || path.includes(".") ? path : `${path}/`}`;
+export const canonicalUrl = (path: string) => `${site.url}${path === "/" || path.endsWith("/") || path.includes(".") ? path : `${path}/`}`;
 export const assetUrl = (path: string) => `${site.url}${path}`;
+
+export function homeMetadata(locale: Locale): Metadata {
+  const dictionary = locale === "en" ? enHome : esHome;
+  const path = homePath(locale);
+  const url = canonicalUrl(path);
+  const image = assetUrl("/og/corsteno-og.webp");
+  return {
+    title: dictionary.seo.title,
+    description: dictionary.seo.description,
+    alternates: {
+      canonical: url,
+      languages: { es: canonicalUrl("/"), en: canonicalUrl("/en/"), "x-default": canonicalUrl("/") },
+    },
+    openGraph: {
+      title: dictionary.seo.title,
+      description: dictionary.seo.description,
+      url,
+      siteName: site.name,
+      locale: locale === "en" ? "en_US" : "es_AR",
+      alternateLocale: [locale === "en" ? "es_AR" : "en_US"],
+      type: "website",
+      images: [{ url: image, alt: dictionary.seo.imageAlt }],
+    },
+    twitter: { card: "summary_large_image", title: dictionary.seo.title, description: dictionary.seo.description, images: [image] },
+  };
+}
 
 export const seoPages: SeoPage[] = [
   {
@@ -645,14 +674,34 @@ export function pageMetadata(page: Pick<SeoPage, "title" | "description" | "path
   };
 }
 
-export function organizationJsonLd() {
+export function localizedPageMetadata(page: SeoPage & { spanishPath: string; englishPath: string }): Metadata {
+  const url = canonicalUrl(page.englishPath);
+  const es = canonicalUrl(page.spanishPath);
+  return {
+    ...pageMetadata(page),
+    alternates: { canonical: url, languages: { es, en: url, "x-default": es } },
+    openGraph: { ...pageMetadata(page).openGraph, url, locale: "en_US", alternateLocale: ["es_AR"] },
+  };
+}
+
+export function spanishPageMetadata(page: SeoPage & { spanishPath: string; englishPath: string }): Metadata {
+  const url = canonicalUrl(page.spanishPath);
+  const en = canonicalUrl(page.englishPath);
+  return { ...pageMetadata(page), alternates: { canonical: url, languages: { es: url, en, "x-default": url } }, openGraph: { ...pageMetadata(page).openGraph, url, locale: "es_AR", alternateLocale: ["en_US"] } };
+}
+
+export function organizationJsonLd(locale: Locale = "es", description = homeSeo.description) {
+  const english = locale === "en";
+  const localizedServiceCatalog = english
+    ? ["Interactive 3D configurators", "Interactive digital experiences", "Web platforms for products and projects"]
+    : serviceCatalog;
   const contactPoint = contactChannels.email || contactChannels.whatsappUrl
     ? {
         "@type": "ContactPoint",
         ...(contactChannels.whatsappUrl ? { url: contactChannels.whatsappUrl } : {}),
         ...(contactChannels.email ? { email: contactChannels.email } : {}),
         contactType: "sales",
-        availableLanguage: ["Spanish"],
+        availableLanguage: [english ? "English" : "Spanish"],
       }
     : undefined;
 
@@ -663,14 +712,14 @@ export function organizationJsonLd() {
         "@type": "ProfessionalService",
         "@id": businessId,
         name: site.name,
-        description: homeSeo.description,
-        url: site.url,
-        areaServed: ["Argentina", "Córdoba", "Remoto"],
+        description,
+        url: canonicalUrl(homePath(locale)),
+        areaServed: ["Argentina", "Córdoba", english ? "Remote" : "Remoto"],
         ...(contactPoint ? { contactPoint } : {}),
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Servicios Corsteno",
-          itemListElement: serviceCatalog.map((serviceName) => ({
+          name: english ? "Corsteno services" : "Servicios Corsteno",
+          itemListElement: localizedServiceCatalog.map((serviceName) => ({
             "@type": "Offer",
             itemOffered: {
               "@type": "Service",

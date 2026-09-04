@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Analytics from "@/components/analytics/Analytics";
 import FloatingContactCTA from "@/components/FloatingContactCTA";
+import LocalizedSkipLink from "@/components/LocalizedSkipLink";
 import { assetUrl, canonicalUrl, homeSeo, site } from "@/lib/seo";
 import favicon from "./favicon.icon.webp";
 import "../styles/globals.css";
@@ -45,9 +46,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es-AR">
+    <html lang="es-AR" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.lang=location.pathname.startsWith('/en/')||location.pathname==='/en'?'en':'es-AR';`,
+          }}
+        />
+      </head>
       <body>
-        <a className="skip-link" href="#main-content">Saltar al contenido</a>
+        <LocalizedSkipLink />
         {children}
         <FloatingContactCTA />
         <Analytics />

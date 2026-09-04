@@ -1,5 +1,5 @@
 import type { WindowConfiguration } from "@/components/home/configurator/types";
-import { WINDOW_LABELS } from "@/components/home/configurator/types";
+import type { HomeDictionary } from "@/lib/i18n";
 
 const demoEndpoint = process.env.NEXT_PUBLIC_DEMO_FORM_ENDPOINT?.trim() ?? "";
 
@@ -40,11 +40,12 @@ export function buildProductDemoPayload(
   marketingConsent: boolean,
   page: string,
   configuration: WindowConfiguration,
+  dictionary: HomeDictionary,
 ): ProductDemoPayload {
   const extras = [
-    configuration.mosquitoNet ? "Mosquitero" : null,
-    configuration.blind ? "Persiana" : null,
-    configuration.security ? "Seguridad" : null,
+    configuration.mosquitoNet ? dictionary.configurator.labels.extras.mosquitoNet : null,
+    configuration.blind ? dictionary.configurator.labels.extras.blind : null,
+    configuration.security ? dictionary.configurator.labels.extras.security : null,
   ].filter((item): item is string => Boolean(item));
 
   return {
@@ -54,17 +55,17 @@ export function buildProductDemoPayload(
     timestamp: new Date().toISOString(),
     source: "configurator-demo",
     page,
-    modelo: WINDOW_LABELS.model[configuration.model],
+    modelo: dictionary.configurator.labels.model[configuration.model],
     dimensiones: `${configuration.width} × ${configuration.height} mm`,
-    marco: WINDOW_LABELS.frameColor[configuration.frameColor],
-    vidrio: WINDOW_LABELS.glassType[configuration.glassType],
-    apertura: WINDOW_LABELS.opening[configuration.opening],
-    extras: extras.length > 0 ? extras.join(", ") : "Sin extras",
+    marco: dictionary.configurator.labels.frameColor[configuration.frameColor],
+    vidrio: dictionary.configurator.labels.glassType[configuration.glassType],
+    apertura: dictionary.configurator.labels.opening[configuration.opening],
+    extras: extras.length > 0 ? extras.join(", ") : dictionary.configurator.labels.extras.none,
   };
 }
 
-async function postPayload(endpoint: string, payload: unknown): Promise<DeliveryResult> {
-  if (!endpoint) return { status: "error", message: DELIVERY_ERROR };
+async function postPayload(endpoint: string, payload: unknown, errorMessage: string): Promise<DeliveryResult> {
+  if (!endpoint) return { status: "error", message: errorMessage };
 
   try {
     const response = await fetch(endpoint, {
@@ -74,15 +75,15 @@ async function postPayload(endpoint: string, payload: unknown): Promise<Delivery
     });
 
     if (!response.ok) {
-      return { status: "error", message: DELIVERY_ERROR };
+      return { status: "error", message: errorMessage };
     }
 
     return { status: "sent" };
   } catch {
-    return { status: "error", message: DELIVERY_ERROR };
+    return { status: "error", message: errorMessage };
   }
 }
 
-export function sendProductDemo(payload: ProductDemoPayload) {
-  return postPayload(demoEndpoint, payload);
+export function sendProductDemo(payload: ProductDemoPayload, errorMessage = DELIVERY_ERROR) {
+  return postPayload(demoEndpoint, payload, errorMessage);
 }

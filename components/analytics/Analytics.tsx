@@ -109,6 +109,7 @@ function isLocalHostname(hostname: string) {
 
 export default function Analytics() {
   const pathname = usePathname();
+  const language = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "es";
   const lastTrackedPath = useRef<string | null>(null);
 
   const enabled =
@@ -137,8 +138,9 @@ export default function Analytics() {
       page_path: pathname,
       page_location: window.location.href,
       page_title: document.title,
+      language,
     });
-  }, [pathname, enabled]);
+  }, [pathname, enabled, language]);
 
   /*
    * Eventos personalizados
@@ -166,7 +168,7 @@ export default function Analytics() {
       window.gtag?.(
         "event",
         name,
-        analyticsPayloadForElement(name, element),
+        { ...analyticsPayloadForElement(name, element), language },
       );
     };
 
@@ -183,7 +185,7 @@ export default function Analytics() {
       window.gtag?.(
         "event",
         detail.name,
-        detail.payload ?? {},
+        { ...(detail.payload ?? {}), language },
       );
     };
 
@@ -194,6 +196,7 @@ export default function Analytics() {
 
       window.gtag?.("event", "project_view", {
         scene: detail.scene,
+        language,
       });
     };
 
@@ -218,7 +221,7 @@ export default function Analytics() {
         onAnalyticsEvent,
       );
     };
-  }, [enabled]);
+  }, [enabled, language]);
 
   if (!enabled || !measurementId) return null;
 

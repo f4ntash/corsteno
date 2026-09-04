@@ -1,0 +1,10 @@
+import ActionButton from "@/components/atoms/ActionButton";
+import ActionGroup from "@/components/molecules/ActionGroup";
+import Eyebrow from "@/components/atoms/Eyebrow";
+import Navigation from "@/components/Navigation";
+import { contactChannels } from "@/lib/contact";
+import { site } from "@/lib/seo";
+import type { LegalCopy } from "@/lib/i18n/legal";
+export function PrivacyPage({ copy, locale = "es" }: { copy: LegalCopy["privacy"]; locale?: "es" | "en" }) { const english = locale === "en"; return <><Navigation locale={locale} languageHref={english ? "/privacidad/" : "/en/privacy/"} homePathPrefix={english ? "/en" : undefined} /><main className="privacy-page" id="main-content"><header><Eyebrow className="label">{copy.eyebrow}</Eyebrow><h1>{copy.title}</h1><p>{copy.updated}</p></header>{copy.sections.map((s)=><section key={s.title}><h2>{s.title}</h2><p>{s.body}</p>{s.title === copy.sections[copy.sections.length-1].title ? <p>{contactChannels.email ? <a href={`mailto:${contactChannels.email}`}>{contactChannels.email}</a> : <a href={`${site.basePath}/${english ? "en/" : ""}#contacto`}>{copy.contact}</a>}</p> : null}</section>)}</main></> }
+export function ConfirmationPage({ copy }: { copy: LegalCopy["confirmation"] }) { return <main className="not-found-page" id="main-content"><Eyebrow className="label">{copy.eyebrow}</Eyebrow><h1>{copy.title}</h1><p>{copy.body}</p><ActionGroup><ActionButton href={`${site.basePath}/`}>{copy.back}</ActionButton></ActionGroup></main> }
+export function NotFoundPage({ copy, english = false }: { copy: LegalCopy["notFound"]; english?: boolean }) { return <main className="not-found-page" id="main-content"><Eyebrow className="label">{copy.eyebrow}</Eyebrow><h1>{copy.title}</h1><p>{copy.body}</p><ActionGroup><ActionButton href={`${site.basePath}/${english ? "en/" : ""}`}>{copy.back}</ActionButton><ActionButton href={`${site.basePath}/${english ? "en/services/3d-configurators/" : "servicios/configuradores-3d/"}`}>{copy.services}</ActionButton><ActionButton href={`${site.basePath}/${english ? "en/" : ""}#proyectos`}>{copy.projects}</ActionButton></ActionGroup></main> }
