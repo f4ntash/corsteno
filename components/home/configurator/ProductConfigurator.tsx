@@ -27,13 +27,8 @@ export default function ProductConfigurator({ className = "", constrained = fals
     <Key extends keyof WindowConfiguration,>(key: Key, value: WindowConfiguration[Key]) => {
       if (!demoStartedRef.current) {
         demoStartedRef.current = true;
-        trackEvent("demo_started", { source: "configurator-demo", language: locale });
+        trackEvent("configurator_start", { location: "home", language: locale, page_path: window.location.pathname });
       }
-      trackEvent("demo_configuration_changed", {
-        category: String(key),
-        option: String(value),
-        language: locale,
-      });
       setConfiguration((current) => ({ ...current, [key]: value }));
     },
     [locale],

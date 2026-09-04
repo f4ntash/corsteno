@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { WindowConfiguration } from "./types";
-import { trackEvent } from "@/lib/analytics";
 import {
   buildProductDemoPayload,
   sendProductDemo,
@@ -43,7 +42,6 @@ export default function ProductConfiguratorSummary({
     setStep("email");
     setStatus("idle");
     setMessage("");
-    trackEvent("demo_email_opened", { source: "configurator-demo", language: locale });
   };
 
   const submitDemo = async (event: FormEvent<HTMLFormElement>) => {
@@ -73,11 +71,6 @@ export default function ProductConfiguratorSummary({
       return;
     }
 
-    trackEvent("demo_email_submitted", {
-      source: payload.source,
-      marketing_consent: marketingConsent,
-      language: locale,
-    });
     setStatus("idle");
     setStep("success");
   };
@@ -135,7 +128,6 @@ export default function ProductConfiguratorSummary({
               onChange={(event) => {
                 const checked = event.target.checked;
                 setMarketingConsent(checked);
-                if (checked) trackEvent("demo_marketing_consent", { source: "configurator-demo", language: locale });
               }}
             />
             <span>{t.configurator.summary.consent}</span>

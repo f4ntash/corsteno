@@ -5,6 +5,7 @@ import { withBasePath } from "@/lib/assetPath";
 import logoCorsteno from "./logoSombreado.png";
 import { esHome, type HomeDictionary, type Locale } from "@/lib/i18n";
 import { homePath } from "@/lib/i18n/routes";
+import { trackEvent } from "@/lib/analytics";
 
 const navItems = [
   { href: "#inicio", key: "inicio" },
@@ -155,9 +156,9 @@ export default function Navigation({ home = false, locale = "es", dictionary = e
         ))}
         {home || languageHref ? (
           <div className="nav-language" aria-label={dictionary.nav.language}>
-            <a aria-current={locale === "es" ? "page" : undefined} href={withBasePath(home ? homePath("es") : languageHref!)} onClick={() => localStorage.setItem("corsteno-locale", "es")}>ES</a>
+            <a aria-current={locale === "es" ? "page" : undefined} href={withBasePath(home ? homePath("es") : languageHref!)} onClick={() => { localStorage.setItem("corsteno-locale", "es"); if (locale !== "es") trackEvent("language_switch", { from_language: "en", to_language: "es", page_path: location.pathname }); }}>ES</a>
             <span aria-hidden="true">/</span>
-            <a aria-current={locale === "en" ? "page" : undefined} aria-label={dictionary.nav.switchLabel} href={withBasePath(home ? homePath("en") : languageHref!)} onClick={() => localStorage.setItem("corsteno-locale", "en")}>EN</a>
+            <a aria-current={locale === "en" ? "page" : undefined} aria-label={dictionary.nav.switchLabel} href={withBasePath(home ? homePath("en") : languageHref!)} onClick={() => { localStorage.setItem("corsteno-locale", "en"); if (locale !== "en") trackEvent("language_switch", { from_language: "es", to_language: "en", page_path: location.pathname }); }}>EN</a>
           </div>
         ) : null}
       </div>

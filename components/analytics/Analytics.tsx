@@ -18,7 +18,7 @@ function eventNameForAnchor(anchor: HTMLAnchorElement) {
   const url = new URL(href, window.location.href);
 
   if (href.includes("wa.me") || href.includes("whatsapp")) {
-    return "whatsapp_click";
+    return "contact_method_click";
   }
 
   if (
@@ -29,11 +29,15 @@ function eventNameForAnchor(anchor: HTMLAnchorElement) {
   }
 
   if (anchor.dataset.analytics === "external_project_visit") {
-    return "project_external_opened";
+    return "view_project";
   }
 
   if (anchor.dataset.analytics === "project_opened") {
-    return "project_opened";
+    return "view_project";
+  }
+
+  if (anchor.dataset.analytics === "project_contact_click") {
+    return "project_contact_click";
   }
 
   if (anchor.dataset.analytics === "cta") {
@@ -65,13 +69,13 @@ function eventNameForButton(button: HTMLButtonElement) {
       ".interior-finishes-variant-options, .exterior-variant-options, .slot-controls",
     )
   ) {
-    return "configurator_interaction";
+    return null;
   }
 
   if (
     button.closest(".showroom-category-tabs, .showroom-project-tabs")
   ) {
-    return "project_interaction";
+    return null;
   }
 
   return null;
@@ -81,7 +85,7 @@ function analyticsPayloadForElement(
   name: string,
   element: HTMLAnchorElement | HTMLButtonElement,
 ) {
-  if (name === "project_opened") {
+  if (name === "project_opened" || name === "view_project") {
     return {
       project_slug: element.dataset.project,
       project_type: element.dataset.projectType,
@@ -91,6 +95,13 @@ function analyticsPayloadForElement(
   if (name === "project_external_opened") {
     return {
       project_slug: element.dataset.project,
+    };
+  }
+
+  if (name === "contact_method_click") {
+    const href = element instanceof HTMLAnchorElement ? element.href : "";
+    return {
+      method: href.startsWith("mailto:") ? "email" : href.includes("linkedin") ? "linkedin" : "whatsapp",
     };
   }
 
@@ -168,7 +179,7 @@ export default function Analytics() {
       window.gtag?.(
         "event",
         name,
-        { ...analyticsPayloadForElement(name, element), language },
+        { ...analyticsPayloadForElement(name, element), language, page_path: window.location.pathname },
       );
     };
 
@@ -189,22 +200,7 @@ export default function Analytics() {
       );
     };
 
-    const onProjectView = (event: Event) => {
-      const detail = (
-        event as CustomEvent<{ scene?: number }>
-      ).detail;
-
-      window.gtag?.("event", "project_view", {
-        scene: detail.scene,
-        language,
-      });
-    };
-
     window.addEventListener("click", onClick);
-    window.addEventListener(
-      "forma3d:project-view",
-      onProjectView,
-    );
     window.addEventListener(
       "corsteno:analytics",
       onAnalyticsEvent,
@@ -212,10 +208,6 @@ export default function Analytics() {
 
     return () => {
       window.removeEventListener("click", onClick);
-      window.removeEventListener(
-        "forma3d:project-view",
-        onProjectView,
-      );
       window.removeEventListener(
         "corsteno:analytics",
         onAnalyticsEvent,

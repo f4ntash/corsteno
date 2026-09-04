@@ -149,6 +149,7 @@ export default function ProjectCaseStudy({ page, locale = "es" }: { page: SeoPag
     : config.relatedHref;
   const isThreeD = config.experience === "interior-finishes" || config.experience === "exterior-house";
 
+
   const breadcrumbItems = [
     { label: english ? "Home" : "Inicio", href: `${site.basePath}/${english ? "en/" : ""}` },
     { label: english ? "Projects" : "Proyectos", href: `${site.basePath}/${english ? "en/" : ""}#proyectos` },
@@ -202,7 +203,7 @@ export default function ProjectCaseStudy({ page, locale = "es" }: { page: SeoPag
         <div className={styles.caseActions} data-navbar-theme="light">
           <div className={styles.commercialCta}>
             <p>{copy.commercialQuestion}</p>
-            <ActionButton href="#contacto" data-analytics="cta">{copy.commercialCta}</ActionButton>
+            <ActionButton href="#contacto" data-analytics="project_contact_click" data-project={page.slug}>{copy.commercialCta}</ActionButton>
           </div>
           <ActionGroup className={styles.actions}>
             <ActionButton href={relatedHref}>{copy.relatedLabel}</ActionButton>

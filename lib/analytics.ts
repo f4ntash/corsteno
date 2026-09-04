@@ -1,13 +1,7 @@
 export type AnalyticsEventName =
-  | "demo_started"
-  | "demo_configuration_changed"
-  | "demo_email_opened"
-  | "demo_email_submitted"
-  | "demo_marketing_consent"
-  | "project_opened"
-  | "project_external_opened"
-  | "contact_started"
-  | "contact_submitted";
+  | "contact_click" | "contact_form_start" | "generate_lead" | "contact_form_error"
+  | "view_project" | "project_contact_click" | "language_switch" | "configurator_start"
+  | "contact_method_click";
 
 export type AnalyticsPayload = Record<string, string | number | boolean | undefined>;
 

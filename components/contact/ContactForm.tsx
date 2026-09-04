@@ -100,10 +100,11 @@ export default function ContactForm({ dictionary: t, locale }: { dictionary: Hom
       }
 
       setStatus("success");
-      trackEvent("contact_submitted", { source: "contact-form", language: locale });
+      trackEvent("generate_lead", { form_name: "contact", language: locale, page_path: window.location.pathname });
       formRef.current?.reset();
       router.push(withBasePath(locale === "en" ? "/en/request-sent/" : "/solicitud-enviada/"));
     } catch (error) {
+      trackEvent("contact_form_error", { form_name: "contact", language: locale, page_path: window.location.pathname });
       setSubmitError(error instanceof Error ? error.message : t.contact.form.sendError);
       setStatus("error");
     }
@@ -117,7 +118,7 @@ export default function ContactForm({ dictionary: t, locale }: { dictionary: Hom
       onFocusCapture={() => {
         if (contactStartedRef.current) return;
         contactStartedRef.current = true;
-        trackEvent("contact_started", { source: "contact-form", language: locale });
+        trackEvent("contact_form_start", { form_name: "contact", language: locale, page_path: window.location.pathname });
       }}
       noValidate
       aria-busy={isSubmitting}
