@@ -35,7 +35,7 @@ export type Faq = {
 export type SeoPage = {
   slug: string;
   path: string;
-  cluster: "3D" | "WEB" | "INMERSIVO";
+  cluster: "3D" | "WEB" | "INMERSIVO" | "ACTIVACIONES";
   category: "home" | "servicio" | "sector" | "proyecto";
   intent: string;
   title: string;
@@ -89,6 +89,31 @@ export function homeMetadata(locale: Locale): Metadata {
 }
 
 export const seoPages: SeoPage[] = [
+  {
+    slug: "activaciones-de-marca",
+    path: "/servicios/activaciones-de-marca",
+    cluster: "ACTIVACIONES",
+    category: "servicio",
+    intent: "desarrollar activaciones de marca interactivas y experiencias gamificadas",
+    title: "Activaciones de Marca Interactivas | Corsteno",
+    description: "Tecnología interactiva para campañas, eventos y activaciones de marca: juegos, experiencias web, AR/XR, rankings, captura de datos e integraciones.",
+    h1: "Activaciones de marca con tecnología interactiva",
+    eyebrow: "Activaciones de marca",
+    intro: "Desarrollamos juegos, campañas y experiencias digitales para que marcas, agencias y productoras generen participación con tecnología interactiva.",
+    cta: "Hablemos de tu activación",
+    takeaways: ["Juegos promocionales, desafíos y gamificación.", "Experiencias web, QR y AR/XR según el contexto.", "Rankings, premios y captura de datos cuando forman parte del alcance.", "Analytics e integraciones con sistemas comerciales cuando corresponde."],
+    sections: [
+      { title: "Tecnología para campañas y eventos", body: "Corsteno participa como partner tecnológico para convertir una idea de campaña en una experiencia interactiva usable, medible y preparada para el canal donde participa la audiencia.", items: ["Juegos promocionales", "Gamificación", "Experiencias web", "AR/XR", "QR y desafíos", "Rankings y premios"] },
+      { title: "Para marcas, agencias y productoras", body: "Trabajamos junto a equipos creativos y de producción, también como partner white-label cuando el proyecto requiere una capacidad tecnológica especializada." },
+      { title: "Casos en desarrollo", body: "Estructura preparada para incorporar activaciones actualmente en desarrollo, sin publicar nombres de clientes ni presentar experiencias no disponibles como casos públicos.", items: ["Activación interactiva — Bebidas", "Experiencia gamificada — Alimentos"] },
+    ],
+    faqs: [{ question: "¿Corsteno es una agencia de marketing?", answer: "No. Nuestro rol es desarrollar la tecnología interactiva que da vida a campañas, activaciones y experiencias de marca." }, { question: "¿Pueden trabajar con una agencia o productora?", answer: "Sí. Podemos integrarnos como partner tecnológico y trabajar de forma white-label cuando el proyecto lo requiere." }, { question: "¿Se pueden medir las interacciones?", answer: "Sí, cuando el alcance contempla analytics y una implementación adecuada para el contexto de la activación." }],
+    links: [
+      { label: "AR / XR", href: p("/servicios/realidad-aumentada") },
+      { label: "Configuradores 3D", href: p("/servicios/configuradores-3d") },
+      { label: "Experiencias Web", href: p("/servicios/desarrollo-web") },
+    ],
+  },
   {
     slug: "configuradores-3d",
     path: "/servicios/configuradores-3d",

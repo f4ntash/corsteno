@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import Analytics from "@/components/analytics/Analytics";
 import FloatingContactCTA from "@/components/FloatingContactCTA";
 import LocalizedSkipLink from "@/components/LocalizedSkipLink";
@@ -48,7 +49,9 @@ export default function RootLayout({
   return (
     <html lang="es-AR" suppressHydrationWarning>
       <head>
-        <script
+        <Script
+          id="locale-detection"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `document.documentElement.lang=location.pathname.startsWith('/en/')||location.pathname==='/en'?'en':'es-AR';`,
           }}

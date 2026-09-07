@@ -41,7 +41,7 @@ function eventNameForAnchor(anchor: HTMLAnchorElement) {
   }
 
   if (anchor.dataset.analytics === "cta") {
-    return "cta_click";
+    return anchor.dataset.capability ? "capability_contact_click" : "cta_click";
   }
 
   if (anchor.classList.contains("contextual-cta")) {
@@ -89,6 +89,8 @@ function analyticsPayloadForElement(
     return {
       project_slug: element.dataset.project,
       project_type: element.dataset.projectType,
+      capability: element.dataset.capability,
+      location: element.dataset.capability ? "capability_page" : undefined,
     };
   }
 
@@ -106,7 +108,7 @@ function analyticsPayloadForElement(
   }
 
   return element instanceof HTMLAnchorElement
-    ? { link_url: element.href }
+    ? { link_url: element.href, capability: element.dataset.capability, location: element.dataset.capability ? "capability_page" : undefined }
     : {};
 }
 

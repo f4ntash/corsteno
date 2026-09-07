@@ -16,6 +16,7 @@ import {
   site,
   type SeoPage,
 } from "@/lib/seo";
+import CapabilityPageTracking from "@/components/analytics/CapabilityPageTracking";
 
 type SeoLandingPageProps = {
   page: SeoPage & Partial<{ spanishPath: string; englishPath: string }>;
@@ -63,6 +64,7 @@ export default function SeoLandingPage({ page, locale = "es" }: SeoLandingPagePr
       <JsonLd data={serviceJsonLd(page)} />
       <JsonLd data={faqJsonLd(page.faqs)} />
       <JsonLd data={breadcrumbJsonLd(breadcrumbItems)} />
+      {page.category === "servicio" && <CapabilityPageTracking capability={page.slug} />}
       <main className="seo-page" id="main-content">
         <nav className="seo-breadcrumbs" aria-label={english ? "Breadcrumb" : "Migas de pan"}>
           {breadcrumbItems.map((item, index) => (
@@ -83,7 +85,7 @@ export default function SeoLandingPage({ page, locale = "es" }: SeoLandingPagePr
             <h1>{page.h1}</h1>
             <p>{page.intro}</p>
             <ActionGroup className="seo-actions">
-              <ActionButton href={`${site.basePath}/${english ? "en/" : ""}#contacto`} data-analytics="cta">
+              <ActionButton href={`${site.basePath}/${english ? "en/" : ""}#contacto`} data-analytics="cta" data-capability={page.slug}>
                 {page.cta}
               </ActionButton>
               <ShareButton title={page.title} text={page.description} url={canonicalUrl(page.path)} />

@@ -3,6 +3,7 @@ import type { Locale } from "./index";
 export const localizedRoutes = {
   home: { es: "/", en: "/en/" },
   services: {
+    "activaciones-de-marca": { es: "/servicios/activaciones-de-marca/", en: "/en/services/brand-activations/" },
     "configuradores-3d": { es: "/servicios/configuradores-3d/", en: "/en/services/3d-configurators/" },
     "visualizacion-3d": { es: "/servicios/visualizacion-3d/", en: "/en/services/interactive-3d-visualization/" },
     "desarrollo-web": { es: "/servicios/desarrollo-web/", en: "/en/services/web-development/" },

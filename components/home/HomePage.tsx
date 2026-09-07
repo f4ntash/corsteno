@@ -18,7 +18,7 @@ export default function HomePage({ locale, dictionary }: { locale: Locale; dicti
     <Navigation home locale={locale} dictionary={dictionary} />
     <main id="main-content" lang={dictionary.htmlLang}>
       <CommercialIntro dictionary={dictionary} locale={locale} />
-      <SelectedWorkSection dictionary={dictionary} />
+      <SelectedWorkSection dictionary={dictionary} locale={locale} />
       <InteractiveDemoSection dictionary={dictionary} locale={locale} />
       <ConnectedSystemSection dictionary={dictionary} />
       <DigitalLayerSection dictionary={dictionary} />

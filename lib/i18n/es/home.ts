@@ -34,7 +34,7 @@ export const esHome = {
     conclusion: "Más autonomía para elegir. Menos ida y vuelta antes de hablar con ventas.",
   },
   projects: {
-    eyebrow: "Trabajo seleccionado", title: "Trabajo seleccionado.", description: "Una selección de experiencias digitales, plataformas y productos interactivos.",
+    eyebrow: "Qué construimos", title: "Experiencias digitales que conectan marcas, productos y personas.", description: "Tecnología interactiva aplicada a marcas, productos, espacios y experiencias.",
     items: [
       { label: "PROYECTO CLIENTE", title: "Terrambú", description: "Experiencia web para presentar el hotel, sus espacios y facilitar la consulta directa.", action: "Ver proyecto", alt: "Preview de Terrambú" },
       { label: "PROYECTO CLIENTE", title: "Mapa Punilla", description: "Plataforma interactiva para organizar información territorial y explorar el Valle de Punilla.", action: "Ver proyecto", alt: "Preview de Mapa Punilla" },
