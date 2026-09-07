@@ -32,11 +32,10 @@ export default function ProductConfiguratorSummary({
     if (step === "email") emailRef.current?.focus();
   }, [step]);
 
-  const extras = [
-    configuration.mosquitoNet ? t.configurator.labels.extras.mosquitoNet : null,
-    configuration.blind ? t.configurator.labels.extras.blind : null,
-    configuration.security ? t.configurator.labels.extras.security : null,
-  ].filter((item): item is string => Boolean(item));
+  const frameAdjustment = { black: 10000, white: 0, aluminum: 20000, graphite: 15000 }[configuration.frameColor];
+  const glassAdjustment = { single: 0, double: 15000, laminated: 25000 }[configuration.glassType];
+  const estimatedPrice = Math.round(180000 + (configuration.width / 1000) * (configuration.height / 1000) * 48000 + frameAdjustment + glassAdjustment);
+  const formattedPrice = `$ ${new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 }).format(estimatedPrice)}`;
 
   const openEmailStep = () => {
     setStep("email");
@@ -156,15 +155,12 @@ export default function ProductConfiguratorSummary({
     <aside className={styles.configuratorSummary} aria-live="polite">
       <span>{t.configurator.summary.estimated}</span>
       <dl>
-        <div><dt>{t.configurator.fields.model}</dt><dd>{t.configurator.labels.model[configuration.model]}</dd></div>
         <div><dt>{t.configurator.fields.dimensions}</dt><dd>{configuration.width} × {configuration.height} mm</dd></div>
         <div><dt>{t.configurator.fields.frame}</dt><dd>{t.configurator.labels.frameColor[configuration.frameColor]}</dd></div>
         <div><dt>{t.configurator.fields.glass}</dt><dd>{t.configurator.labels.glassType[configuration.glassType]}</dd></div>
-        <div><dt>{t.configurator.fields.opening}</dt><dd>{t.configurator.labels.opening[configuration.opening]}</dd></div>
-        <div><dt>{t.configurator.fields.extras}</dt><dd>{extras.length > 0 ? extras.join(", ") : t.configurator.labels.extras.none}</dd></div>
       </dl>
       <div className={styles.demoPrice}>
-        <strong>USD 1.840</strong>
+        <strong>{formattedPrice}</strong>
         <small>{t.configurator.summary.price}</small>
       </div>
       <button type="button" onClick={openEmailStep}>{t.configurator.summary.tryOrder}</button>

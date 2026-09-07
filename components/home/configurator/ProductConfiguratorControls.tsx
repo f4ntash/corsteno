@@ -1,4 +1,4 @@
-import type { FrameColor, GlassType, OpeningType, WindowConfiguration, WindowModel } from "./types";
+import type { FrameColor, GlassType, WindowConfiguration } from "./types";
 import { WINDOW_LABELS } from "./types";
 import styles from "./productConfigurator.module.css";
 import type { HomeDictionary } from "@/lib/i18n";
@@ -9,10 +9,8 @@ type ControlsProps = {
   dictionary: HomeDictionary;
 };
 
-const models = Object.keys(WINDOW_LABELS.model) as WindowModel[];
 const frameColors = Object.keys(WINDOW_LABELS.frameColor) as FrameColor[];
 const glassTypes = Object.keys(WINDOW_LABELS.glassType) as GlassType[];
-const openings = Object.keys(WINDOW_LABELS.opening) as OpeningType[];
 
 export default function ProductConfiguratorControls({ configuration, onChange, dictionary: t }: ControlsProps) {
   const update = <Key extends keyof WindowConfiguration>(key: Key, value: WindowConfiguration[Key]) => {
@@ -21,17 +19,6 @@ export default function ProductConfiguratorControls({ configuration, onChange, d
 
   return (
     <div className={styles.configuratorControls}>
-      <fieldset>
-        <legend>{t.configurator.fields.model}</legend>
-        <div className={styles.segmentedControl}>
-          {models.map((model) => (
-            <button key={model} type="button" aria-pressed={configuration.model === model} onClick={() => update("model", model)}>
-              {t.configurator.labels.model[model]}
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
       <fieldset>
         <legend>{t.configurator.fields.dimensions}</legend>
         <label className={styles.rangeControl}>
@@ -67,25 +54,6 @@ export default function ProductConfiguratorControls({ configuration, onChange, d
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend>{t.configurator.fields.opening}</legend>
-        <div className={styles.segmentedControl}>
-          {openings.map((opening) => (
-            <button key={opening} type="button" aria-pressed={configuration.opening === opening} onClick={() => update("opening", opening)}>
-              {t.configurator.labels.opening[opening]}
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>{t.configurator.fields.extras}</legend>
-        <div className={styles.checkList}>
-          <label><input type="checkbox" checked={configuration.mosquitoNet} onChange={(event) => update("mosquitoNet", event.target.checked)} /> {t.configurator.labels.extras.mosquitoNet}</label>
-          <label><input type="checkbox" checked={configuration.blind} onChange={(event) => update("blind", event.target.checked)} /> {t.configurator.labels.extras.blind}</label>
-          <label><input type="checkbox" checked={configuration.security} onChange={(event) => update("security", event.target.checked)} /> {t.configurator.labels.extras.security}</label>
-        </div>
-      </fieldset>
     </div>
   );
 }
