@@ -1,0 +1,179 @@
+/* Add these once in your index.html <head>, or keep this @import (slower):
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+*/
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap");
+
+.hero {
+  --ink: #f4f1ea;
+  --ink-dim: #b9b4a6;
+  --amber: #c9a06a;
+  --bg: #08080a;
+
+  background: var(--bg);
+  width: 100%;
+}
+
+/* Desktop: stage is the positioning context; photo fills it edge to edge,
+   nav + copy float on top of it. */
+.hero__stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero__photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1672 / 941;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  z-index: 1;
+}
+
+/* The mockup is a fixed-size box (SOURCE.w x SOURCE.h) pinned onto the
+   screen's 4 corners via matrix3d — see useCornerPin.js. Width/height are
+   set inline per-instance; don't override object-fit here. */
+.hero__mockup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  object-fit: cover;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero__nav {
+  position: absolute;
+  inset: 4% 3% auto 3%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(0.6rem, 0.9vw, 0.8rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.hero__brand {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.hero__crumb {
+  display: none;
+}
+
+.hero__copy {
+  position: absolute;
+  left: 3%;
+  top: 14%;
+  width: 30%;
+  min-width: 220px;
+  z-index: 3;
+  color: var(--ink);
+}
+
+.hero__kicker {
+  font-family: "Space Mono", monospace;
+  font-size: clamp(0.6rem, 0.8vw, 0.75rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin: 0 0 0.9em;
+}
+
+.hero__title {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.9rem, 6.4vw, 4.6rem);
+  margin: 0 0 1.1em;
+}
+
+.hero__lead {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.75rem, 1.05vw, 1rem);
+  line-height: 1.5;
+  color: var(--ink-dim);
+  max-width: 22em;
+  margin: 0 0 1.6em;
+}
+
+.hero__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(0.65rem, 0.85vw, 0.85rem);
+  color: var(--ink);
+  text-decoration: none;
+  border-top: 1px solid rgba(244, 241, 234, 0.25);
+  padding-top: 0.7em;
+}
+
+.hero__index {
+  font-family: "Space Mono", monospace;
+  color: var(--amber);
+}
+
+.hero__arrow {
+  transition: transform 0.2s ease;
+}
+
+.hero__link:hover .hero__arrow {
+  transform: translateX(0.25em);
+}
+
+/* --- Mobile: drop the overlay composition, stack normally.
+   .hero__photo keeps its aspect-ratio lock (so the corner-pin math stays
+   correct), it just moves into normal document flow instead of sitting
+   as a full-bleed background behind the text. --- */
+@media (max-width: 720px) {
+  .hero__stage {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0 0;
+  }
+
+  .hero__nav {
+    position: static;
+    order: -2;
+    flex-wrap: wrap;
+    padding: 0 5%;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero__copy {
+    position: static;
+    order: -1;
+    width: auto;
+    min-width: 0;
+    padding: 0 5%;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__title {
+    font-size: clamp(2.6rem, 13vw, 3.4rem);
+  }
+
+  .hero__photo {
+    order: 0;
+  }
+}

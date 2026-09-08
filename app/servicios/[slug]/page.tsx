@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import SeoLandingPage from "@/components/seo/SeoLandingPage";
 import { findSeoPage, pageMetadata, servicePages, spanishPageMetadata } from "@/lib/seo";
 import { localizedRoutes } from "@/lib/i18n/routes";
-import WebExperiencesPage from "@/components/seo/WebExperiencesPage";
+import WebExperiencesPage from "@/components/web-experiences/WebExperiencesPage";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
