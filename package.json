@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "project:new": "node scripts/project-new.mjs",
+    "test:project": "node --test scripts/project-new.test.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

@@ -1,6 +1,7 @@
 import type { Locale } from "./index";
+import { generatedProjects } from "@/lib/projects";
 
-export const localizedRoutes = {
+const fixedLocalizedRoutes = {
   home: { es: "/", en: "/en/" },
   services: {
     "configuradores-3d": { es: "/servicios/configuradores-3d/", en: "/en/services/3d-configurators/" },
@@ -26,6 +27,23 @@ export const localizedRoutes = {
   privacy: { es: "/privacidad/", en: "/en/privacy/" },
   confirmation: { es: "/solicitud-enviada/", en: "/en/request-sent/" },
 } as const;
+
+const generatedProjectRoutes = Object.fromEntries(
+  generatedProjects.map((project) => [project.slug, {
+    es: `/proyectos/${project.slug}/`,
+    en: `/en/projects/${project.enSlug}/`,
+  }]),
+) as Record<string, LocalizedPageRoute>;
+
+const projectRoutes: Record<string, LocalizedPageRoute> = {
+  ...fixedLocalizedRoutes.projects,
+  ...generatedProjectRoutes,
+};
+
+export const localizedRoutes = {
+  ...fixedLocalizedRoutes,
+  projects: projectRoutes,
+};
 
 export function homePath(locale: Locale) { return localizedRoutes.home[locale]; }
 

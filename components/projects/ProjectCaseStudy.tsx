@@ -20,6 +20,7 @@ import type { Locale } from "@/lib/i18n";
 import { enHome } from "@/lib/i18n/en/home";
 import { englishProjects } from "@/lib/i18n/en/projects";
 import { localizedRoutes } from "@/lib/i18n/routes";
+import { generatedProjects } from "@/lib/projects";
 
 const InteriorFinishesProjectExperience = dynamic(() => import("./InteriorFinishesProjectExperience"));
 const ExteriorHouseProjectExperience = dynamic(() => import("./ExteriorHouseProjectExperience"));
@@ -38,7 +39,9 @@ type ProjectConfig = {
   relatedLabel: string;
   commercialQuestion: string;
   commercialCta: string;
-  experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house";
+  experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house" | "rulete" | "custom-website" | "none";
+  liveUrl?: string;
+  projectSlug?: string;
 };
 
 const projectConfigs: Record<string, ProjectConfig> = {
@@ -120,9 +123,23 @@ const projectConfigs: Record<string, ProjectConfig> = {
   },
 };
 
-function ProjectExperience({ config }: { config: ProjectConfig }) {
+function ProjectExperience({ config, title, locale }: { config: ProjectConfig; title: string; locale?: Locale }) {
+  if (config.experience === "none") return null;
+  if (config.experience === "custom-website" && config.liveUrl) {
+    return (
+      <LiveWebsiteFrame
+        className={styles.webExperience}
+        title={title}
+        url={config.liveUrl}
+        externalUrl={config.liveUrl}
+        projectSlug={config.projectSlug ?? "project"}
+        locale={locale}
+      />
+    );
+  }
   if (config.experience === "interior-finishes") return <InteriorFinishesProjectExperience />;
   if (config.experience === "exterior-house") return <ExteriorHouseProjectExperience />;
+  if (config.experience === "rulete") return <ExteriorHouseProjectExperience />;
 
   const project = digitalProjects.find((item) => item.id === config.experience);
   if (!project || project.type !== "website") return null;
@@ -134,18 +151,41 @@ function ProjectExperience({ config }: { config: ProjectConfig }) {
       url={project.url}
       externalUrl={project.externalUrl}
       projectSlug={project.id}
+      locale={locale}
     />
   );
 }
 
 export default function ProjectCaseStudy({ page, locale = "es" }: { page: SeoPage; locale?: Locale }) {
-  const config = projectConfigs[page.slug];
+  const fixedConfig = projectConfigs[page.slug];
+  const generatedProject = generatedProjects.find((project) => project.slug === page.slug);
+  const generatedCopy = generatedProject?.copy.es;
+  const config: ProjectConfig | undefined = fixedConfig ?? (generatedProject && generatedCopy ? {
+    category: generatedProject.kind === "corsteno-lab" ? "CORSTENO LAB" : "PROYECTO CLIENTE",
+    description: generatedCopy.description,
+    liveTitle: generatedProject.kind === "corsteno-lab" ? "Explorá la experiencia" : "Explorá el proyecto",
+    firstLabel: "El desafío",
+    firstTitle: generatedCopy.challengeTitle,
+    firstBody: generatedCopy.challengeBody,
+    secondLabel: "La solución",
+    secondTitle: generatedCopy.solutionTitle,
+    secondBody: generatedCopy.solutionBody,
+    relatedHref: `${site.basePath}${generatedProject.kind === "corsteno-lab" ? "/servicios/visualizacion-3d/" : "/servicios/desarrollo-web/"}`,
+    relatedLabel: generatedProject.kind === "corsteno-lab" ? "Ver visualización 3D" : "Ver desarrollo web",
+    commercialQuestion: "¿Querés aplicar algo así a tu negocio?",
+    commercialCta: "Hablemos de tu proyecto",
+    experience: generatedProject.liveUrl ? "custom-website" : "none",
+    liveUrl: generatedProject.liveUrl ?? undefined,
+    projectSlug: generatedProject.slug,
+  } : undefined);
   if (!config) return null;
   const english = locale === "en";
   const copy = english ? englishProjects[page.slug as keyof typeof englishProjects] : config;
   const route = localizedRoutes.projects[page.slug as keyof typeof localizedRoutes.projects];
   const relatedHref = english
-    ? (page.slug === "terrambu" || page.slug === "mapa-punilla" ? `${site.basePath}/en/services/web-development/` : `${site.basePath}/en/services/interactive-3d-visualization/`)
+    ? (fixedConfig
+      ? (page.slug === "terrambu" || page.slug === "mapa-punilla" ? `${site.basePath}/en/services/web-development/` : `${site.basePath}/en/services/interactive-3d-visualization/`)
+      : `${site.basePath}${generatedProject?.kind === "corsteno-lab" ? "/en/services/interactive-3d-visualization/" : "/en/services/web-development/"}`)
     : config.relatedHref;
   const isThreeD = config.experience === "interior-finishes" || config.experience === "exterior-house";
 
@@ -172,20 +212,22 @@ export default function ProjectCaseStudy({ page, locale = "es" }: { page: SeoPag
           <p>{copy.description}</p>
         </header>
 
-        <section
-          className={`${styles.liveSection}${isThreeD ? ` ${styles.liveSectionThreeD}` : ""}`}
-          aria-labelledby="project-live-title"
-          data-navbar-theme="light"
-        >
-          <SectionHeading
-            className={styles.sectionHead}
-            eyebrow={english ? "Live experience" : "Experiencia live"}
-            eyebrowClassName={styles.eyebrow}
-            title={copy.liveTitle}
-            titleId="project-live-title"
-          />
-          <ProjectExperience config={config} />
-        </section>
+        {config.experience !== "none" && (
+          <section
+            className={`${styles.liveSection}${isThreeD ? ` ${styles.liveSectionThreeD}` : ""}`}
+            aria-labelledby="project-live-title"
+            data-navbar-theme="light"
+          >
+            <SectionHeading
+              className={styles.sectionHead}
+              eyebrow={english ? "Live experience" : "Experiencia live"}
+              eyebrowClassName={styles.eyebrow}
+              title={copy.liveTitle}
+              titleId="project-live-title"
+            />
+            <ProjectExperience config={config} title={page.h1} locale={generatedProject ? locale : undefined} />
+          </section>
+        )}
 
         <section className={styles.caseStudy} data-navbar-theme="light">
           <article>

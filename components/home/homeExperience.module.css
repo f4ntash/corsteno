@@ -206,10 +206,11 @@
   transform: translateY(-2px);
 }
 
-.projectTerrambu { grid-column: 1 / 8; grid-row: 1; }
-.projectMap { grid-column: 8 / 13; grid-row: 1; }
-.projectFinishes { grid-column: 1 / 6; grid-row: 2; }
-.projectExterior { grid-column: 6 / 13; grid-row: 2; }
+.projectTerrambu { grid-column: var(--project-grid-column, 1 / 8); grid-row: var(--project-grid-row, 1); }
+.projectMap { grid-column: var(--project-grid-column, 8 / 13); grid-row: var(--project-grid-row, 1); }
+.projectFinishes { grid-column: var(--project-grid-column, 1 / 6); grid-row: var(--project-grid-row, 2); }
+.projectExterior { grid-column: var(--project-grid-column, 6 / 13); grid-row: var(--project-grid-row, 2); }
+.projectGenerated { grid-column: var(--project-grid-column, span 6); grid-row: var(--project-grid-row, auto); }
 
 .workCta {
   display: flex;
@@ -469,7 +470,8 @@
   .projectTerrambu,
   .projectMap,
   .projectFinishes,
-  .projectExterior {
+  .projectExterior,
+  .projectGenerated {
     grid-column: auto;
     grid-row: auto;
   }

@@ -4,6 +4,7 @@ import { BASE_PATH } from "@/lib/assetPath";
 import { esHome, type Locale } from "@/lib/i18n";
 import { enHome } from "@/lib/i18n/en/home";
 import { homePath } from "@/lib/i18n/routes";
+import { generatedProjects } from "@/lib/projects";
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://corsteno.com").replace(/\/$/, "");
 
@@ -629,6 +630,30 @@ export const seoPages: SeoPage[] = [
     keywords: ["plataforma interactiva", "mapas", "turismo", "desarrollo web", "experiencia de exploración"],
     projectKind: "client-work",
   },
+  ...generatedProjects.map((project): SeoPage => {
+    const copy = project.copy.es;
+    return {
+      slug: project.slug,
+      path: `/proyectos/${project.slug}`,
+      cluster: project.kind === "corsteno-lab" ? "3D" : "WEB",
+      category: "proyecto",
+      intent: `ver el proyecto ${copy.name.toLocaleLowerCase("es-AR")}`,
+      title: project.seo.es.title,
+      description: copy.description,
+      h1: copy.name,
+      eyebrow: project.kind === "corsteno-lab" ? "Corsteno Lab" : "Proyecto cliente",
+      intro: copy.description,
+      cta: "Consultar proyecto",
+      takeaways: [],
+      sections: [],
+      faqs: [],
+      links: [],
+      image: project.image,
+      imageAlt: project.imageAlt.es,
+      ...(project.seo.es.keywords.length ? { keywords: project.seo.es.keywords } : {}),
+      projectKind: project.kind,
+    };
+  }),
 ];
 
 export const servicePages = seoPages.filter((page) => page.category === "servicio");
