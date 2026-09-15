@@ -1,6 +1,6 @@
 "use client";
 
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   forwardRef,
@@ -46,7 +46,7 @@ const INTERIOR_FINISHES_CAMERA_CONFIG = {
 
   // Límites de zoom.
   minDistanceFactor: 0,
-  maxDistanceFactor: 1.8,
+  maxDistanceFactor: 0.8,
 
   // =========================================================
   // LIMITES HORIZONTALES DE LA CAMARA
@@ -254,7 +254,23 @@ function InteriorFinishesComparison({
 
   return (
     <>
-      <CameraAndControls radius={radius} presentation="hero" controlsRef={controlsRef} />
+      <Environment
+        files="/environments/grasslands_sunset.exr"
+        background
+        scene={beforeScene}
+      />
+      <Environment
+        files="/environments/grasslands_sunset.exr"
+        background
+        scene={afterScene}
+      />
+
+      <CameraAndControls
+        radius={radius}
+        presentation="hero"
+        controlsRef={controlsRef}
+      />
+
       <HeroScissorRenderer
         beforeScene={beforeScene}
         afterScene={afterScene}
@@ -584,6 +600,12 @@ Shadow map de Three.js.*/
               <hemisphereLight args={[0xffffff, 0x8a8074, 1.2]} />
               <directionalLight position={[5, 8, 6]} intensity={2.1} />
               <directionalLight position={[-4, 3, -5]} intensity={0.65} />
+
+              <Environment
+                files="/environments/grasslands_sunset.exr"
+                background
+              />
+
               <InteriorFinishesModel
                 variants={variants}
                 presentation={presentation}

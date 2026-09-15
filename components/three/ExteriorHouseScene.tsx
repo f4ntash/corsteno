@@ -35,7 +35,7 @@ const EXTERIOR_HOUSE_CAMERA_CONFIG = {
   fov: 36,
   fitPadding: 0.82,
   minDistanceFactor: 0,
-  maxDistanceFactor: 1.8,
+  maxDistanceFactor: 0.8,
   azimuthRange: THREE.MathUtils.degToRad(40),
   minPolarAngle: THREE.MathUtils.degToRad(10),
   maxPolarAngle: THREE.MathUtils.degToRad(60),

@@ -264,7 +264,7 @@ button:disabled:hover{background:transparent;color:inherit}
 .exterior-color-control span{font-size:10px;letter-spacing:.08em;text-transform:uppercase}
 .exterior-config-panel .slot-controls{position:static;margin-top:32px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;opacity:1;transform:none}
 .demo-panel-intro{display:grid;gap:4px;margin-bottom:24px}
-.demo-panel-intro h1,.demo-panel-intro h2{font-size:clamp(30px,3vw,44px);line-height:.95;text-transform:uppercase}
+.demo-panel-intro h1,.demo-panel-intro h2{font-size:clamp(30px,3vw,42px);line-height:.95;text-transform:uppercase}
 .panel-commercial-copy{max-width:30ch;margin-top:24px;font-size:13px;line-height:1.5;color:var(--accent-secondary)}
 .panel-commercial-copy+.contextual-cta{margin-top:8px}
 .hotspot{position:absolute;z-index:28;width:44px;height:44px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer}
