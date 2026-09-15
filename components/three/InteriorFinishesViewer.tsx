@@ -46,7 +46,7 @@ const INTERIOR_FINISHES_CAMERA_CONFIG = {
 
   // Límites de zoom.
   minDistanceFactor: 0,
-  maxDistanceFactor: 1.8,
+  maxDistanceFactor: 0.8,
 
   // =========================================================
   // LIMITES HORIZONTALES DE LA CAMARA
