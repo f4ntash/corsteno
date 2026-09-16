@@ -24,6 +24,7 @@ import { generatedProjects } from "@/lib/projects";
 
 const InteriorFinishesProjectExperience = dynamic(() => import("./InteriorFinishesProjectExperience"));
 const ExteriorHouseProjectExperience = dynamic(() => import("./ExteriorHouseProjectExperience"));
+const RuleteProjectExperience = dynamic(() => import("./RuleteProjectExperience"));
 
 type ProjectConfig = {
   category: string;
@@ -39,7 +40,7 @@ type ProjectConfig = {
   relatedLabel: string;
   commercialQuestion: string;
   commercialCta: string;
-  experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house" | "rulete" | "custom-website" | "none";
+  experience: "terrambu" | "mapa-punilla" | "interior-finishes" | "exterior-house" | "ruleta" | "custom-website" | "none";
   liveUrl?: string;
   projectSlug?: string;
 };
@@ -139,7 +140,7 @@ function ProjectExperience({ config, title, locale }: { config: ProjectConfig; t
   }
   if (config.experience === "interior-finishes") return <InteriorFinishesProjectExperience />;
   if (config.experience === "exterior-house") return <ExteriorHouseProjectExperience />;
-  if (config.experience === "rulete") return <ExteriorHouseProjectExperience />;
+  if (config.experience === "ruleta") return <RuleteProjectExperience />;
 
   const project = digitalProjects.find((item) => item.id === config.experience);
   if (!project || project.type !== "website") return null;

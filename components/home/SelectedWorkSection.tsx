@@ -56,6 +56,15 @@ const fixedProjects: ProjectCard[] = [
     type: "corsteno_lab",
     copyIndex: 3,
   },
+  {
+    id: "ruleta",
+    image: withBasePath("/projects/exterior-house-3d.png"),
+    imageSrcSet: `${withBasePath("/projects/exterior-house-3d-480.webp")} 480w, ${withBasePath("/projects/exterior-house-3d.png")} 650w`,
+    href: withBasePath("/proyectos/exterior-house/"),
+    className: styles.projectRoulette,
+    type: "corsteno_lab",
+    copyIndex: 4,
+  },
 ];
 
 function gridPlacement(index: number): CSSProperties {

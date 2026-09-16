@@ -3,7 +3,51 @@
     "terrambu",
     "mapa-punilla",
     "revestimientos-interactivos",
-    "exterior-house"
+    "exterior-house",
+    "ruleta"
   ],
-  "projects": []
+  "projects": [
+    {
+      "internalName": "roulette-game",
+      "slug": "ruleta",
+      "enSlug": "roulette",
+      "kind": "corsteno-lab",
+      "image": "/projects/ruleta/cover.png",
+      "imageAlt": {
+        "es": "Vista previa de Ruleta",
+        "en": "Preview of Roulette"
+      },
+      "liveUrl": null,
+      "seo": {
+        "es": {
+          "title": "Ruleta Interactiva",
+          "keywords": []
+        },
+        "en": {
+          "title": "Interactive Roulette",
+          "keywords": []
+        }
+      },
+      "copy": {
+        "es": {
+          "name": "Ruleta",
+          "cardDescription": "Ruleta interactiva",
+          "description": "Ruleta interactiva",
+          "challengeTitle": "Gamifica tu experiencia aleatoria!",
+          "challengeBody": "interactive roulete",
+          "solutionTitle": "Juego interactivo",
+          "solutionBody": "Una descripcion para el juego interactivo"
+        },
+        "en": {
+          "name": "Roulette",
+          "cardDescription": "Interactive Roulette",
+          "description": "Interactive Roulette",
+          "challengeTitle": "Gamify Your Roulette Experience",
+          "challengeBody": "Interactive Random Experience",
+          "solutionTitle": "Interactive Game",
+          "solutionBody": "Descripction for a interactive game"
+        }
+      }
+    }
+  ]
 }
