@@ -699,6 +699,49 @@ export function pageMetadata(page: Pick<SeoPage, "title" | "description" | "path
   };
 }
 
+export type CustomPageMetadata = {
+  title: string;
+  description: string;
+  spanishPath: string;
+  englishPath?: string;
+  image?: string;
+  imageAlt?: string;
+};
+
+export function customPageMetadata(page: CustomPageMetadata, locale: Locale): Metadata {
+  const currentPath = locale === "en" ? page.englishPath : page.spanishPath;
+  if (!currentPath) return {};
+  const base = pageMetadata({
+    title: page.title,
+    description: page.description,
+    path: currentPath,
+    image: page.image,
+    imageAlt: page.imageAlt,
+  });
+  const url = canonicalUrl(currentPath);
+  const hasEnglishVersion = Boolean(page.englishPath);
+  const openGraph = {
+    ...base.openGraph,
+    url,
+    locale: locale === "en" ? "en_US" : "es_AR",
+    ...(hasEnglishVersion ? { alternateLocale: [locale === "en" ? "es_AR" : "en_US"] } : {}),
+  };
+  return {
+    ...base,
+    alternates: hasEnglishVersion
+      ? {
+          canonical: url,
+          languages: {
+            es: canonicalUrl(page.spanishPath),
+            en: canonicalUrl(page.englishPath!),
+            "x-default": canonicalUrl(page.spanishPath),
+          },
+        }
+      : { canonical: url },
+    openGraph,
+  };
+}
+
 export function localizedPageMetadata(page: SeoPage & { spanishPath: string; englishPath: string }): Metadata {
   const url = canonicalUrl(page.englishPath);
   const es = canonicalUrl(page.spanishPath);

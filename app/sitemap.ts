@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { canonicalUrl, homeSeo } from "@/lib/seo";
 import { localizedRoutes } from "@/lib/i18n/routes";
+import { generatedPages } from "@/lib/pages";
 
 export const dynamic = "force-static";
 
@@ -10,6 +11,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: canonicalUrl(route.es), lastModified, changeFrequency: "monthly" as const, priority: category === "services" ? 0.9 : category === "sectors" ? 0.75 : 0.8, alternates: { languages: { es: canonicalUrl(route.es), en: canonicalUrl(route.en) } } },
     { url: canonicalUrl(route.en), lastModified, changeFrequency: "monthly" as const, priority: category === "services" ? 0.9 : category === "sectors" ? 0.75 : 0.8, alternates: { languages: { es: canonicalUrl(route.es), en: canonicalUrl(route.en) } } },
   ]);
+  const generatedPageEntries = generatedPages.flatMap((page) => {
+    const es = canonicalUrl(page.paths.es);
+    const languages = page.paths.en
+      ? { es, en: canonicalUrl(page.paths.en) }
+      : { es };
+    const entries = [{ url: es, lastModified, changeFrequency: "monthly" as const, priority: 0.7, alternates: { languages } }];
+    if (page.paths.en) entries.push({ url: canonicalUrl(page.paths.en), lastModified, changeFrequency: "monthly" as const, priority: 0.7, alternates: { languages } });
+    return entries;
+  });
 
   return [
     {
@@ -31,5 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...paired("services"),
     ...paired("sectors"),
     ...paired("projects"),
+    ...generatedPageEntries,
   ];
 }
