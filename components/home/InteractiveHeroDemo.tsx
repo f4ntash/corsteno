@@ -5,6 +5,8 @@ import { formatHour, PRESETS, sunAt } from "@/components/three/container-house-h
 import type { CameraRequest } from "@/components/three/container-house-hero/cameras";
 import type { ModelLightEntry } from "@/components/three/container-house-hero/lights";
 import { GROUPS, GROUP_LABELS, type SectionEntry } from "@/components/three/container-house-hero/sections";
+import HeroActionButtons from "@/components/three/container-house-hero/HeroActionButtons";
+import { useTimelapse } from "@/components/three/container-house-hero/useTimelapse";
 import type { HomeDictionary, Locale } from "@/lib/i18n";
 
 type HeroViewerProps = {
@@ -16,8 +18,11 @@ type HeroViewerProps = {
   showStars: boolean;
   hidden: Set<string>;
   lightsOff: Set<string>;
-  showMarkers: boolean;
   cameraRequest: CameraRequest;
+  autoRotate: boolean;
+  onAutoRotateChange: (value: boolean) => void;
+  onSelectCamera: (key: string) => void;
+  viewFromLabel: string;
   onSections: (sections: Omit<SectionEntry, "node">[]) => void;
   onLights: (lights: ModelLightEntry[]) => void;
   onCameras: (cameras: { key: string; label: string }[]) => void;
@@ -28,6 +33,12 @@ type ControlTab = "lighting" | "sections" | "lights" | "cameras";
 const TAB_ORDER: ControlTab[] = ["lighting", "sections", "lights", "cameras"];
 const INITIAL_TIME = 12;
 const INITIAL_SUN = sunAt(INITIAL_TIME);
+
+// Textos de los botones de rotación y timelapse. Conviene moverlos a tu diccionario i18n (HomeDictionary).
+const ACTION_LABELS = {
+  es: { autoRotateOff: "Rotar automáticamente", autoRotateOn: "Detener rotación", timelapseOff: "Comenzar timelapse", timelapseOn: "Detener timelapse" },
+  en: { autoRotateOff: "Rotate automatically", autoRotateOn: "Stop rotation", timelapseOff: "Start timelapse", timelapseOn: "Stop timelapse" },
+};
 
 const nowHour = () => {
   const date = new Date();
@@ -43,7 +54,7 @@ function replaceValue(template: string, values: Record<string, string | number>)
   return template.replace(/\{(\w+)\}/g, (_match, key: string) => String(values[key] ?? ""));
 }
 
-export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: HomeDictionary; locale: Locale }) {
+export default function InteractiveHeroDemo({ dictionary: t, locale }: { dictionary: HomeDictionary; locale: Locale }) {
   const [time, setTime] = useState(INITIAL_TIME);
   const [azimuth, setAzimuth] = useState(INITIAL_SUN.azimuth);
   const [elevation, setElevation] = useState(INITIAL_SUN.elevation);
@@ -54,7 +65,7 @@ export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: Hom
   const [hidden, setHidden] = useState<Set<string>>(() => new Set());
   const [lights, setLights] = useState<ModelLightEntry[] | null>(null);
   const [lightsOff, setLightsOff] = useState<Set<string>>(() => new Set());
-  const [showMarkers, setShowMarkers] = useState(true);
+  const [autoRotate, setAutoRotate] = useState(false);
   const [cameras, setCameras] = useState<{ key: string; label: string }[] | null>(null);
   const [cameraRequest, setCameraRequest] = useState<CameraRequest>(null);
   const [activeTab, setActiveTab] = useState<ControlTab>("lighting");
@@ -105,6 +116,8 @@ export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: Hom
     setIntensity(sun.intensity);
   };
 
+  const timelapse = useTimelapse({ time, onTimeChange: applyTime });
+
   const toggleSection = (key: string) => setHidden((current) => {
     const next = new Set(current);
     if (next.has(key)) next.delete(key);
@@ -143,6 +156,7 @@ export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: Hom
   };
 
   const scene = t.hero.sceneControls;
+  const actionLabels = String(locale).toLowerCase().startsWith("en") ? ACTION_LABELS.en : ACTION_LABELS.es;
   const visibleLights = (lights ?? []).filter((light) => !lightsOff.has(light.key)).length;
 
   return (
@@ -159,8 +173,11 @@ export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: Hom
               showStars={showStars}
               hidden={hidden}
               lightsOff={lightsOff}
-              showMarkers={showMarkers}
               cameraRequest={cameraRequest}
+              autoRotate={autoRotate}
+              onAutoRotateChange={setAutoRotate}
+              onSelectCamera={(key) => requestCamera(key, "view")}
+              viewFromLabel={scene.viewFrom}
               onSections={setSections}
               onLights={setLights}
               onCameras={setCameras}
@@ -197,6 +214,13 @@ export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: Hom
           <div className="interactive-hero-panel-content">
             <h2>{t.hero.panel.title}</h2>
             <p className="interactive-hero-panel-note">{t.hero.panel.note}</p>
+            <HeroActionButtons
+              autoRotate={autoRotate}
+              onToggleAutoRotate={() => setAutoRotate((value) => !value)}
+              timelapseRunning={timelapse.running}
+              onToggleTimelapse={timelapse.toggle}
+              labels={actionLabels}
+            />
             <div className="interactive-hero-tabs" role="tablist" aria-label={scene.tabAria}>
               {TAB_ORDER.map((tab) => (
                 <button
@@ -343,7 +367,6 @@ export default function InteractiveHeroDemo({ dictionary: t }: { dictionary: Hom
                       </li>
                     ))}
                   </ul>
-                  <label className="interactive-hero-check"><input type="checkbox" checked={showMarkers} onChange={(event) => setShowMarkers(event.target.checked)} />{scene.markers}</label>
                 </>
               )}
 

@@ -544,3 +544,103 @@ main:has(> .testimonials)>.contact{background:#0b0d0b}
   .privacy-page section{grid-template-columns:1fr;gap:16px}
   .floating-contact-cta{right:auto;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));min-width:96px;min-height:44px;padding:0 15px;font-size:9px}
 }
+
+/* =====================================================================
+   Hero interactivo: legibilidad del panel
+   - Texto de 11 a 13 px (antes 8 a 10 px) y con contraste alto.
+   - Fondo casi opaco; se quita el opacity:80% que lavaba todo el panel.
+   - Botones y filas de al menos 28 a 40 px de alto.
+   Todas las reglas llevan el prefijo .interactive-hero-panel para imponerse
+   a las anteriores en cualquier tamaño de pantalla.
+   ===================================================================== */
+.interactive-hero-panel{--panel-width:264px;padding:18px 18px 16px;background:rgb(16 14 11 / .94);backdrop-filter:blur(8px);opacity:1}
+.interactive-hero-panel .interactive-hero-panel-content{gap:14px;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgb(255 255 255 / .4) transparent}
+.interactive-hero-panel .interactive-hero-panel-content::-webkit-scrollbar{display:block;width:6px}
+.interactive-hero-panel .interactive-hero-panel-content::-webkit-scrollbar-thumb{background:rgb(255 255 255 / .4);border-radius:3px}
+.interactive-hero-panel h2{font-size:14px;letter-spacing:.07em;line-height:1.25;color:#fff}
+.interactive-hero-panel .interactive-hero-panel-note{max-width:none;margin:0;font-size:13px;font-weight:400;line-height:1.45;color:rgb(255 255 255 / .88)}
+.interactive-hero-panel .interactive-hero-tabs{gap:6px}
+.interactive-hero-panel .interactive-hero-tab{min-height:40px;padding:8px;border-color:rgb(255 255 255 / .42);color:rgb(255 255 255 / .94);font-size:13px;font-weight:500;line-height:1.15}
+.interactive-hero-panel .interactive-hero-tab:hover{border-color:rgb(255 255 255 / .8)}
+.interactive-hero-panel .interactive-hero-tab[aria-selected="true"]{border-color:#c9ab68;background:rgb(184 154 90 / .26);color:#fff;font-weight:700}
+.interactive-hero-panel .interactive-hero-controls-content{gap:12px}
+.interactive-hero-panel .interactive-hero-time-presets{gap:6px}
+.interactive-hero-panel .interactive-hero-time-presets button,
+.interactive-hero-panel .interactive-hero-section-actions button,
+.interactive-hero-panel .interactive-hero-time-input button,
+.interactive-hero-panel .interactive-hero-camera-head button,
+.interactive-hero-panel .interactive-hero-camera-list button{min-height:38px;padding:6px 10px;border-color:rgb(255 255 255 / .42);color:#fff;font-size:12px;font-weight:500;line-height:1.15}
+.interactive-hero-panel .interactive-hero-time-presets button:hover,
+.interactive-hero-panel .interactive-hero-section-actions button:hover,
+.interactive-hero-panel .interactive-hero-time-input button:hover,
+.interactive-hero-panel .interactive-hero-camera-head button:hover,
+.interactive-hero-panel .interactive-hero-camera-list button:hover{border-color:rgb(255 255 255 / .8);background:rgb(255 255 255 / .12)}
+.interactive-hero-panel .interactive-hero-time-presets button[aria-pressed="true"]{border-color:#c9ab68;background:rgb(184 154 90 / .3);font-weight:700}
+.interactive-hero-panel .interactive-hero-range{grid-template-columns:64px minmax(0,1fr) 44px;gap:8px;color:rgb(255 255 255 / .94);font-size:12px;line-height:1.2}
+.interactive-hero-panel .interactive-hero-range input{height:22px}
+.interactive-hero-panel .interactive-hero-range output{font-weight:600;color:#fff}
+.interactive-hero-panel .interactive-hero-time-input{flex-wrap:wrap;gap:8px;color:rgb(255 255 255 / .94);font-size:12px}
+.interactive-hero-panel .interactive-hero-time-input label{gap:8px}
+.interactive-hero-panel .interactive-hero-time-input input{width:96px;padding:6px 8px;border-color:rgb(255 255 255 / .42);font-size:13px}
+.interactive-hero-panel .interactive-hero-checks{gap:10px 16px;color:rgb(255 255 255 / .94);font-size:12px}
+.interactive-hero-panel .interactive-hero-checks label,
+.interactive-hero-panel .interactive-hero-check{gap:8px;min-height:28px}
+.interactive-hero-panel input[type="checkbox"]{width:16px;height:16px;flex:none}
+.interactive-hero-panel .interactive-hero-section-group{grid-template-columns:18px minmax(0,1fr);gap:8px}
+.interactive-hero-panel .interactive-hero-section-group>button{padding:6px 0;font-size:13px;font-weight:600}
+.interactive-hero-panel .interactive-hero-count,
+.interactive-hero-panel .interactive-hero-count-label,
+.interactive-hero-panel .interactive-hero-camera-head>span{color:rgb(255 255 255 / .78);font-size:11px}
+.interactive-hero-panel .interactive-hero-list{gap:4px}
+.interactive-hero-panel .interactive-hero-list-items{gap:6px;margin:2px 0 6px 26px}
+.interactive-hero-panel .interactive-hero-list-items label,
+.interactive-hero-panel .interactive-hero-light-list label{gap:8px;min-height:28px;color:rgb(255 255 255 / .94);font-size:12px;line-height:1.3}
+.interactive-hero-panel .interactive-hero-fixed-note,
+.interactive-hero-panel .interactive-hero-empty{color:rgb(255 255 255 / .75);font-size:11px;line-height:1.4}
+.interactive-hero-panel .interactive-hero-origin{color:rgb(255 255 255 / .72);font-size:11px}
+.interactive-hero-panel .interactive-hero-camera-list li{gap:8px;color:rgb(255 255 255 / .94);font-size:12px}
+.container-hero-loader,.container-hero-loader-label{font-size:14px}
+.container-hero-loader{padding:8px 12px}
+
+/* Botones "Rotar automáticamente" y "Comenzar timelapse" (HeroActionButtons) */
+.interactive-hero-actions{display:grid;gap:8px}
+.interactive-hero-action{display:flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:8px 12px;border:1px solid #c9ab68;border-radius:4px;background:transparent;color:#fff;font:inherit;font-size:13px;font-weight:600;line-height:1.15;text-align:center;cursor:pointer;transition:background 160ms ease,color 160ms ease}
+.interactive-hero-action svg{width:20px;height:20px;flex:none}
+.interactive-hero-action:hover{background:rgb(184 154 90 / .24)}
+.interactive-hero-action[data-active="true"]{border-color:#b89a5a;background:#b89a5a;color:#14120e}
+.interactive-hero-action[data-active="true"]:hover{background:#c9ab68}
+
+/* Botones sobre cada cámara dentro del modelo 3D (CameraMarkers) */
+.container-hero-camera-marker{position:relative;display:grid;place-items:center;width:44px;height:44px;padding:0;border:2px solid #b89a5a;border-radius:50%;background:#14120e;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgb(0 0 0 / .55);transition:transform 150ms ease,opacity 200ms ease,background 150ms ease,color 150ms ease}
+.container-hero-camera-marker svg{width:22px;height:22px}
+.container-hero-camera-marker::after{content:"";position:absolute;inset:-3px;border:2px solid #b89a5a;border-radius:50%;opacity:0;pointer-events:none;animation:container-hero-camera-pulse 2.4s ease-out infinite}
+@keyframes container-hero-camera-pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
+.container-hero-camera-marker:hover{background:#b89a5a;color:#14120e;transform:scale(1.1)}
+.container-hero-camera-marker:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.container-hero-camera-marker[data-hidden="true"]{opacity:0;pointer-events:none}
+.container-hero-camera-tooltip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translate(-50%,4px);padding:6px 10px;border:1px solid rgb(184 154 90 / .8);border-radius:4px;background:#14120e;color:#fff;font:600 13px/1.2 var(--font-display);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease,transform 150ms ease}
+.container-hero-camera-marker:hover .container-hero-camera-tooltip,.container-hero-camera-marker:focus-visible .container-hero-camera-tooltip{opacity:1;transform:translate(-50%,0)}
+
+/* Escritorio: escenario un poco más alto para que el panel con letra más grande tenga lugar */
+@media(min-width:901px){
+  .interactive-hero-stage{aspect-ratio:1.6/1}
+}
+/* Tablet: el panel se mantiene en 250 px para no tapar la escena */
+@media(min-width:901px) and (max-width:1180px){
+  .interactive-hero-panel{--panel-width:250px;padding:16px 16px 14px}
+}
+/* Móvil: el panel se abre sobre la escena con el botón "trigger" */
+@media(max-width:768px){
+  .interactive-hero-panel{padding:14px}
+  .interactive-hero-panel .interactive-hero-panel-content{gap:10px}
+  .interactive-hero-panel h2{font-size:14px}
+  .interactive-hero-panel .interactive-hero-panel-note{font-size:12px}
+  .interactive-hero-panel .interactive-hero-panel-label{font-size:12px}
+  .interactive-hero-panel .interactive-hero-choice-count{font-size:11px}
+  .interactive-hero-panel .interactive-hero-view-button{font-size:12px}
+  .interactive-hero-panel-trigger{font-size:12px}
+  .interactive-hero-panel-close{color:rgb(255 255 255 / .95)}
+}
+@media(prefers-reduced-motion:reduce){
+  .container-hero-camera-marker::after{animation:none}
+}

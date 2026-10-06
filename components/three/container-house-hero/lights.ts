@@ -7,7 +7,6 @@ export const LIGHT_DEFAULTS = {
   decay: 2,
 };
 
-export const MARKER_RADIUS = 0.08;
 export const LIGHT_SHADOWS = false;
 export const FALLBACK_LIGHTS: { name: string; blender: [number, number, number] }[] = [];
 export const LIGHT_INTENSITY = 0.01;

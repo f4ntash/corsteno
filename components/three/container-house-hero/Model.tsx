@@ -3,13 +3,13 @@ import { useFrame } from "@react-three/fiber";
 import { Center, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { isCameraName } from "./cameras";
-import { blenderToThree, FALLBACK_LIGHTS, isLightName, LIGHT_DEFAULTS, LIGHT_INTENSITY, LIGHT_SHADOWS, MARKER_RADIUS, type ModelLightEntry } from "./lights";
+import { blenderToThree, FALLBACK_LIGHTS, isLightName, LIGHT_DEFAULTS, LIGHT_INTENSITY, LIGHT_SHADOWS, type ModelLightEntry } from "./lights";
 import { isLocked, parseName, type SectionEntry } from "./sections";
 
 type SectionNodeEntry = SectionEntry & { node: THREE.Object3D };
 type CameraNodeEntry = { key: string; label: string; object: THREE.Object3D; fov: number | null };
 type LightNodeEntry = { key: string; label: string; node: THREE.Object3D };
-type RigEntry = { key: string; light: THREE.Light; marker: THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>; real: boolean; base: number };
+type RigEntry = { key: string; light: THREE.Light; real: boolean; base: number };
 
 function collectSections(root: THREE.Object3D): SectionNodeEntry[] {
   const found: SectionNodeEntry[] = [];
@@ -96,7 +96,6 @@ export default function Model({
   hidden,
   onSections,
   lightsOff,
-  showMarkers = true,
   onLights,
   onBounds,
   camerasRef,
@@ -107,9 +106,8 @@ export default function Model({
   hidden: Set<string>;
   onSections?: (sections: Omit<SectionEntry, "node">[]) => void;
   lightsOff: Set<string>;
-  showMarkers?: boolean;
   onLights?: (lights: ModelLightEntry[]) => void;
-  onBounds?: (radius: number) => void;
+  onBounds?: (radius: number, height: number) => void;
   camerasRef: React.RefObject<Map<string, CameraNodeEntry>>;
   onCameras?: (cameras: { key: string; label: string }[]) => void;
 }) {
@@ -118,15 +116,19 @@ export default function Model({
   const lightNodes = useMemo(() => collectLightNodes(scene), [scene]);
   const rig = useRef<RigEntry[]>([]);
 
-  const radius = useMemo(() => {
+  const bounds = useMemo(() => {
     const size = new THREE.Box3().setFromObject(scene).getSize(new THREE.Vector3());
     const modelRadius = (size.length() / 2) * scale;
-    return Number.isFinite(modelRadius) && modelRadius > 0 ? modelRadius : 8;
+    const modelHeight = size.y * scale;
+    return {
+      radius: Number.isFinite(modelRadius) && modelRadius > 0 ? modelRadius : 8,
+      height: Number.isFinite(modelHeight) && modelHeight > 0 ? modelHeight : 0,
+    };
   }, [scene, scale]);
 
   useEffect(() => {
-    onBounds?.(radius);
-  }, [radius]); // Matches the source viewer's model bounds update.
+    onBounds?.(bounds.radius, bounds.height);
+  }, [bounds]); // Matches the source viewer's model bounds update.
 
   const cameraNodes = useMemo(() => collectCameraNodes(scene), [scene]);
   useEffect(() => {
@@ -155,12 +157,7 @@ export default function Model({
     const register = (key: string, light: THREE.Light, real: boolean) => {
       light.userData.baseIntensity ??= light.intensity;
       light.castShadow = LIGHT_SHADOWS;
-      const markerMaterial = new THREE.MeshBasicMaterial({ toneMapped: false });
-      const marker = new THREE.Mesh(new THREE.SphereGeometry(MARKER_RADIUS, 16, 16), markerMaterial);
-      marker.userData.isMarker = true;
-      light.add(marker);
-      added.push(marker);
-      entries.push({ key, light, marker, real, base: light.userData.baseIntensity as number });
+      entries.push({ key, light, real, base: light.userData.baseIntensity as number });
     };
 
     if (lightNodes.length > 0) {
@@ -188,15 +185,7 @@ export default function Model({
     onLights?.(entries.map(({ key, real }) => ({ key, label: lightNodes.find((entry) => entry.key === key)?.label ?? key.replace(/_/g, " "), origin: real ? "glb" : "three" })));
 
     return () => {
-      added.forEach((object) => {
-        object.parent?.remove(object);
-        if ((object as THREE.Mesh).isMesh) {
-          const mesh = object as THREE.Mesh;
-          mesh.geometry.dispose();
-          if (Array.isArray(mesh.material)) mesh.material.forEach((material) => material.dispose());
-          else mesh.material.dispose();
-        }
-      });
+      added.forEach((object) => object.parent?.remove(object));
       entries.forEach((entry) => {
         if (entry.real) entry.light.intensity = entry.base;
       });
@@ -210,15 +199,12 @@ export default function Model({
       const target = off ? 0 : entry.base * LIGHT_INTENSITY;
       const next = THREE.MathUtils.damp(entry.light.intensity, target, 8, delta);
       entry.light.intensity = Math.abs(next - target) < 1e-3 ? target : next;
-      entry.marker.visible = showMarkers;
-      if (off) entry.marker.material.color.set("#3a3a3a");
-      else entry.marker.material.color.copy(entry.light.color);
     }
   });
 
   useEffect(() => {
     scene.traverse((object) => {
-      if ((object as THREE.Mesh).isMesh && !object.userData.isMarker) {
+      if ((object as THREE.Mesh).isMesh) {
         const mesh = object as THREE.Mesh;
         mesh.castShadow = true;
         mesh.receiveShadow = true;
