@@ -1,6 +1,11 @@
 import type * as THREE from "three";
 
-export const isCameraName = (name: string) => /^camera/i.test(name);
+// La cámara 7 no se usa: no aparece en la lista ni como punto sobre el modelo
+// Excluye cualquier nombre con un "7" suelto: Camera_7, Camera 7, Camera.007, Camera_07, Camera_7_Sala...
+// (no afecta a números como 17 o 70)
+const isSevenCamera = (name: string) => /(?:^|[^0-9])0*7(?![0-9])/.test(name);
+
+export const isCameraName = (name: string) => /^camera/i.test(name) && !isSevenCamera(name);
 
 export const MAX_ZOOM_OUT = 2.5;
 export const MIN_MAX_DISTANCE = 20;

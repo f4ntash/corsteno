@@ -4,8 +4,9 @@ import { useEffect, useState, type ComponentType } from "react";
 import { formatHour, PRESETS, sunAt } from "@/components/three/container-house-hero/presets";
 import type { CameraRequest } from "@/components/three/container-house-hero/cameras";
 import type { ModelLightEntry } from "@/components/three/container-house-hero/lights";
-import { GROUPS, GROUP_LABELS, type SectionEntry } from "@/components/three/container-house-hero/sections";
+import { buildRows, GROUPS, GROUP_LABELS, type SectionEntry } from "@/components/three/container-house-hero/sections";
 import HeroActionButtons from "@/components/three/container-house-hero/HeroActionButtons";
+import HotspotSwitcher from "@/components/three/container-house-hero/HotspotSwitcher";
 import { useTimelapse } from "@/components/three/container-house-hero/useTimelapse";
 import type { HomeDictionary, Locale } from "@/lib/i18n";
 
@@ -14,15 +15,15 @@ type HeroViewerProps = {
   azimuth: number;
   elevation: number;
   intensity: number;
-  showClouds: boolean;
-  showStars: boolean;
   hidden: Set<string>;
   lightsOff: Set<string>;
   cameraRequest: CameraRequest;
-  autoRotate: boolean;
-  onAutoRotateChange: (value: boolean) => void;
   onSelectCamera: (key: string) => void;
+  onSelectLight: (key: string) => void;
   viewFromLabel: string;
+  hotspotMode: "cameras" | "lights" | null;
+  activeCameraKey: string | null;
+  activeLightKey: string | null;
   onSections: (sections: Omit<SectionEntry, "node">[]) => void;
   onLights: (lights: ModelLightEntry[]) => void;
   onCameras: (cameras: { key: string; label: string }[]) => void;
@@ -36,8 +37,8 @@ const INITIAL_SUN = sunAt(INITIAL_TIME);
 
 // Textos de los botones de rotación y timelapse. Conviene moverlos a tu diccionario i18n (HomeDictionary).
 const ACTION_LABELS = {
-  es: { autoRotateOff: "Rotar automáticamente", autoRotateOn: "Detener rotación", timelapseOff: "Comenzar timelapse", timelapseOn: "Detener timelapse" },
-  en: { autoRotateOff: "Rotate automatically", autoRotateOn: "Stop rotation", timelapseOff: "Start timelapse", timelapseOn: "Stop timelapse" },
+  es: { timelapseOff: "Comenzar timelapse", timelapseOn: "Detener timelapse", previous: "Anterior", next: "Siguiente", advanced: "Ajustes avanzados" },
+  en: { timelapseOff: "Start timelapse", timelapseOn: "Stop timelapse", previous: "Previous", next: "Next", advanced: "Advanced settings" },
 };
 
 const nowHour = () => {
@@ -59,16 +60,15 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
   const [azimuth, setAzimuth] = useState(INITIAL_SUN.azimuth);
   const [elevation, setElevation] = useState(INITIAL_SUN.elevation);
   const [intensity, setIntensity] = useState(INITIAL_SUN.intensity);
-  const [showClouds, setShowClouds] = useState(true);
-  const [showStars, setShowStars] = useState(true);
   const [sections, setSections] = useState<Omit<SectionEntry, "node">[]>([]);
   const [hidden, setHidden] = useState<Set<string>>(() => new Set());
   const [lights, setLights] = useState<ModelLightEntry[] | null>(null);
   const [lightsOff, setLightsOff] = useState<Set<string>>(() => new Set());
-  const [autoRotate, setAutoRotate] = useState(false);
   const [cameras, setCameras] = useState<{ key: string; label: string }[] | null>(null);
   const [cameraRequest, setCameraRequest] = useState<CameraRequest>(null);
   const [activeTab, setActiveTab] = useState<ControlTab>("lighting");
+  const [activeCameraKey, setActiveCameraKey] = useState<string | null>(null);
+  const [activeLightKey, setActiveLightKey] = useState<string | null>(null);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [HeroViewer, setHeroViewer] = useState<HeroViewer | null>(null);
@@ -118,16 +118,16 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
 
   const timelapse = useTimelapse({ time, onTimeChange: applyTime });
 
-  const toggleSection = (key: string) => setHidden((current) => {
-    const next = new Set(current);
-    if (next.has(key)) next.delete(key);
-    else next.add(key);
-    return next;
-  });
-
   const setGroupVisible = (items: Omit<SectionEntry, "node">[], visible: boolean) => setHidden((current) => {
     const next = new Set(current);
     items.forEach((item) => (visible ? next.delete(item.key) : next.add(item.key)));
+    return next;
+  });
+
+  // Prende o apaga de una vez todas las claves de un botón combinado
+  const setKeysVisible = (keys: string[], visible: boolean) => setHidden((current) => {
+    const next = new Set(current);
+    keys.forEach((key) => (visible ? next.delete(key) : next.add(key)));
     return next;
   });
 
@@ -151,13 +151,39 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
     return next;
   });
 
+  // Cámara "Camera Inicial" del modelo (también acepta "Initial"): es la que muestra "Vista inicial"
+  const homeCamera = cameras?.find((camera) => /inicial|initial/i.test(`${camera.key} ${camera.label}`)) ?? null;
+
   const requestCamera = (key: string | null, mode: "home" | "view") => {
+    setActiveCameraKey(mode === "view" ? key : homeCamera?.key ?? null);
     setCameraRequest({ key, mode, n: Date.now() });
   };
 
+  // Elemento anterior o siguiente de una lista (cámaras o luces), dando la vuelta al llegar al final
+  const stepKey = (items: { key: string }[], current: string | null, delta: 1 | -1) => {
+    const index = items.findIndex((item) => item.key === current);
+    const next = index === -1 ? (delta === 1 ? 0 : items.length - 1) : (index + delta + items.length) % items.length;
+    return items[next].key;
+  };
+  const stepCamera = (delta: 1 | -1) => {
+    if (cameras?.length) requestCamera(stepKey(cameras, activeCameraKey ?? homeCamera?.key ?? null, delta), "view");
+  };
+  const stepLight = (delta: 1 | -1) => {
+    if (lights?.length) setActiveLightKey(stepKey(lights, activeLightKey, delta));
+  };
+  // Tocar el punto de una luz la selecciona y la enciende o apaga
+  const selectLight = (key: string) => {
+    setActiveLightKey(key);
+    toggleLight(key);
+  };
+
   const scene = t.hero.sceneControls;
-  const actionLabels = String(locale).toLowerCase().startsWith("en") ? ACTION_LABELS.en : ACTION_LABELS.es;
+  const isEnglish = String(locale).toLowerCase().startsWith("en");
+  const actionLabels = isEnglish ? ACTION_LABELS.en : ACTION_LABELS.es;
   const visibleLights = (lights ?? []).filter((light) => !lightsOff.has(light.key)).length;
+  // Si no hay ninguna cámara elegida, el selector muestra "Camera Inicial" en vez del contador de cámaras
+  const activeCamera = cameras?.find((camera) => camera.key === activeCameraKey) ?? homeCamera;
+  const activeLight = lights?.find((light) => light.key === activeLightKey) ?? null;
 
   return (
     <div className="interactive-hero-demo">
@@ -169,21 +195,43 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
               azimuth={azimuth}
               elevation={elevation}
               intensity={intensity}
-              showClouds={showClouds}
-              showStars={showStars}
               hidden={hidden}
               lightsOff={lightsOff}
               cameraRequest={cameraRequest}
-              autoRotate={autoRotate}
-              onAutoRotateChange={setAutoRotate}
               onSelectCamera={(key) => requestCamera(key, "view")}
               viewFromLabel={scene.viewFrom}
+              onSelectLight={selectLight}
+              hotspotMode={activeTab === "cameras" ? "cameras" : activeTab === "lights" ? "lights" : null}
+              activeCameraKey={activeCameraKey}
+              activeLightKey={activeLightKey}
               onSections={setSections}
               onLights={setLights}
               onCameras={setCameras}
             />
           ) : <span className="container-hero-loader-label">0%</span>}
         </div>
+
+        {/* Selector central: solo con la pestaña Cámaras o la pestaña Luces abierta */}
+        {activeTab === "cameras" && cameras !== null && cameras.length > 0 && (
+          <HotspotSwitcher
+            label={activeCamera ? activeCamera.label : replaceValue(scene.camerasCount, { count: cameras.length })}
+            prevLabel={actionLabels.previous}
+            nextLabel={actionLabels.next}
+            onPrev={() => stepCamera(-1)}
+            onNext={() => stepCamera(1)}
+          />
+        )}
+        {activeTab === "lights" && lights !== null && lights.length > 0 && (
+          <HotspotSwitcher
+            label={activeLight ? activeLight.label : replaceValue(scene.lightsCount, { on: visibleLights, total: lights.length })}
+            prevLabel={actionLabels.previous}
+            nextLabel={actionLabels.next}
+            onPrev={() => stepLight(-1)}
+            onNext={() => stepLight(1)}
+            onLabelClick={activeLight ? () => toggleLight(activeLight.key) : undefined}
+            labelPressed={activeLight ? !lightsOff.has(activeLight.key) : undefined}
+          />
+        )}
 
         {!mobilePanelOpen && (
           <button
@@ -215,8 +263,6 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
             <h2>{t.hero.panel.title}</h2>
             <p className="interactive-hero-panel-note">{t.hero.panel.note}</p>
             <HeroActionButtons
-              autoRotate={autoRotate}
-              onToggleAutoRotate={() => setAutoRotate((value) => !value)}
               timelapseRunning={timelapse.running}
               onToggleTimelapse={timelapse.toggle}
               labels={actionLabels}
@@ -270,25 +316,26 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
                     </label>
                     <button type="button" onClick={() => applyTime(nowHour())}>{scene.systemTime}</button>
                   </div>
-                  <label className="interactive-hero-range">
-                    <span>{scene.azimuth}</span>
-                    <input type="range" min={0} max={360} step={1} value={azimuth} onChange={(event) => setAzimuth(Number(event.target.value))} />
-                    <output>{azimuth}°</output>
-                  </label>
-                  <label className="interactive-hero-range">
-                    <span>{scene.elevation}</span>
-                    <input type="range" min={0} max={90} step={1} value={elevation} onChange={(event) => setElevation(Number(event.target.value))} />
-                    <output>{elevation}°</output>
-                  </label>
-                  <label className="interactive-hero-range">
-                    <span>{scene.intensity}</span>
-                    <input type="range" min={0} max={5} step={0.1} value={intensity} onChange={(event) => setIntensity(Number(event.target.value))} />
-                    <output>{intensity.toFixed(1)}</output>
-                  </label>
-                  <div className="interactive-hero-checks">
-                    <label><input type="checkbox" checked={showClouds} onChange={(event) => setShowClouds(event.target.checked)} />{scene.clouds}</label>
-                    <label><input type="checkbox" checked={showStars} onChange={(event) => setShowStars(event.target.checked)} />{scene.stars}</label>
-                  </div>
+                  <details className="interactive-hero-advanced">
+                    <summary>{actionLabels.advanced}</summary>
+                    <div className="interactive-hero-advanced-body">
+                      <label className="interactive-hero-range">
+                        <span>{scene.azimuth}</span>
+                        <input type="range" min={0} max={360} step={1} value={azimuth} onChange={(event) => setAzimuth(Number(event.target.value))} />
+                        <output>{azimuth}°</output>
+                      </label>
+                      <label className="interactive-hero-range">
+                        <span>{scene.elevation}</span>
+                        <input type="range" min={0} max={90} step={1} value={elevation} onChange={(event) => setElevation(Number(event.target.value))} />
+                        <output>{elevation}°</output>
+                      </label>
+                      <label className="interactive-hero-range">
+                        <span>{scene.intensity}</span>
+                        <input type="range" min={0} max={5} step={0.1} value={intensity} onChange={(event) => setIntensity(Number(event.target.value))} />
+                        <output>{intensity.toFixed(1)}</output>
+                      </label>
+                    </div>
+                  </details>
                 </>
               )}
 
@@ -328,9 +375,16 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
                           </div>
                           {open && (
                             <ul className="interactive-hero-list-items">
-                              {toggleable.map((section) => (
-                                <li key={section.key}>
-                                  <label><input type="checkbox" checked={!hidden.has(section.key)} onChange={() => toggleSection(section.key)} />{section.label}</label>
+                              {buildRows(group, toggleable, isEnglish ? "en" : "es").map((row) => (
+                                <li key={row.id}>
+                                  <label>
+                                    <input
+                                      type="checkbox"
+                                      checked={row.keys.every((key) => !hidden.has(key))}
+                                      onChange={(event) => setKeysVisible(row.keys, event.target.checked)}
+                                    />
+                                    {row.label}
+                                  </label>
                                 </li>
                               ))}
                               {items.length > toggleable.length && (
@@ -356,35 +410,13 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
                     <button type="button" onClick={() => setAllLights(true)}>{scene.turnOn}</button>
                     <button type="button" onClick={() => setAllLights(false)}>{scene.turnOff}</button>
                   </div>
-                  <ul className="interactive-hero-list interactive-hero-light-list">
-                    {lights.map((light) => (
-                      <li key={light.key}>
-                        <label>
-                          <input type="checkbox" checked={!lightsOff.has(light.key)} onChange={() => toggleLight(light.key)} />
-                          <span>{light.label}</span>
-                          <span className="interactive-hero-origin">{light.origin === "glb" ? scene.sourceGlb : scene.sourceThree}</span>
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
                 </>
               )}
 
               {activeTab === "cameras" && cameras !== null && (
-                <>
-                  <div className="interactive-hero-camera-head">
-                    <span>{replaceValue(scene.camerasCount, { count: cameras.length })}</span>
-                    <button type="button" onClick={() => requestCamera(null, "home")}>{scene.homeView}</button>
-                  </div>
-                  <ul className="interactive-hero-list interactive-hero-camera-list">
-                    {cameras.map((camera) => (
-                      <li key={camera.key}>
-                        <span>{camera.label}</span>
-                        <button type="button" onClick={() => requestCamera(camera.key, "view")}>{scene.viewFrom}</button>
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                <div className="interactive-hero-camera-head interactive-hero-camera-home">
+                  <button type="button" onClick={() => requestCamera(null, "home")}>{scene.homeView}</button>
+                </div>
               )}
 
               {activeTab === "lights" && lights !== null && lights.length === 0 && <p className="interactive-hero-empty">{scene.noLights}</p>}

@@ -5,6 +5,11 @@ import type { Atmosphere } from "./presets";
 
 const STAR_SHELL = 300;
 
+// Posición de las nubes, como múltiplo del tamaño del modelo.
+// Distancia horizontal al centro y altura sobre el centro: [mínimo, máximo].
+const CLOUD_RING: [number, number] = [1, 1.2];
+const CLOUD_HEIGHT: [number, number] = [0.3, 0.5];
+
 function randomGenerator(seed: number) {
   let state = seed >>> 0;
   return () => ((state = (state * 1664525 + 1013904223) >>> 0) / 4294967296);
@@ -62,13 +67,9 @@ function makeStars(count: number, seed: number) {
 export default function Sky({
   phase,
   radius = 8,
-  showClouds = true,
-  showStars = true,
 }: {
   phase: Atmosphere;
   radius?: number;
-  showClouds?: boolean;
-  showStars?: boolean;
 }) {
   const camera = useThree((state) => state.camera);
   const starsRef = useRef<THREE.Group>(null);
@@ -96,15 +97,15 @@ export default function Sky({
     const cloudCount = 10;
     for (let index = 0; index < cloudCount; index += 1) {
       const angle = (index / cloudCount) * Math.PI * 2 + random() * 0.4;
-      const ring = scale * (2 + random() * 0.8);
-      const height = scale * (0.9 + random() * 0.7);
+      const ring = scale * (CLOUD_RING[0] + random() * (CLOUD_RING[1] - CLOUD_RING[0]));
+      const height = scale * (CLOUD_HEIGHT[0] + random() * (CLOUD_HEIGHT[1] - CLOUD_HEIGHT[0]));
       const centerX = Math.sin(angle) * ring;
       const centerZ = Math.cos(angle) * ring;
       const puffCount = 4 + Math.floor(random() * 3);
       for (let puff = 0; puff < puffCount; puff += 1) {
-        const width = scale * (0.9 + random() * 0.8);
+        const width = scale * (0.55 + random() * 0.5);
         list.push({
-          position: [centerX + (random() - 0.5) * scale * 1.4, height + (random() - 0.5) * scale * 0.25, centerZ + (random() - 0.5) * scale * 1.4],
+          position: [centerX + (random() - 0.5) * scale * 0.9, height + (random() - 0.5) * scale * 0.15, centerZ + (random() - 0.5) * scale * 0.9],
           scale: [width, width * (0.45 + random() * 0.2), 1],
         });
       }
@@ -150,11 +151,11 @@ export default function Sky({
     const colorBlend = 1 - Math.exp(-speed * delta);
     cloudMaterial.color.lerp(cloudTarget, colorBlend);
     cloudMaterial.opacity = THREE.MathUtils.damp(cloudMaterial.opacity, phase.cloudOpacity, speed, delta);
-    clouds.visible = showClouds && cloudMaterial.opacity > 0.01;
+    clouds.visible = cloudMaterial.opacity > 0.01;
     clouds.rotation.y += delta * 0.004;
     stars.smallMaterial.opacity = THREE.MathUtils.damp(stars.smallMaterial.opacity, phase.starOpacity, speed, delta);
     stars.bigMaterial.opacity = stars.smallMaterial.opacity * (0.85 + 0.15 * Math.sin(clock.elapsedTime * 1.8));
-    starsGroup.visible = showStars && stars.smallMaterial.opacity > 0.01;
+    starsGroup.visible = stars.smallMaterial.opacity > 0.01;
     starsGroup.position.copy(camera.position);
   });
 

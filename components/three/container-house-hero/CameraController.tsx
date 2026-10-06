@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { HOME_VIEW, type CameraRequest, type HeroCameraEntry } from "./cameras";
+import type { CameraRequest, HeroCameraEntry } from "./cameras";
 
 const DURATION = 0.9;
 
@@ -40,15 +40,17 @@ export default function CameraController({
 
   useEffect(() => {
     if (!request || !controls) return;
+
+    // "Vista inicial" busca la cámara "Camera Inicial" del modelo (también acepta "Initial")
+    const isHomeCamera = (entry: HeroCameraEntry) => /inicial|initial/i.test(`${entry.key} ${entry.label}`);
+    const homeEntry = request.mode === "home"
+      ? [...camerasRef.current.values()].find(isHomeCamera)
+      : undefined;
+
     let to: CameraAnimation["to"];
-    if (request.mode === "home") {
-      to = {
-        position: new THREE.Vector3(...HOME_VIEW.position),
-        target: new THREE.Vector3(...HOME_VIEW.target),
-        fov: HOME_VIEW.fov,
-      };
-    } else {
-      const entry = camerasRef.current.get(request.key ?? "");
+    {
+      // Sin vista de respaldo: "Vista inicial" solo va a "Camera Inicial"
+      const entry = homeEntry ?? (request.mode === "view" ? camerasRef.current.get(request.key ?? "") : undefined);
       if (!entry) return;
       const object = entry.object;
       object.updateWorldMatrix(true, false);

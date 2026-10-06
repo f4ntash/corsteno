@@ -610,16 +610,6 @@ main:has(> .testimonials)>.contact{background:#0b0d0b}
 .interactive-hero-action[data-active="true"]{border-color:#b89a5a;background:#b89a5a;color:#14120e}
 .interactive-hero-action[data-active="true"]:hover{background:#c9ab68}
 
-/* Botones sobre cada cámara dentro del modelo 3D (CameraMarkers) */
-.container-hero-camera-marker{position:relative;display:grid;place-items:center;width:44px;height:44px;padding:0;border:2px solid #b89a5a;border-radius:50%;background:#14120e;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgb(0 0 0 / .55);transition:transform 150ms ease,opacity 200ms ease,background 150ms ease,color 150ms ease}
-.container-hero-camera-marker svg{width:22px;height:22px}
-.container-hero-camera-marker::after{content:"";position:absolute;inset:-3px;border:2px solid #b89a5a;border-radius:50%;opacity:0;pointer-events:none;animation:container-hero-camera-pulse 2.4s ease-out infinite}
-@keyframes container-hero-camera-pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
-.container-hero-camera-marker:hover{background:#b89a5a;color:#14120e;transform:scale(1.1)}
-.container-hero-camera-marker:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.container-hero-camera-marker[data-hidden="true"]{opacity:0;pointer-events:none}
-.container-hero-camera-tooltip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translate(-50%,4px);padding:6px 10px;border:1px solid rgb(184 154 90 / .8);border-radius:4px;background:#14120e;color:#fff;font:600 13px/1.2 var(--font-display);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease,transform 150ms ease}
-.container-hero-camera-marker:hover .container-hero-camera-tooltip,.container-hero-camera-marker:focus-visible .container-hero-camera-tooltip{opacity:1;transform:translate(-50%,0)}
 
 /* Escritorio: escenario un poco más alto para que el panel con letra más grande tenga lugar */
 @media(min-width:901px){
@@ -642,5 +632,65 @@ main:has(> .testimonials)>.contact{background:#0b0d0b}
   .interactive-hero-panel-close{color:rgb(255 255 255 / .95)}
 }
 @media(prefers-reduced-motion:reduce){
-  .container-hero-camera-marker::after{animation:none}
+  .container-hero-hotspot,.container-hero-hotspot-label,.container-hero-switcher-arrow,.container-hero-switcher-label{transition:none}
+}
+
+/* Puntos de interés sobre el modelo (cámaras y luces): círculo fino, fondo oscuro translúcido y número */
+.container-hero-hotspot{position:relative;display:grid;place-items:center;width:30px;height:30px;padding:0;border:1.5px solid rgb(255 255 255 / .85);border-radius:50%;background:rgb(24 22 20 / .55);backdrop-filter:blur(2px);color:rgb(255 255 255 / .96);font:600 12px/1 var(--font-display);font-variant-numeric:tabular-nums;cursor:pointer;box-shadow:0 1px 6px rgb(0 0 0 / .45);transition:transform 150ms ease,background 150ms ease,border-color 150ms ease,opacity 200ms ease}
+.container-hero-hotspot::before{content:"";position:absolute;inset:-8px;border-radius:50%}
+.container-hero-hotspot:hover{transform:scale(1.12);border-color:#fff;background:rgb(24 22 20 / .78)}
+.container-hero-hotspot:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.container-hero-hotspot[data-active="true"]{border-color:#fff;background:rgb(255 255 255 / .28);box-shadow:0 0 0 4px rgb(255 255 255 / .2),0 1px 6px rgb(0 0 0 / .45)}
+.container-hero-hotspot[data-dim="true"]{border-style:dashed;opacity:.6}
+.container-hero-hotspot[data-hidden="true"]{opacity:0;pointer-events:none}
+.container-hero-hotspot-label{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translate(-50%,4px);padding:4px 10px;border-radius:999px;background:rgb(20 18 14 / .82);color:#fff;font:500 12px/1.2 var(--font-display);letter-spacing:.04em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 150ms ease,transform 150ms ease}
+.container-hero-hotspot:hover .container-hero-hotspot-label,.container-hero-hotspot:focus-visible .container-hero-hotspot-label{opacity:1;transform:translate(-50%,0)}
+
+/* Selector central (abajo): flecha, nombre del punto actual, flecha */
+.interactive-hero-stage{--hero-panel-space:264px}
+.container-hero-switcher{position:absolute;z-index:8;bottom:16px;left:calc((100% - var(--hero-panel-space)) / 2);transform:translateX(-50%);display:flex;align-items:center;gap:2px;max-width:calc(100% - var(--hero-panel-space) - 24px);padding:3px;border:1px solid rgb(255 255 255 / .35);border-radius:999px;background:rgb(20 18 14 / .55);backdrop-filter:blur(6px);color:#fff}
+.container-hero-switcher-arrow{display:grid;place-items:center;flex:none;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;transition:background 150ms ease}
+.container-hero-switcher-arrow:hover{background:rgb(255 255 255 / .16)}
+.container-hero-switcher-label{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:120px;min-height:40px;padding:0 10px;border:0;border-radius:999px;background:transparent;color:#fff;font:600 13px/1.2 var(--font-display);letter-spacing:.09em;text-align:center;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button.container-hero-switcher-label{cursor:pointer;transition:background 150ms ease}
+button.container-hero-switcher-label:hover{background:rgb(255 255 255 / .12)}
+.container-hero-switcher-arrow:focus-visible,button.container-hero-switcher-label:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.container-hero-switcher-dot{flex:none;width:8px;height:8px;border:1.5px solid #fff;border-radius:50%}
+.container-hero-switcher-label[aria-pressed="true"] .container-hero-switcher-dot{background:#fff}
+@media(min-width:901px) and (max-width:1180px){
+  .interactive-hero-stage{--hero-panel-space:266px}
+}
+@media(max-width:768px){
+  .interactive-hero-stage{--hero-panel-space:0px}
+  .container-hero-switcher{bottom:68px}
+}
+
+/* Listas numeradas de Luces y Cámaras (el número coincide con el punto sobre el modelo) */
+.interactive-hero-panel .interactive-hero-numbered-item{display:flex;align-items:center;justify-content:flex-start;gap:10px;min-height:32px;color:rgb(255 255 255 / .94);font-size:12px;line-height:1.3}
+.interactive-hero-panel .interactive-hero-numbered-item>span:not(.interactive-hero-item-number){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.interactive-hero-item-number{display:grid;place-items:center;flex:none;width:24px;height:24px;border:1.5px solid rgb(255 255 255 / .85);border-radius:50%;background:rgb(255 255 255 / .06);font:600 11px/1 var(--font-display);font-variant-numeric:tabular-nums}
+.interactive-hero-panel .interactive-hero-numbered-item[data-off="true"]{opacity:.55}
+.interactive-hero-panel .interactive-hero-numbered-item[data-off="true"] .interactive-hero-item-number{border-style:dashed}
+
+/* Pestaña Cámaras: solo el botón "Vista inicial", centrado */
+.interactive-hero-panel .interactive-hero-camera-home{display:flex;justify-content:center}
+.interactive-hero-panel .interactive-hero-camera-home button{min-width:160px}
+
+/* Panel Luz: el campo de hora y "Hora del sistema" van en la misma línea */
+.interactive-hero-panel .interactive-hero-time-input{flex-wrap:nowrap;gap:8px}
+.interactive-hero-panel .interactive-hero-time-input label{flex:none;gap:6px}
+.interactive-hero-panel .interactive-hero-time-input input{width:92px}
+.interactive-hero-panel .interactive-hero-time-input button{flex:1 1 auto;min-width:0}
+
+/* Subpanel "Ajustes avanzados" (Rotación, Altura e Intensidad) */
+.interactive-hero-panel .interactive-hero-advanced{border:1px solid rgb(255 255 255 / .42);border-radius:4px}
+.interactive-hero-panel .interactive-hero-advanced>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:38px;padding:6px 10px;color:#fff;font-size:12px;font-weight:600;line-height:1.15;list-style:none;cursor:pointer}
+.interactive-hero-panel .interactive-hero-advanced>summary::-webkit-details-marker{display:none}
+.interactive-hero-panel .interactive-hero-advanced>summary::after{content:"";flex:none;width:7px;height:7px;margin-top:-3px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform 160ms ease}
+.interactive-hero-panel .interactive-hero-advanced[open]>summary::after{margin-top:3px;transform:rotate(-135deg)}
+.interactive-hero-panel .interactive-hero-advanced>summary:hover{background:rgb(255 255 255 / .1)}
+.interactive-hero-panel .interactive-hero-advanced>summary:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.interactive-hero-panel .interactive-hero-advanced-body{display:grid;gap:12px;padding:12px 10px 10px;border-top:1px solid rgb(255 255 255 / .2)}
+@media(prefers-reduced-motion:reduce){
+  .interactive-hero-panel .interactive-hero-advanced>summary::after{transition:none}
 }

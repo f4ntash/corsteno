@@ -100,6 +100,7 @@ export default function Model({
   onBounds,
   camerasRef,
   onCameras,
+  lightsRef,
 }: {
   url: string;
   scale?: number;
@@ -110,6 +111,8 @@ export default function Model({
   onBounds?: (radius: number, height: number) => void;
   camerasRef: React.RefObject<Map<string, CameraNodeEntry>>;
   onCameras?: (cameras: { key: string; label: string }[]) => void;
+  /** Registro de las luces (clave → luz) para poder dibujar un punto sobre cada una. */
+  lightsRef?: React.RefObject<Map<string, THREE.Light>>;
 }) {
   const { scene } = useGLTF(url);
   const sections = useMemo(() => collectSections(scene), [scene]);
@@ -182,6 +185,7 @@ export default function Model({
     }
 
     rig.current = entries;
+    if (lightsRef) lightsRef.current = new Map(entries.map((entry) => [entry.key, entry.light]));
     onLights?.(entries.map(({ key, real }) => ({ key, label: lightNodes.find((entry) => entry.key === key)?.label ?? key.replace(/_/g, " "), origin: real ? "glb" : "three" })));
 
     return () => {
@@ -190,6 +194,7 @@ export default function Model({
         if (entry.real) entry.light.intensity = entry.base;
       });
       rig.current = [];
+      if (lightsRef) lightsRef.current = new Map();
     };
   }, [lightNodes, scene]);
 
