@@ -177,7 +177,7 @@
 }
 
 .projectGrid {
-  min-height: 570px;
+  min-height: 516px;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(250px, 1fr));
@@ -267,8 +267,7 @@
 
 .projectFinishes .projectMedia img,
 .projectExterior .projectMedia img {
-  object-fit: contain;
-  background: #2e2e29;
+  object-fit: cover;
 }
 
 .projectItem:hover .projectMedia img,

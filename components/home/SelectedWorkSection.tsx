@@ -41,7 +41,7 @@ const fixedProjects: ProjectCard[] = [
   {
     id: "revestimientos-interactivos",
     image: withBasePath("/projects/revestimientos-interactivos.png"),
-    imageSrcSet: `${withBasePath("/projects/revestimientos-interactivos-480.webp")} 480w, ${withBasePath("/projects/revestimientos-interactivos.png")} 630w`,
+    imageSrcSet: `${withBasePath("/projects/revestimientos-interactivos.webp")} 930w`,
     href: withBasePath("/proyectos/revestimientos-interactivos/"),
     className: styles.projectFinishes,
     type: "corsteno_lab",
@@ -50,7 +50,7 @@ const fixedProjects: ProjectCard[] = [
   {
     id: "exterior-house",
     image: withBasePath("/projects/exterior-house-3d.png"),
-    imageSrcSet: `${withBasePath("/projects/exterior-house-3d-480.webp")} 480w, ${withBasePath("/projects/exterior-house-3d.png")} 650w`,
+    imageSrcSet: `${withBasePath("/projects/exterior-house-3d-480.webp")} 930w`,
     href: withBasePath("/proyectos/exterior-house/"),
     className: styles.projectExterior,
     type: "corsteno_lab",
@@ -91,6 +91,7 @@ export default function SelectedWorkSection({ dictionary: t }: { dictionary: Hom
   }
 
   const projects = projectHomeOrder
+    .filter((id) => id !== "ruleta")
     .map((id) => cardsById.get(id))
     .filter((project): project is ProjectCard => project !== undefined);
 
