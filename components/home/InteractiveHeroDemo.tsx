@@ -183,6 +183,7 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
   const visibleLights = (lights ?? []).filter((light) => !lightsOff.has(light.key)).length;
   // Si no hay ninguna cámara elegida, el selector muestra "Camera Inicial" en vez del contador de cámaras
   const activeCamera = cameras?.find((camera) => camera.key === activeCameraKey) ?? homeCamera;
+  const activeCameraLabel = activeCamera?.label.replace(/\bcamera\b/gi, "Camara");
   const activeLight = lights?.find((light) => light.key === activeLightKey) ?? null;
 
   return (
@@ -214,7 +215,7 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
         {/* Selector central: solo con la pestaña Cámaras o la pestaña Luces abierta */}
         {activeTab === "cameras" && cameras !== null && cameras.length > 0 && (
           <HotspotSwitcher
-            label={activeCamera ? activeCamera.label : replaceValue(scene.camerasCount, { count: cameras.length })}
+            label={activeCameraLabel ?? replaceValue(scene.camerasCount, { count: cameras.length })}
             prevLabel={actionLabels.previous}
             nextLabel={actionLabels.next}
             onPrev={() => stepCamera(-1)}

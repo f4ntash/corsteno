@@ -81,7 +81,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:-.02em}
 .interactive-hero-viewer{position:absolute;z-index:1;inset:0;width:100%;background:#b8a388;cursor:grab}
 .interactive-hero-viewer:active{cursor:grabbing}
 .interactive-hero-viewer canvas{display:block}
-.container-hero-loader{padding:6px 9px;border-radius:4px;background:rgb(20 18 14 / .72);color:#fff;font:500 11px/1 var(--font-display)}
+.container-hero-loader{padding:6px 9px;border-radius:4px;background:rgb(20 18 14 / .72);color:#fff;font:500 11px/1 var(--font-display);white-space:nowrap}
 .container-hero-loader-label{position:absolute;left:50%;top:50%;color:#fff;font:500 11px/1 var(--font-display);transform:translate(-50%,-50%)}
 .interactive-hero-panel{--panel-top:0px;--panel-right:0px;--panel-bottom:0px;--panel-width:220px;position:absolute;z-index:10;top:var(--panel-top);right:var(--panel-right);bottom:var(--panel-bottom);width:var(--panel-width);height:calc(100% - var(--panel-top) - var(--panel-bottom));max-height:100%;padding:16px;border:0;border-radius:0;box-sizing:border-box;background:rgb(20 18 14 / .72);display:flex;flex-direction:column;box-shadow:none;backdrop-filter:blur(3px);opacity:80%;overflow:hidden}
 .interactive-hero-panel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:rgb(198 161 91 / .95);pointer-events:none}
@@ -611,9 +611,17 @@ main:has(> .testimonials)>.contact{background:#0b0d0b}
 .interactive-hero-action[data-active="true"]:hover{background:#c9ab68}
 
 
-/* Escritorio: escenario un poco más alto para que el panel con letra más grande tenga lugar */
+/* Escritorio: ensancha el escenario sin cambiar apreciablemente su altura */
 @media(min-width:901px){
-  .interactive-hero-stage{aspect-ratio:1.6/1}
+  .commercial-hero-visual{width:calc(100% + clamp(36px,4vw,52px));margin-left:calc(0px - clamp(18px,2vw,26px))}
+  .interactive-hero-stage{aspect-ratio:1.7/1}
+}
+@media(min-width:1840px){
+  .commercial-hero-visual{width:calc(100% + clamp(152px,8vw,192px));margin-right:calc(0px - clamp(72px,4vw,96px))}
+  .interactive-hero-stage{aspect-ratio:1.85/1}
+}
+@media(min-width:2400px){
+  .interactive-hero-stage{aspect-ratio:1.9/1}
 }
 /* Tablet: el panel se mantiene en 250 px para no tapar la escena */
 @media(min-width:901px) and (max-width:1180px){

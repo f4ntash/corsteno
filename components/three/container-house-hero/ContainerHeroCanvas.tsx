@@ -4,7 +4,7 @@ import { Suspense, useCallback, useRef, useState } from "react";
 import type * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { Html, OrbitControls, useProgress } from "@react-three/drei";
-import { MAX_POLAR_DEG, MIN_MAX_DISTANCE, MAX_ZOOM_OUT, PAN_DOWN_MARGIN, type CameraRequest, type HeroCameraEntry } from "./cameras";
+import { HOME_VIEW, MAX_POLAR_DEG, MIN_MAX_DISTANCE, MAX_ZOOM_OUT, PAN_DOWN_MARGIN, type CameraRequest, type HeroCameraEntry } from "./cameras";
 import CameraController from "./CameraController";
 import HotspotMarkers from "./HotspotMarkers";
 import Lighting from "./Lighting";
@@ -20,7 +20,7 @@ type CameraInfo = { key: string; label: string };
 
 function Loader() {
   const { progress } = useProgress();
-  return <Html center className="container-hero-loader">{Math.round(progress)} %</Html>;
+  return <Html center className="container-hero-loader">{Math.round(progress)}%</Html>;
 }
 
 export default function ContainerHeroCanvas({
@@ -93,7 +93,7 @@ export default function ContainerHeroCanvas({
   );
 
   return (
-    <Canvas shadows camera={{ position: [3, 2, 7], fov: 45 }}>
+    <Canvas shadows camera={{ position: HOME_VIEW.position, fov: HOME_VIEW.fov }}>
       <Lighting azimuth={azimuth} elevation={elevation} intensity={intensity} phase={phase} radius={radius} />
       <Sky phase={phase} radius={radius} />
       <Suspense fallback={<Loader />}>
@@ -134,6 +134,7 @@ export default function ContainerHeroCanvas({
       <OrbitControls
         makeDefault
         enableDamping
+        target={HOME_VIEW.target}
         maxDistance={Math.max(MIN_MAX_DISTANCE, radius * MAX_ZOOM_OUT)}
         maxPolarAngle={(MAX_POLAR_DEG * Math.PI) / 180}
       />

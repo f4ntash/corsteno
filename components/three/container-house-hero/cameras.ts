@@ -16,8 +16,8 @@ export const MAX_POLAR_DEG = 90;
 export const PAN_DOWN_MARGIN = 2;
 
 export const HOME_VIEW = {
-  position: [3, 2, 7] as [number, number, number],
-  target: [0, 0, 0] as [number, number, number],
+  position: [3, 4.2, 28] as [number, number, number],
+  target: [0, 0.25, 0] as [number, number, number],
   fov: 45,
 };
 
