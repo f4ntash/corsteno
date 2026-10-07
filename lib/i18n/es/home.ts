@@ -22,7 +22,7 @@ export const esHome = {
       title: "Explorá la escena", note: "Mové la vista y ajustá sus elementos.",
     },
     sceneControls: {
-      tabs: { lighting: "Luz", sections: "Secciones", lights: "Luces", cameras: "Cámaras" },
+      tabs: { lighting: "Iluminación", sections: "Capas", lights: "Lámparas", cameras: "Cámaras" },
       tabAria: "Controles de escena",
       time: "Horario", exactTime: "Hora", systemTime: "Hora del sistema",
       azimuth: "Rotación", elevation: "Altura", intensity: "Intensidad",

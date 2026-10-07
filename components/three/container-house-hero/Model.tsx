@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Center, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { isCameraName } from "./cameras";
+import { displayName } from "./displayNames";
 import { blenderToThree, FALLBACK_LIGHTS, isLightName, LIGHT_DEFAULTS, LIGHT_INTENSITY, LIGHT_SHADOWS, type ModelLightEntry } from "./lights";
 import { isLocked, parseName, type SectionEntry } from "./sections";
 
@@ -43,7 +44,7 @@ function collectLightNodes(root: THREE.Object3D): LightNodeEntry[] {
     if (original && isLightName(original)) {
       const count = seen.get(original) ?? 0;
       seen.set(original, count + 1);
-      found.push({ key: count ? `${original}#${count}` : original, node: object, label: original.replace(/_/g, " ") });
+      found.push({ key: count ? `${original}#${count}` : original, node: object, label: displayName(original) });
       return;
     }
     object.children.forEach(visit);
@@ -78,7 +79,7 @@ function collectCameraNodes(root: THREE.Object3D): CameraNodeEntry[] {
         : null;
       found.push({
         key: count ? `${original}#${count}` : original,
-        label: original.replace(/_/g, " "),
+        label: displayName(original),
         object: importedCamera ?? object,
         fov: perspective?.fov ?? null,
       });
@@ -186,7 +187,7 @@ export default function Model({
 
     rig.current = entries;
     if (lightsRef) lightsRef.current = new Map(entries.map((entry) => [entry.key, entry.light]));
-    onLights?.(entries.map(({ key, real }) => ({ key, label: lightNodes.find((entry) => entry.key === key)?.label ?? key.replace(/_/g, " "), origin: real ? "glb" : "three" })));
+    onLights?.(entries.map(({ key, real }) => ({ key, label: lightNodes.find((entry) => entry.key === key)?.label ?? displayName(key), origin: real ? "glb" : "three" })));
 
     return () => {
       added.forEach((object) => object.parent?.remove(object));

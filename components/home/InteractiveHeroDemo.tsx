@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import { formatHour, PRESETS, sunAt } from "@/components/three/container-house-hero/presets";
 import type { CameraRequest } from "@/components/three/container-house-hero/cameras";
 import type { ModelLightEntry } from "@/components/three/container-house-hero/lights";
@@ -37,8 +37,8 @@ const INITIAL_SUN = sunAt(INITIAL_TIME);
 
 // Textos de los botones de rotación y timelapse. Conviene moverlos a tu diccionario i18n (HomeDictionary).
 const ACTION_LABELS = {
-  es: { timelapseOff: "Comenzar timelapse", timelapseOn: "Detener timelapse", previous: "Anterior", next: "Siguiente", advanced: "Ajustes avanzados" },
-  en: { timelapseOff: "Start timelapse", timelapseOn: "Stop timelapse", previous: "Previous", next: "Next", advanced: "Advanced settings" },
+  es: { timelapseOff: "Comenzar timelapse", timelapseOn: "Detener timelapse", fullscreenOff: "Pantalla completa", fullscreenOn: "Salir de pantalla completa", previous: "Anterior", next: "Siguiente", advanced: "Ajustes avanzados" },
+  en: { timelapseOff: "Start timelapse", timelapseOn: "Stop timelapse", fullscreenOff: "Fullscreen", fullscreenOn: "Exit fullscreen", previous: "Previous", next: "Next", advanced: "Advanced settings" },
 };
 
 const nowHour = () => {
@@ -72,6 +72,22 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
   const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
   const [HeroViewer, setHeroViewer] = useState<HeroViewer | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenSupported, setFullscreenSupported] = useState(false);
+
+  // Pantalla completa del visor junto con su panel de controles
+  useEffect(() => {
+    setFullscreenSupported(Boolean(document.fullscreenEnabled));
+    const onChange = () => setIsFullscreen(document.fullscreenElement === stageRef.current);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else void stageRef.current?.requestFullscreen().catch(() => undefined);
+  };
 
   useEffect(() => {
     let idleId: number | undefined;
@@ -183,12 +199,11 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
   const visibleLights = (lights ?? []).filter((light) => !lightsOff.has(light.key)).length;
   // Si no hay ninguna cámara elegida, el selector muestra "Camera Inicial" en vez del contador de cámaras
   const activeCamera = cameras?.find((camera) => camera.key === activeCameraKey) ?? homeCamera;
-  const activeCameraLabel = activeCamera?.label.replace(/\bcamera\b/gi, "Camara");
   const activeLight = lights?.find((light) => light.key === activeLightKey) ?? null;
 
   return (
     <div className="interactive-hero-demo">
-      <div className="interactive-hero-stage">
+      <div className="interactive-hero-stage" ref={stageRef}>
         <div className="interactive-hero-viewer" aria-label={t.hero.panel.aria}>
           {HeroViewer ? (
             <HeroViewer
@@ -215,7 +230,7 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
         {/* Selector central: solo con la pestaña Cámaras o la pestaña Luces abierta */}
         {activeTab === "cameras" && cameras !== null && cameras.length > 0 && (
           <HotspotSwitcher
-            label={activeCameraLabel ?? replaceValue(scene.camerasCount, { count: cameras.length })}
+            label={activeCamera ? activeCamera.label : replaceValue(scene.camerasCount, { count: cameras.length })}
             prevLabel={actionLabels.previous}
             nextLabel={actionLabels.next}
             onPrev={() => stepCamera(-1)}
@@ -266,6 +281,8 @@ export default function InteractiveHeroDemo({ dictionary: t, locale }: { diction
             <HeroActionButtons
               timelapseRunning={timelapse.running}
               onToggleTimelapse={timelapse.toggle}
+              fullscreen={isFullscreen}
+              onToggleFullscreen={fullscreenSupported ? toggleFullscreen : undefined}
               labels={actionLabels}
             />
             <div className="interactive-hero-tabs" role="tablist" aria-label={scene.tabAria}>
